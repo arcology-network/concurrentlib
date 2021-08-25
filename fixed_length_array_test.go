@@ -9,11 +9,11 @@ import (
 	ethcommon "github.com/HPISTechnologies/3rd-party/eth/common"
 	"github.com/HPISTechnologies/common-lib/types"
 	"github.com/HPISTechnologies/concurrentlib"
-	"github.com/HPISTechnologies/concurrenturl"
-	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
-	urltype "github.com/HPISTechnologies/concurrenturl/type"
-	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
-	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
+	"github.com/HPISTechnologies/concurrenturl/v2"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/v2/common"
+	urltype "github.com/HPISTechnologies/concurrenturl/v2/type"
+	commutative "github.com/HPISTechnologies/concurrenturl/v2/type/commutative"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/v2/type/noncommutative"
 )
 
 type txContext struct {
@@ -42,21 +42,21 @@ func formatValue(value interface{}) string {
 			}
 		}
 		str += "}"
-		if len(meta.Added()) != 0 {
+		if len(meta.GetAdded()) != 0 {
 			str += " + {"
-			for i, k := range meta.Added() {
+			for i, k := range meta.GetAdded() {
 				str += k
-				if i != len(meta.Added())-1 {
+				if i != len(meta.GetAdded())-1 {
 					str += ", "
 				}
 			}
 			str += "}"
 		}
-		if len(meta.Removed()) != 0 {
+		if len(meta.GetRemoved()) != 0 {
 			str += " - {"
-			for i, k := range meta.Removed() {
+			for i, k := range meta.GetRemoved() {
 				str += k
-				if i != len(meta.Removed())-1 {
+				if i != len(meta.GetRemoved())-1 {
 					str += ", "
 				}
 			}
@@ -66,7 +66,7 @@ func formatValue(value interface{}) string {
 	case *noncommutative.Int64:
 		return fmt.Sprintf(" = %v", int64(*value.(*noncommutative.Int64)))
 	case *noncommutative.Bytes:
-		return fmt.Sprintf(" = %v", []byte(*value.(*noncommutative.Bytes)))
+		return fmt.Sprintf(" = %v", value.(*noncommutative.Bytes).Data())
 	case *noncommutative.String:
 		return fmt.Sprintf(" = %v", string(*value.(*noncommutative.String)))
 	}
@@ -76,15 +76,15 @@ func formatValue(value interface{}) string {
 func formatTransitions(transitions []urlcommon.UnivalueInterface) string {
 	var str string
 	for _, t := range transitions {
-		str += fmt.Sprintf("[%v:%v,%v,%v,%v]%s%s\n", t.(*urltype.Univalue).GetTx(), t.(*urltype.Univalue).GetReads(), t.(*urltype.Univalue).GetWrites(), t.(*urltype.Univalue).AddOrDelete, t.(*urltype.Univalue).IsComposite(), t.(*urltype.Univalue).GetPath(), formatValue(t.(*urltype.Univalue).GetValue()))
+		str += fmt.Sprintf("[%v:%v,%v,%v,%v]%s%s\n", t.(*urltype.Univalue).GetTx(), t.(*urltype.Univalue).Reads(), t.(*urltype.Univalue).Writes(), t.(*urltype.Univalue).Preexist(), t.(*urltype.Univalue).Composite(), t.(*urltype.Univalue).GetPath(), formatValue(t.(*urltype.Univalue).Value()))
 	}
 	return str
 }
 
 func TestFLABasic(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")
@@ -132,6 +132,6 @@ func TestFLABasic(t *testing.T) {
 		t.Errorf("Expected elem0 = %v, got %v.", ethcommon.BytesToHash([]byte{1}).Bytes(), elem0)
 	}
 
-	_, transitions := fla.Collect()
+	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 }

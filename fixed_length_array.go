@@ -2,9 +2,8 @@ package concurrentlib
 
 import (
 	"github.com/HPISTechnologies/common-lib/types"
-	"github.com/HPISTechnologies/concurrenturl"
-	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
-	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
+	"github.com/HPISTechnologies/concurrenturl/v2"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/v2/type/noncommutative"
 )
 
 type FixedLengthArray struct {
@@ -58,7 +57,7 @@ func (array *FixedLengthArray) GetElem(account types.Address, id string, index i
 	} else if value == nil {
 		return getDefaultValue(elemType)
 	} else {
-		return []byte(*value.(*noncommutative.Bytes)), true
+		return value.(*noncommutative.Bytes).Data(), true
 	}
 }
 
@@ -71,10 +70,6 @@ func (array *FixedLengthArray) SetElem(account types.Address, id string, index i
 		return false
 	}
 	return true
-}
-
-func (array *FixedLengthArray) Collect() ([]urlcommon.UnivalueInterface, []urlcommon.UnivalueInterface) {
-	return array.url.Export()
 }
 
 func (array *FixedLengthArray) getSize(account types.Address, id string) int {

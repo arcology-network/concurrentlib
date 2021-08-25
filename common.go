@@ -6,9 +6,9 @@ import (
 
 	"github.com/HPISTechnologies/3rd-party/eth/common"
 	"github.com/HPISTechnologies/common-lib/types"
-	"github.com/HPISTechnologies/concurrenturl"
-	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
-	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
+	"github.com/HPISTechnologies/concurrenturl/v2"
+	commutative "github.com/HPISTechnologies/concurrenturl/v2/type/commutative"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/v2/type/noncommutative"
 )
 
 const (
@@ -46,7 +46,7 @@ func getDefaultValue(dataType int) ([]byte, bool) {
 }
 
 func getAccountRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
-	return url.Platform.Eth10() + string(account) + "/"
+	return url.Platform.Eth10Account() + string(account) + "/"
 }
 
 func getStorageRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
@@ -99,7 +99,7 @@ func getContainerType(url *concurrenturl.ConcurrentUrl, account types.Address, i
 
 func makeStorageRootPath(url *concurrenturl.ConcurrentUrl, account types.Address, txIndex uint32) bool {
 	accountRoot := getAccountRootPath(url, account)
-	if value, err := url.Read(txIndex, accountRoot); err != nil {
+	if value, err := url.TryRead(txIndex, accountRoot); err != nil {
 		return false
 	} else if value == nil { // The account didn't exist.
 		if err := url.Preload(txIndex, url.Platform.Eth10(), string(account)); err != nil {
@@ -132,7 +132,7 @@ func makeStorageRootPath(url *concurrenturl.ConcurrentUrl, account types.Address
 
 func makeContainerRootPath(url *concurrenturl.ConcurrentUrl, account types.Address, id string, txIndex uint32) bool {
 	containerRoot := getContainerRootPath(url, account, id)
-	if value, err := url.Read(txIndex, containerRoot); err != nil || value != nil {
+	if value, err := url.TryRead(txIndex, containerRoot); err != nil || value != nil {
 		return false
 	}
 

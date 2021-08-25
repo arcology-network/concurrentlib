@@ -7,15 +7,15 @@ import (
 
 	"github.com/HPISTechnologies/common-lib/types"
 	"github.com/HPISTechnologies/concurrentlib"
-	"github.com/HPISTechnologies/concurrenturl"
-	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
-	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
+	"github.com/HPISTechnologies/concurrenturl/v2"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/v2/common"
+	commutative "github.com/HPISTechnologies/concurrenturl/v2/type/commutative"
 )
 
 func TestTransientDBBasic(t *testing.T) {
 	persistentDB := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	persistentDB.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	persistentDB.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	transientDB := urlcommon.NewTransientDB(persistentDB)
 
 	// transientDB := urlcommon.NewDataStore()
@@ -50,7 +50,7 @@ func TestTransientDBBasic(t *testing.T) {
 		t.Fail()
 	}
 
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Commit(transitions, []uint32{1})
 
@@ -59,8 +59,9 @@ func TestTransientDBBasic(t *testing.T) {
 	sm = concurrentlib.NewSortedMap(url, context)
 	queue = concurrentlib.NewQueue(url, context)
 
-	if sm.GetSize(account1, mapID1) != 2 {
-		t.Fail()
+	if size := sm.GetSize(account1, mapID1); size != 2 {
+		t.Errorf("SortedMap.GetSize(account1, mapID1) error, got %d, expected %d", size, 2)
+		return
 	}
 	if value, ok := sm.GetValue(account1, mapID1, []byte("key1"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256); !ok || !bytes.Equal(value, []byte("value1")) {
 		t.Fail()
@@ -96,7 +97,7 @@ func TestTransientDBBasic(t *testing.T) {
 	queue.Push(account2, queueID, []byte("elem3"), concurrentlib.DataTypeBytes)
 	queue.Push(account2, queueID, []byte("elem4"), concurrentlib.DataTypeBytes)
 
-	_, transitions = url.Export()
+	_, transitions = url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Commit(transitions, []uint32{1})
 
@@ -105,8 +106,9 @@ func TestTransientDBBasic(t *testing.T) {
 	sm = concurrentlib.NewSortedMap(url, context)
 	queue = concurrentlib.NewQueue(url, context)
 
-	if sm.GetSize(account1, mapID1) != 1 {
-		t.Fail()
+	if size := sm.GetSize(account1, mapID1); size != 1 {
+		t.Errorf("SortedMap.GetSize(account1, mapID1) error, got %d, expected %d", size, 1)
+		return
 	}
 	if value, ok := sm.GetValue(account1, mapID1, []byte("key1"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256); !ok || !bytes.Equal(value, []byte("newvalue1")) {
 		t.Fail()
@@ -126,8 +128,12 @@ func TestTransientDBBasic(t *testing.T) {
 	if queue.GetSize(account2, queueID) != 3 {
 		t.Fail()
 	}
-	if value, ok := queue.Pop(account2, queueID, concurrentlib.DataTypeBytes); !ok || !bytes.Equal(value, []byte("elem2")) {
-		t.Fail()
+	if value, ok := queue.Pop(account2, queueID, concurrentlib.DataTypeBytes); !ok {
+		t.Error("Failed to pop element from queue.")
+		return
+	} else if !bytes.Equal(value, []byte("elem2")) {
+		t.Errorf("Unexpected element got, expected: %v, got %v", []byte("elem2"), value)
+		return
 	}
 	if queue.GetSize(account2, queueID) != 2 {
 		t.Fail()
@@ -145,7 +151,7 @@ func TestTransientDBBasic(t *testing.T) {
 		t.Fail()
 	}
 
-	_, transitions = url.Export()
+	_, transitions = url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Commit(transitions, []uint32{1})
 

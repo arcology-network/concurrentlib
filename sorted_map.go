@@ -4,10 +4,9 @@ import (
 	"encoding/hex"
 
 	"github.com/HPISTechnologies/common-lib/types"
-	"github.com/HPISTechnologies/concurrenturl"
-	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
-	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
-	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
+	"github.com/HPISTechnologies/concurrenturl/v2"
+	commutative "github.com/HPISTechnologies/concurrenturl/v2/type/commutative"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/v2/type/noncommutative"
 )
 
 type SortedMap struct {
@@ -45,7 +44,7 @@ func (sm *SortedMap) GetValue(account types.Address, id string, key []byte, keyT
 	} else if value == nil {
 		return getDefaultValue(valueType)
 	} else {
-		return []byte(*value.(*noncommutative.Bytes)), true
+		return value.(*noncommutative.Bytes).Data(), true
 	}
 }
 
@@ -74,10 +73,6 @@ func (sm *SortedMap) GetKeys(account types.Address, id string, keyType int) ([][
 
 func (sm *SortedMap) DeleteKey(account types.Address, id string, key []byte, keyType int) bool {
 	return sm.SetValue(account, id, key, nil, keyType, DataTypeInvalid)
-}
-
-func (sm *SortedMap) Collect() ([]urlcommon.UnivalueInterface, []urlcommon.UnivalueInterface) {
-	return sm.url.Export()
 }
 
 func (sm *SortedMap) create(account types.Address, id string, keyType int, valueType int) bool {
@@ -155,5 +150,27 @@ func (sm *SortedMap) getKeys(account types.Address, id string) ([][]byte, bool) 
 			}
 		}
 		return keys, true
+	}
+}
+
+func (sm *SortedMap) getIterator(account types.Address, id string) (*commutative.Meta, bool) {
+	if value, err := sm.url.Read(sm.context.GetIndex(), getContainerRootPath(sm.url, account, id)); err != nil || value == nil {
+		return nil, false
+	} else {
+		value.(*commutative.Meta).LoadKeys()
+		value.(*commutative.Meta).ResetIterator()
+		return value.(*commutative.Meta), true
+	}
+}
+
+func (sm *SortedMap) getNextKey(iterator *commutative.Meta) ([]byte, bool) {
+	for {
+		key := iterator.Next()
+		if len(key) > 1 {
+			b, _ := hex.DecodeString(key[1:])
+			return b, true
+		} else if len(key) == 0 {
+			return nil, false
+		}
 	}
 }

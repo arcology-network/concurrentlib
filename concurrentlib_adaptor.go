@@ -4,7 +4,7 @@ import (
 	"math/big"
 
 	"github.com/HPISTechnologies/common-lib/types"
-	"github.com/HPISTechnologies/concurrenturl"
+	"github.com/HPISTechnologies/concurrenturl/v2"
 )
 
 type txContext struct {

@@ -8,15 +8,15 @@ import (
 	ethcommon "github.com/HPISTechnologies/3rd-party/eth/common"
 	"github.com/HPISTechnologies/common-lib/types"
 	"github.com/HPISTechnologies/concurrentlib"
-	"github.com/HPISTechnologies/concurrenturl"
-	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
-	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
+	"github.com/HPISTechnologies/concurrenturl/v2"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/v2/common"
+	commutative "github.com/HPISTechnologies/concurrenturl/v2/type/commutative"
 )
 
 func TestContainersBasic(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account1 := types.Address("contractAddress1")
@@ -120,7 +120,7 @@ func TestContainersBasic(t *testing.T) {
 		t.Error("Failed to create queue22.")
 	}
 
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 
 	if errs := url.Commit(transitions, []uint32{1}); len(errs) != 0 {

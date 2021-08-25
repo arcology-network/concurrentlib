@@ -4,19 +4,20 @@ import (
 	"bytes"
 	"math/big"
 	"testing"
+	"time"
 
 	ethcommon "github.com/HPISTechnologies/3rd-party/eth/common"
 	"github.com/HPISTechnologies/common-lib/types"
 	"github.com/HPISTechnologies/concurrentlib"
-	"github.com/HPISTechnologies/concurrenturl"
-	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
-	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
+	"github.com/HPISTechnologies/concurrenturl/v2"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/v2/common"
+	commutative "github.com/HPISTechnologies/concurrenturl/v2/type/commutative"
 )
 
 func TestQueueBasic(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")
@@ -72,14 +73,14 @@ func TestQueueBasic(t *testing.T) {
 		t.Errorf("Expected size = 0, got %v.", size)
 	}
 
-	_, transitions := queue.Collect()
+	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 }
 
 func TestQueueOrder(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")
@@ -145,14 +146,14 @@ func TestQueueOrder(t *testing.T) {
 		t.Errorf("Expected value = elem8, got %v", string(value))
 	}
 
-	accessRecords, _ := url.Export()
+	accessRecords, _ := url.Export(true)
 	t.Log("\n" + formatTransitions(accessRecords))
 }
 
 func TestQueueCreateTwoDiffQueuesInSameAccount(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "queue1"
 	id2 := "queue2"
@@ -160,7 +161,7 @@ func TestQueueCreateTwoDiffQueuesInSameAccount(t *testing.T) {
 	url := concurrenturl.NewConcurrentUrl(store)
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, "somequeue", concurrentlib.DataTypeUint256)
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Commit(transitions, []uint32{1})
 
@@ -173,8 +174,8 @@ func TestQueueCreateTwoDiffQueuesInSameAccount(t *testing.T) {
 	queue1.Create(account, id1, concurrentlib.DataTypeUint256)
 	queue2.Create(account, id2, concurrentlib.DataTypeUint256)
 
-	ar1, _ := url1.Export()
-	ar2, _ := url2.Export()
+	ar1, _ := url1.Export(true)
+	ar2, _ := url2.Export(true)
 
 	t.Log("\n" + formatTransitions(ar1))
 	t.Log("\n" + formatTransitions(ar2))
@@ -189,8 +190,8 @@ func TestQueueCreateTwoDiffQueuesInSameAccount(t *testing.T) {
 
 func TestQueueCreateAndPush(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "queue1"
 	id2 := "queue2"
@@ -198,7 +199,7 @@ func TestQueueCreateAndPush(t *testing.T) {
 	url := concurrenturl.NewConcurrentUrl(store)
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	url.Commit(transitions, []uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -210,8 +211,8 @@ func TestQueueCreateAndPush(t *testing.T) {
 	queue1.Push(account, id1, []byte("somevalue"), concurrentlib.DataTypeUint256)
 	queue2.Create(account, id2, concurrentlib.DataTypeUint256)
 
-	ar1, _ := url1.Export()
-	ar2, _ := url2.Export()
+	ar1, _ := url1.Export(true)
+	ar2, _ := url2.Export(true)
 
 	t.Log("\n" + formatTransitions(ar1))
 	t.Log("\n" + formatTransitions(ar2))
@@ -226,8 +227,8 @@ func TestQueueCreateAndPush(t *testing.T) {
 
 func TestQueueCreateAndPop(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "queue1"
 	id2 := "queue2"
@@ -236,7 +237,7 @@ func TestQueueCreateAndPop(t *testing.T) {
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	queue.Push(account, id1, []byte("somevalue"), concurrentlib.DataTypeUint256)
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	url.Commit(transitions, []uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -248,8 +249,8 @@ func TestQueueCreateAndPop(t *testing.T) {
 	queue1.Pop(account, id1, concurrentlib.DataTypeUint256)
 	queue2.Create(account, id2, concurrentlib.DataTypeUint256)
 
-	ar1, _ := url1.Export()
-	ar2, _ := url2.Export()
+	ar1, _ := url1.Export(true)
+	ar2, _ := url2.Export(true)
 
 	t.Log("\n" + formatTransitions(ar1))
 	t.Log("\n" + formatTransitions(ar2))
@@ -264,8 +265,8 @@ func TestQueueCreateAndPop(t *testing.T) {
 
 func TestQueueCreateAndGetSize(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "queue1"
 	id2 := "queue2"
@@ -273,7 +274,7 @@ func TestQueueCreateAndGetSize(t *testing.T) {
 	url := concurrenturl.NewConcurrentUrl(store)
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	url.Commit(transitions, []uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -285,8 +286,8 @@ func TestQueueCreateAndGetSize(t *testing.T) {
 	queue1.GetSize(account, id1)
 	queue2.Create(account, id2, concurrentlib.DataTypeUint256)
 
-	ar1, _ := url1.Export()
-	ar2, _ := url2.Export()
+	ar1, _ := url1.Export(true)
+	ar2, _ := url2.Export(true)
 
 	t.Log("\n" + formatTransitions(ar1))
 	t.Log("\n" + formatTransitions(ar2))
@@ -301,15 +302,15 @@ func TestQueueCreateAndGetSize(t *testing.T) {
 
 func TestQueuePushAndPush(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "queue1"
 
 	url := concurrenturl.NewConcurrentUrl(store)
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	url.Commit(transitions, []uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -321,8 +322,8 @@ func TestQueuePushAndPush(t *testing.T) {
 	queue1.Push(account, id1, []byte("somevalue"), concurrentlib.DataTypeUint256)
 	queue2.Push(account, id1, []byte("someothervalue"), concurrentlib.DataTypeUint256)
 
-	ar1, _ := url1.Export()
-	ar2, _ := url2.Export()
+	ar1, _ := url1.Export(true)
+	ar2, _ := url2.Export(true)
 
 	t.Log("\n" + formatTransitions(ar1))
 	t.Log("\n" + formatTransitions(ar2))
@@ -337,8 +338,8 @@ func TestQueuePushAndPush(t *testing.T) {
 
 func TestQueuePushAndPop(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "queue1"
 
@@ -346,7 +347,7 @@ func TestQueuePushAndPop(t *testing.T) {
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	queue.Push(account, id1, []byte("initvalue"), concurrentlib.DataTypeUint256)
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	url.Commit(transitions, []uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -358,8 +359,8 @@ func TestQueuePushAndPop(t *testing.T) {
 	queue1.Push(account, id1, []byte("somevalue"), concurrentlib.DataTypeUint256)
 	queue2.Pop(account, id1, concurrentlib.DataTypeUint256)
 
-	ar1, _ := url1.Export()
-	ar2, _ := url2.Export()
+	ar1, _ := url1.Export(true)
+	ar2, _ := url2.Export(true)
 
 	t.Log("\n" + formatTransitions(ar1))
 	t.Log("\n" + formatTransitions(ar2))
@@ -374,8 +375,8 @@ func TestQueuePushAndPop(t *testing.T) {
 
 func TestQueuePopAndPop(t *testing.T) {
 	store := urlcommon.NewDataStore()
-	meta, _ := commutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
-	store.Save(urlcommon.ACCOUNT_BASE_URL, meta)
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "queue1"
 
@@ -383,7 +384,7 @@ func TestQueuePopAndPop(t *testing.T) {
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	queue.Push(account, id1, []byte("initvalue"), concurrentlib.DataTypeUint256)
-	_, transitions := url.Export()
+	_, transitions := url.Export(true)
 	url.Commit(transitions, []uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -392,11 +393,17 @@ func TestQueuePopAndPop(t *testing.T) {
 	queue1 := concurrentlib.NewQueue(url1, &txContext{height: new(big.Int).SetUint64(101), index: 1})
 	queue2 := concurrentlib.NewQueue(url2, &txContext{height: new(big.Int).SetUint64(101), index: 2})
 
-	queue1.Pop(account, id1, concurrentlib.DataTypeUint256)
-	queue2.Pop(account, id1, concurrentlib.DataTypeUint256)
+	if _, ok := queue1.Pop(account, id1, concurrentlib.DataTypeUint256); !ok {
+		t.Error("Failed to pop element from queue1.")
+		return
+	}
+	if _, ok := queue2.Pop(account, id1, concurrentlib.DataTypeUint256); !ok {
+		t.Error("Failed to pop element from queue2.")
+		return
+	}
 
-	ar1, _ := url1.Export()
-	ar2, _ := url2.Export()
+	ar1, _ := url1.Export(true)
+	ar2, _ := url2.Export(true)
 
 	t.Log("\n" + formatTransitions(ar1))
 	t.Log("\n" + formatTransitions(ar2))
@@ -407,4 +414,34 @@ func TestQueuePopAndPop(t *testing.T) {
 	if len(txs) != 4 {
 		t.Fail()
 	}
+}
+
+func TestQueuePopPerf(t *testing.T) {
+	nElem := 50000
+	store := urlcommon.NewDataStore()
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	account := types.Address("contractAddress")
+	id1 := "queue1"
+
+	url := concurrenturl.NewConcurrentUrl(store)
+	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
+	queue.Create(account, id1, concurrentlib.DataTypeUint256)
+	for i := 0; i < nElem; i++ {
+		queue.Push(account, id1, []byte("value"), concurrentlib.DataTypeUint256)
+	}
+	_, transitions := url.Export(true)
+	url.Commit(transitions, []uint32{1})
+
+	url = concurrenturl.NewConcurrentUrl(store)
+	queue = concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(101), index: 2})
+	begin := time.Now()
+	for i := 0; i < nElem; i++ {
+		_, ok := queue.Pop(account, id1, concurrentlib.DataTypeUint256)
+		if !ok {
+			t.Errorf("Failed to pop the %dth element.", i+1)
+			return
+		}
+	}
+	t.Log(time.Since(begin))
 }

@@ -4,8 +4,7 @@ import (
 	"encoding/binary"
 
 	"github.com/HPISTechnologies/common-lib/types"
-	"github.com/HPISTechnologies/concurrenturl"
-	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
+	"github.com/HPISTechnologies/concurrenturl/v2"
 )
 
 type Queue struct {
@@ -44,26 +43,41 @@ func (queue *Queue) Pop(account types.Address, id string, elemType int) ([]byte,
 		return nil, false
 	}
 
-	keys, ok := queue.sm.getKeys(account, id)
-	if !ok || len(keys) == 0 {
-		return nil, false
-	}
+	// keys, ok := queue.sm.getKeys(account, id)
+	// if !ok || len(keys) == 0 {
+	// 	return nil, false
+	// }
 
-	elem, ok := queue.sm.GetValue(account, id, keys[0], DataTypeBytes, elemType)
+	// elem, ok := queue.sm.GetValue(account, id, keys[0], DataTypeBytes, elemType)
+	// if !ok {
+	// 	return nil, false
+	// }
+
+	// if !queue.sm.SetValue(account, id, keys[0], nil, DataTypeBytes, elemType) {
+	// 	return nil, false
+	// }
+	// Tricky! Update meta data.
+	// queue.sm.getSize(account, id)
+
+	iter, ok := queue.sm.getIterator(account, id)
 	if !ok {
 		return nil, false
 	}
 
-	if !queue.sm.SetValue(account, id, keys[0], nil, DataTypeBytes, elemType) {
+	key, ok := queue.sm.getNextKey(iter)
+	if !ok {
 		return nil, false
 	}
-	// Tricky! Update meta data.
-	queue.sm.getSize(account, id)
-	return elem, true
-}
 
-func (queue *Queue) Collect() ([]urlcommon.UnivalueInterface, []urlcommon.UnivalueInterface) {
-	return queue.url.Export()
+	elem, ok := queue.sm.GetValue(account, id, key, DataTypeBytes, elemType)
+	if !ok {
+		return nil, false
+	}
+
+	if !queue.sm.SetValue(account, id, key, nil, DataTypeBytes, elemType) {
+		return nil, false
+	}
+	return elem, true
 }
 
 func (queue *Queue) getStoredKey() string {

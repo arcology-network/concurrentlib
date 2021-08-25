@@ -2,8 +2,8 @@ package concurrentlib
 
 import (
 	"github.com/HPISTechnologies/common-lib/types"
-	"github.com/HPISTechnologies/concurrenturl"
-	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
+	"github.com/HPISTechnologies/concurrenturl/v2"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/v2/type/noncommutative"
 )
 
 type DeferCall struct {
