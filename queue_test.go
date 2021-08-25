@@ -5,12 +5,12 @@ import (
 	"math/big"
 	"testing"
 
-	ethcommon "github.com/arcology/3rd-party/eth/common"
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl"
-	urlcommon "github.com/arcology/concurrenturl/common"
-	commutative "github.com/arcology/concurrenturl/type/commutative"
+	ethcommon "github.com/HPISTechnologies/3rd-party/eth/common"
+	"github.com/HPISTechnologies/common-lib/types"
+	"github.com/HPISTechnologies/concurrentlib"
+	"github.com/HPISTechnologies/concurrenturl"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
+	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
 )
 
 func TestQueueBasic(t *testing.T) {

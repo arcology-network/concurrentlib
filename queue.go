@@ -3,9 +3,9 @@ package concurrentlib
 import (
 	"encoding/binary"
 
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrenturl"
-	urlcommon "github.com/arcology/concurrenturl/common"
+	"github.com/HPISTechnologies/common-lib/types"
+	"github.com/HPISTechnologies/concurrenturl"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
 )
 
 type Queue struct {

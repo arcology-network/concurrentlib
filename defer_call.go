@@ -1,9 +1,9 @@
 package concurrentlib
 
 import (
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrenturl"
-	noncommutative "github.com/arcology/concurrenturl/type/noncommutative"
+	"github.com/HPISTechnologies/common-lib/types"
+	"github.com/HPISTechnologies/concurrenturl"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
 )
 
 type DeferCall struct {

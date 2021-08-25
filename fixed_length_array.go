@@ -1,10 +1,10 @@
 package concurrentlib
 
 import (
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrenturl"
-	urlcommon "github.com/arcology/concurrenturl/common"
-	noncommutative "github.com/arcology/concurrenturl/type/noncommutative"
+	"github.com/HPISTechnologies/common-lib/types"
+	"github.com/HPISTechnologies/concurrenturl"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
 )
 
 type FixedLengthArray struct {

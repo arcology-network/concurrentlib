@@ -6,14 +6,14 @@ import (
 	"math/big"
 	"testing"
 
-	ethcommon "github.com/arcology/3rd-party/eth/common"
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl"
-	urlcommon "github.com/arcology/concurrenturl/common"
-	urltype "github.com/arcology/concurrenturl/type"
-	commutative "github.com/arcology/concurrenturl/type/commutative"
-	noncommutative "github.com/arcology/concurrenturl/type/noncommutative"
+	ethcommon "github.com/HPISTechnologies/3rd-party/eth/common"
+	"github.com/HPISTechnologies/common-lib/types"
+	"github.com/HPISTechnologies/concurrentlib"
+	"github.com/HPISTechnologies/concurrenturl"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
+	urltype "github.com/HPISTechnologies/concurrenturl/type"
+	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
 )
 
 type txContext struct {

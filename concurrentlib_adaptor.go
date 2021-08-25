@@ -3,8 +3,8 @@ package concurrentlib
 import (
 	"math/big"
 
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrenturl"
+	"github.com/HPISTechnologies/common-lib/types"
+	"github.com/HPISTechnologies/concurrenturl"
 )
 
 type txContext struct {

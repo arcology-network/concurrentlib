@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/arcology/3rd-party/eth/common"
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrenturl"
-	commutative "github.com/arcology/concurrenturl/type/commutative"
-	noncommutative "github.com/arcology/concurrenturl/type/noncommutative"
+	"github.com/HPISTechnologies/3rd-party/eth/common"
+	"github.com/HPISTechnologies/common-lib/types"
+	"github.com/HPISTechnologies/concurrenturl"
+	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
+	noncommutative "github.com/HPISTechnologies/concurrenturl/type/noncommutative"
 )
 
 const (

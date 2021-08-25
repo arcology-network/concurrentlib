@@ -5,11 +5,11 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl"
-	urlcommon "github.com/arcology/concurrenturl/common"
-	commutative "github.com/arcology/concurrenturl/type/commutative"
+	"github.com/HPISTechnologies/common-lib/types"
+	"github.com/HPISTechnologies/concurrentlib"
+	"github.com/HPISTechnologies/concurrenturl"
+	urlcommon "github.com/HPISTechnologies/concurrenturl/common"
+	commutative "github.com/HPISTechnologies/concurrenturl/type/commutative"
 )
 
 func TestTransientDBBasic(t *testing.T) {
