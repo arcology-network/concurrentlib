@@ -3,10 +3,10 @@ package concurrentlib
 import (
 	"encoding/hex"
 
-	"github.com/HPISTechnologies/common-lib/types"
-	"github.com/HPISTechnologies/concurrenturl/v2"
-	commutative "github.com/HPISTechnologies/concurrenturl/v2/type/commutative"
-	noncommutative "github.com/HPISTechnologies/concurrenturl/v2/type/noncommutative"
+	"github.com/arcology/common-lib/types"
+	"github.com/arcology/concurrenturl/v2"
+	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
+	noncommutative "github.com/arcology/concurrenturl/v2/type/noncommutative"
 )
 
 type SortedMap struct {

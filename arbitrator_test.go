@@ -4,14 +4,14 @@ import (
 	"math/big"
 	"testing"
 
-	ethcommon "github.com/HPISTechnologies/3rd-party/eth/common"
-	"github.com/HPISTechnologies/common-lib/types"
-	"github.com/HPISTechnologies/concurrentlib"
-	"github.com/HPISTechnologies/concurrenturl/v2"
-	urlcommon "github.com/HPISTechnologies/concurrenturl/v2/common"
-	urltype "github.com/HPISTechnologies/concurrenturl/v2/type"
-	commutative "github.com/HPISTechnologies/concurrenturl/v2/type/commutative"
-	arbitrator "github.com/HPISTechnologies/urlarbitrator-engine/go-wrapper"
+	ethcommon "github.com/arcology/3rd-party/eth/common"
+	"github.com/arcology/common-lib/types"
+	"github.com/arcology/concurrentlib"
+	"github.com/arcology/concurrenturl/v2"
+	urlcommon "github.com/arcology/concurrenturl/v2/common"
+	urltype "github.com/arcology/concurrenturl/v2/type"
+	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
+	arbitrator "github.com/arcology/urlarbitrator-engine/go-wrapper"
 )
 
 func detectConflict(transitions []urlcommon.UnivalueInterface) ([]uint32, []uint32, []bool) {
