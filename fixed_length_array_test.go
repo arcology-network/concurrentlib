@@ -6,14 +6,14 @@ import (
 	"math/big"
 	"testing"
 
-	ethcommon "github.com/arcology/3rd-party/eth/common"
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl/v2"
-	urlcommon "github.com/arcology/concurrenturl/v2/common"
-	urltype "github.com/arcology/concurrenturl/v2/type"
-	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
-	noncommutative "github.com/arcology/concurrenturl/v2/type/noncommutative"
+	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	"github.com/arcology-network/common-lib/types"
+	"github.com/arcology-network/concurrentlib"
+	"github.com/arcology-network/concurrenturl/v2"
+	urlcommon "github.com/arcology-network/concurrenturl/v2/common"
+	urltype "github.com/arcology-network/concurrenturl/v2/type"
+	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
+	noncommutative "github.com/arcology-network/concurrenturl/v2/type/noncommutative"
 )
 
 type txContext struct {
@@ -35,28 +35,28 @@ func formatValue(value interface{}) string {
 		meta := value.(*commutative.Meta)
 		var str string
 		str += "{"
-		for i, k := range meta.GetKeys() {
+		for i, k := range meta.PeekKeys() {
 			str += k
-			if i != len(meta.GetKeys())-1 {
+			if i != len(meta.PeekKeys())-1 {
 				str += ", "
 			}
 		}
 		str += "}"
-		if len(meta.GetAdded()) != 0 {
+		if len(meta.PeekAdded()) != 0 {
 			str += " + {"
-			for i, k := range meta.GetAdded() {
+			for i, k := range meta.PeekAdded() {
 				str += k
-				if i != len(meta.GetAdded())-1 {
+				if i != len(meta.PeekAdded())-1 {
 					str += ", "
 				}
 			}
 			str += "}"
 		}
-		if len(meta.GetRemoved()) != 0 {
+		if len(meta.PeekRemoved()) != 0 {
 			str += " - {"
-			for i, k := range meta.GetRemoved() {
+			for i, k := range meta.PeekRemoved() {
 				str += k
-				if i != len(meta.GetRemoved())-1 {
+				if i != len(meta.PeekRemoved())-1 {
 					str += ", "
 				}
 			}

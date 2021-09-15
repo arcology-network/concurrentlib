@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"testing"
 
-	ethcommon "github.com/arcology/3rd-party/eth/common"
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl/v2"
-	urlcommon "github.com/arcology/concurrenturl/v2/common"
-	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
+	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	"github.com/arcology-network/common-lib/types"
+	"github.com/arcology-network/concurrentlib"
+	"github.com/arcology-network/concurrenturl/v2"
+	urlcommon "github.com/arcology-network/concurrenturl/v2/common"
+	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
 )
 
 func TestSMBasic(t *testing.T) {
@@ -131,7 +131,8 @@ func TestSMCreateTwoDiffMapsInSameAccount(t *testing.T) {
 	sm.Create(account, "somemap", concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -169,7 +170,8 @@ func TestSMCreateAndAddKey(t *testing.T) {
 	sm := concurrentlib.NewSortedMap(url, &txContext{})
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -208,7 +210,8 @@ func TestSMCreateAndDeleteExistKey(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	sm.SetValue(account, id1, []byte("somekey"), []byte("somevalue"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -246,7 +249,8 @@ func TestSMCreateAndDeleteNonexistKey(t *testing.T) {
 	sm := concurrentlib.NewSortedMap(url, &txContext{})
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -285,7 +289,8 @@ func TestSMCreateAndUpdateKey(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	sm.SetValue(account, id1, []byte("somekey"), []byte("somevalue"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -324,7 +329,8 @@ func TestSMCreateAndGetSize(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	sm.SetValue(account, id1, []byte("somekey"), []byte("somevalue"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -362,7 +368,8 @@ func TestSMCreateAndAddThenDelete(t *testing.T) {
 	sm := concurrentlib.NewSortedMap(url, &txContext{})
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -400,7 +407,8 @@ func TestSMAddKeyAndDeleteNonexistKey(t *testing.T) {
 	sm := concurrentlib.NewSortedMap(url, &txContext{})
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -437,7 +445,8 @@ func TestSMAddKeyAndGetSize(t *testing.T) {
 	sm := concurrentlib.NewSortedMap(url, &txContext{})
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -474,7 +483,8 @@ func TestSMAddThenDeleteAndGetSize(t *testing.T) {
 	sm := concurrentlib.NewSortedMap(url, &txContext{})
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -513,7 +523,8 @@ func TestSMCreateAndSetKeyToSameMap(t *testing.T) {
 	sm := concurrentlib.NewSortedMap(url, &txContext{})
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -557,7 +568,8 @@ func TestExportDoNotContainKeysInMetadata(t *testing.T) {
 	sm.Create(account, id, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	sm.SetValue(account, id, []byte("key1"), []byte("value1"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{0})
+	url.Import(transitions)
+	url.Commit([]uint32{0})
 
 	url = concurrenturl.NewConcurrentUrl(store)
 	sm = concurrentlib.NewSortedMap(url, &txContext{index: 1})
@@ -565,7 +577,8 @@ func TestExportDoNotContainKeysInMetadata(t *testing.T) {
 
 	_, transitions = url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(store)
 	sm = concurrentlib.NewSortedMap(url, &txContext{index: 2})

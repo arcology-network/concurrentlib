@@ -4,14 +4,14 @@ import (
 	"math/big"
 	"testing"
 
-	ethcommon "github.com/arcology/3rd-party/eth/common"
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl/v2"
-	urlcommon "github.com/arcology/concurrenturl/v2/common"
-	urltype "github.com/arcology/concurrenturl/v2/type"
-	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
-	arbitrator "github.com/arcology/urlarbitrator-engine/go-wrapper"
+	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	"github.com/arcology-network/common-lib/types"
+	"github.com/arcology-network/concurrentlib"
+	"github.com/arcology-network/concurrenturl/v2"
+	urlcommon "github.com/arcology-network/concurrenturl/v2/common"
+	urltype "github.com/arcology-network/concurrenturl/v2/type"
+	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
+	arbitrator "github.com/arcology-network/urlarbitrator-engine/go-wrapper"
 )
 
 func detectConflict(transitions []urlcommon.UnivalueInterface) ([]uint32, []uint32, []bool) {
@@ -27,13 +27,14 @@ func detectConflict(transitions []urlcommon.UnivalueInterface) ([]uint32, []uint
 		paths[i] = t.(*urltype.Univalue).GetPath()
 		reads[i] = t.(*urltype.Univalue).Reads()
 		writes[i] = t.(*urltype.Univalue).Writes()
-		addOrDelete[i] = t.(*urltype.Univalue).IfAddOrDelete()
+		addOrDelete[i] = false
 		composite[i] = t.(*urltype.Univalue).Composite()
 	}
 
 	engine := arbitrator.Start()
-	buf, _ := arbitrator.Insert(engine, txs, paths, reads, writes, addOrDelete, composite)
+	_, buf := arbitrator.Insert(engine, txs, paths, reads, writes, addOrDelete, composite)
 	txs, groups, flags := arbitrator.Detect(engine, uint32(length))
+
 	arbitrator.Clear(engine, buf)
 	return txs, groups, flags
 }
@@ -53,7 +54,8 @@ func TestFixedLengthArrayConflict(t *testing.T) {
 	}
 
 	_, transitions := url.Export(true)
-	if errs := url.Commit(transitions, []uint32{1}); len(errs) != 0 {
+	url.Import(transitions)
+	if errs := url.Commit([]uint32{1}); len(errs) != 0 {
 		t.Error("Failed to commit transitions.")
 	}
 
@@ -101,7 +103,8 @@ func TestSortedMapConflict(t *testing.T) {
 	}
 
 	_, transitions := url.Export(true)
-	if errs := url.Commit(transitions, []uint32{1}); len(errs) != 0 {
+	url.Import(transitions)
+	if errs := url.Commit([]uint32{1}); len(errs) != 0 {
 		t.Error("Failed to commit transitions.")
 	}
 
@@ -161,7 +164,8 @@ func TestQueueConflict(t *testing.T) {
 
 	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
-	if errs := url.Commit(transitions, []uint32{1}); len(errs) != 0 {
+	url.Import(transitions)
+	if errs := url.Commit([]uint32{1}); len(errs) != 0 {
 		t.Error("Failed to commit transitions.")
 	}
 

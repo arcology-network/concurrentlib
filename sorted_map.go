@@ -3,10 +3,10 @@ package concurrentlib
 import (
 	"encoding/hex"
 
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrenturl/v2"
-	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
-	noncommutative "github.com/arcology/concurrenturl/v2/type/noncommutative"
+	"github.com/arcology-network/common-lib/types"
+	"github.com/arcology-network/concurrenturl/v2"
+	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
+	noncommutative "github.com/arcology-network/concurrenturl/v2/type/noncommutative"
 )
 
 type SortedMap struct {
@@ -101,7 +101,7 @@ func (sm *SortedMap) getSize(account types.Address, id string) int {
 	if value, err := sm.url.Read(sm.context.GetIndex(), getContainerRootPath(sm.url, account, id)); err != nil || value == nil {
 		return ContainerSizeInvalid
 	} else {
-		return len(value.(*commutative.Meta).GetKeys()) - 2
+		return len(value.(*commutative.Meta).PeekKeys()) - 2
 	}
 }
 
@@ -142,8 +142,8 @@ func (sm *SortedMap) getKeys(account types.Address, id string) ([][]byte, bool) 
 	if value, err := sm.url.Read(sm.context.GetIndex(), getContainerRootPath(sm.url, account, id)); err != nil || value == nil {
 		return nil, false
 	} else {
-		keys := make([][]byte, 0, len(value.(*commutative.Meta).GetKeys())-2)
-		for _, key := range value.(*commutative.Meta).GetKeys() {
+		keys := make([][]byte, 0, len(value.(*commutative.Meta).PeekKeys())-2)
+		for _, key := range value.(*commutative.Meta).PeekKeys() {
 			if len(key) > 1 {
 				b, _ := hex.DecodeString(key[1:])
 				keys = append(keys, b)

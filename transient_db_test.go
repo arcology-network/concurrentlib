@@ -5,11 +5,11 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl/v2"
-	urlcommon "github.com/arcology/concurrenturl/v2/common"
-	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
+	"github.com/arcology-network/common-lib/types"
+	"github.com/arcology-network/concurrentlib"
+	"github.com/arcology-network/concurrenturl/v2"
+	urlcommon "github.com/arcology-network/concurrenturl/v2/common"
+	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
 )
 
 func TestTransientDBBasic(t *testing.T) {
@@ -52,7 +52,8 @@ func TestTransientDBBasic(t *testing.T) {
 
 	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(transientDB)
 	context = &txContext{height: new(big.Int).SetUint64(101), index: 1}
@@ -99,7 +100,8 @@ func TestTransientDBBasic(t *testing.T) {
 
 	_, transitions = url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(transientDB)
 	context = &txContext{height: new(big.Int).SetUint64(102), index: 1}
@@ -153,7 +155,8 @@ func TestTransientDBBasic(t *testing.T) {
 
 	_, transitions = url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(transientDB)
 	context = &txContext{height: new(big.Int).SetUint64(103), index: 1}

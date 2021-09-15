@@ -3,11 +3,11 @@ package concurrentlib_test
 import (
 	"testing"
 
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl/v2"
-	urlcommon "github.com/arcology/concurrenturl/v2/common"
-	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
+	"github.com/arcology-network/common-lib/types"
+	"github.com/arcology-network/concurrentlib"
+	"github.com/arcology-network/concurrenturl/v2"
+	urlcommon "github.com/arcology-network/concurrenturl/v2/common"
+	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
 )
 
 func TestDeferBasic(t *testing.T) {
@@ -32,7 +32,8 @@ func TestDeferBasic(t *testing.T) {
 	t.Log("\n" + formatTransitions(accesses))
 	t.Log("\n" + formatTransitions(transitions))
 
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 	url = concurrenturl.NewConcurrentUrl(store)
 	dc = concurrentlib.NewDeferCall(url, &txContext{index: 2})
 	if !dc.IsExist(account, id) {

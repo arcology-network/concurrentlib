@@ -5,12 +5,12 @@ import (
 	"math/big"
 	"testing"
 
-	ethcommon "github.com/arcology/3rd-party/eth/common"
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl/v2"
-	urlcommon "github.com/arcology/concurrenturl/v2/common"
-	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
+	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	"github.com/arcology-network/common-lib/types"
+	"github.com/arcology-network/concurrentlib"
+	"github.com/arcology-network/concurrenturl/v2"
+	urlcommon "github.com/arcology-network/concurrenturl/v2/common"
+	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
 )
 
 func TestContainersBasic(t *testing.T) {
@@ -123,7 +123,8 @@ func TestContainersBasic(t *testing.T) {
 	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 
-	if errs := url.Commit(transitions, []uint32{1}); len(errs) != 0 {
+	url.Import(transitions)
+	if errs := url.Commit([]uint32{1}); len(errs) != 0 {
 		t.Error("Failed to commit transitions.")
 	}
 

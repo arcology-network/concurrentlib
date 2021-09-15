@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	ethcommon "github.com/arcology/3rd-party/eth/common"
-	"github.com/arcology/common-lib/types"
-	"github.com/arcology/concurrentlib"
-	"github.com/arcology/concurrenturl/v2"
-	urlcommon "github.com/arcology/concurrenturl/v2/common"
-	commutative "github.com/arcology/concurrenturl/v2/type/commutative"
+	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	"github.com/arcology-network/common-lib/types"
+	"github.com/arcology-network/concurrentlib"
+	"github.com/arcology-network/concurrenturl/v2"
+	urlcommon "github.com/arcology-network/concurrenturl/v2/common"
+	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
 )
 
 func TestQueueBasic(t *testing.T) {
@@ -163,7 +163,8 @@ func TestQueueCreateTwoDiffQueuesInSameAccount(t *testing.T) {
 	queue.Create(account, "somequeue", concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -200,7 +201,8 @@ func TestQueueCreateAndPush(t *testing.T) {
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -238,7 +240,8 @@ func TestQueueCreateAndPop(t *testing.T) {
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	queue.Push(account, id1, []byte("somevalue"), concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -275,7 +278,8 @@ func TestQueueCreateAndGetSize(t *testing.T) {
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -311,7 +315,8 @@ func TestQueuePushAndPush(t *testing.T) {
 	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -348,7 +353,8 @@ func TestQueuePushAndPop(t *testing.T) {
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	queue.Push(account, id1, []byte("initvalue"), concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -385,7 +391,8 @@ func TestQueuePopAndPop(t *testing.T) {
 	queue.Create(account, id1, concurrentlib.DataTypeUint256)
 	queue.Push(account, id1, []byte("initvalue"), concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
 	url2 := concurrenturl.NewConcurrentUrl(store)
@@ -431,7 +438,8 @@ func TestQueuePopPerf(t *testing.T) {
 		queue.Push(account, id1, []byte("value"), concurrentlib.DataTypeUint256)
 	}
 	_, transitions := url.Export(true)
-	url.Commit(transitions, []uint32{1})
+	url.Import(transitions)
+	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(store)
 	queue = concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(101), index: 2})
@@ -444,4 +452,53 @@ func TestQueuePopPerf(t *testing.T) {
 		}
 	}
 	t.Log(time.Since(begin))
+}
+
+func TestQueueWithTransientDB(t *testing.T) {
+	persistentDB := urlcommon.NewDataStore()
+	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
+	persistentDB.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	// db := urlcommon.NewTransientDB(persistentDB)
+	db := persistentDB
+	account := types.Address("contractAddress")
+	id1 := "queue1"
+
+	// Create queue.
+	url := concurrenturl.NewConcurrentUrl(db)
+	queue := concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(100), index: 1})
+	queue.Create(account, id1, concurrentlib.DataTypeUint256)
+	_, transitions := url.Export(true)
+	url.Import(transitions)
+	url.Commit([]uint32{1})
+
+	// Push element into queue.
+	tdb := urlcommon.NewTransientDB(db)
+	url = concurrenturl.NewConcurrentUrl(tdb)
+	queue = concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(101), index: 1})
+	queue.Push(account, id1, []byte("someelement"), concurrentlib.DataTypeUint256)
+	_, transitions = url.Export(true)
+	url = concurrenturl.NewConcurrentUrl(tdb)
+	url.Import(transitions)
+	url.Commit([]uint32{1})
+
+	// Pop element out of queue in defer call.
+	url = concurrenturl.NewConcurrentUrl(tdb)
+	queue = concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(101), index: 2})
+	if value, ok := queue.Pop(account, id1, concurrentlib.DataTypeUint256); !ok || !bytes.Equal(value, []byte("someelement")) {
+		t.Fail()
+		return
+	}
+	_, transitions2 := url.Export(true)
+
+	// Commit all the transitions.
+	url = concurrenturl.NewConcurrentUrl(db)
+	url.Import(append(transitions, transitions2...))
+	url.Commit([]uint32{1, 2})
+
+	// Check status.
+	url = concurrenturl.NewConcurrentUrl(db)
+	queue = concurrentlib.NewQueue(url, &txContext{height: new(big.Int).SetUint64(102), index: 1})
+	if queue.GetSize(account, id1) != 0 {
+		t.Fail()
+	}
 }
