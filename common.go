@@ -5,6 +5,7 @@ import (
 	"math/big"
 
 	"github.com/arcology-network/3rd-party/eth/common"
+	commonlib "github.com/arcology-network/common-lib/common"
 	"github.com/arcology-network/common-lib/types"
 	"github.com/arcology-network/concurrenturl/v2"
 	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
@@ -46,43 +47,43 @@ func getDefaultValue(dataType int) ([]byte, bool) {
 }
 
 func getAccountRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
-	return url.Platform.Eth10Account() + string(account) + "/"
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/")
 }
 
 func getStorageRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
-	return getAccountRootPath(url, account) + "storage/containers/"
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/")
 }
 
 func getDeferRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
-	return getAccountRootPath(url, account) + "defer/"
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/defer/")
 }
 
 func getDeferCallPath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
-	return getDeferRootPath(url, account) + id
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/defer/", id)
 }
 
 func getContainerRootPath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
-	return getStorageRootPath(url, account) + id + "/"
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/", id, "/")
 }
 
 func getContainerTypeRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
-	return getStorageRootPath(url, account) + "!/"
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/!/")
 }
 
 func getContainerTypePath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
-	return getContainerTypeRootPath(url, account) + id
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/!/", id)
 }
 
 func getSizePath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
-	return getContainerRootPath(url, account, id) + "#"
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/", id, "/#")
 }
 
 func getKeyTypePath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
-	return getContainerRootPath(url, account, id) + "!"
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/", id, "/!")
 }
 
 func getValueTypePath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
-	return getContainerRootPath(url, account, id) + "@"
+	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/", id, "/@")
 }
 
 func getValuePath(url *concurrenturl.ConcurrentUrl, account types.Address, id string, key interface{}) string {

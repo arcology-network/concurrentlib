@@ -3,6 +3,7 @@ package concurrentlib_test
 import (
 	"testing"
 
+	cachedstorage "github.com/arcology-network/common-lib/cachedstorage"
 	"github.com/arcology-network/common-lib/types"
 	"github.com/arcology-network/concurrentlib"
 	"github.com/arcology-network/concurrenturl/v2"
@@ -11,9 +12,9 @@ import (
 )
 
 func TestDeferBasic(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")
@@ -33,6 +34,7 @@ func TestDeferBasic(t *testing.T) {
 	t.Log("\n" + formatTransitions(transitions))
 
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{1})
 	url = concurrenturl.NewConcurrentUrl(store)
 	dc = concurrentlib.NewDeferCall(url, &txContext{index: 2})

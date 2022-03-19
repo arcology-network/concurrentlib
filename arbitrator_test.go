@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	cachedstorage "github.com/arcology-network/common-lib/cachedstorage"
 	"github.com/arcology-network/common-lib/types"
 	"github.com/arcology-network/concurrentlib"
 	"github.com/arcology-network/concurrenturl/v2"
@@ -20,29 +21,34 @@ func detectConflict(transitions []urlcommon.UnivalueInterface) ([]uint32, []uint
 	paths := make([]string, length)
 	reads := make([]uint32, length)
 	writes := make([]uint32, length)
-	addOrDelete := make([]bool, length)
 	composite := make([]bool, length)
+	uniqueTxsDict := make(map[uint32]struct{})
 	for i, t := range transitions {
 		txs[i] = t.(*urltype.Univalue).GetTx()
-		paths[i] = t.(*urltype.Univalue).GetPath()
+		paths[i] = *(t.(*urltype.Univalue).GetPath())
 		reads[i] = t.(*urltype.Univalue).Reads()
 		writes[i] = t.(*urltype.Univalue).Writes()
-		addOrDelete[i] = false
 		composite[i] = t.(*urltype.Univalue).Composite()
+		uniqueTxsDict[txs[i]] = struct{}{}
 	}
 
+	uniqueTxs := make([]uint32, 0, len(uniqueTxsDict))
+	for tx := range uniqueTxsDict {
+		uniqueTxs = append(uniqueTxs, tx)
+	}
 	engine := arbitrator.Start()
-	_, buf := arbitrator.Insert(engine, txs, paths, reads, writes, addOrDelete, composite)
-	txs, groups, flags := arbitrator.Detect(engine, uint32(length))
+	arbitrator.Insert(engine, txs, paths, reads, writes, composite)
+	txs, groups, flags := arbitrator.DetectLegacy(engine, uniqueTxs)
 
-	arbitrator.Clear(engine, buf)
+	arbitrator.Clear(engine)
 	return txs, groups, flags
 }
 
 func TestFixedLengthArrayConflict(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
+
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")
@@ -55,6 +61,7 @@ func TestFixedLengthArrayConflict(t *testing.T) {
 
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	if errs := url.Commit([]uint32{1}); len(errs) != 0 {
 		t.Error("Failed to commit transitions.")
 	}
@@ -89,9 +96,9 @@ func TestFixedLengthArrayConflict(t *testing.T) {
 }
 
 func TestSortedMapConflict(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")
@@ -104,6 +111,7 @@ func TestSortedMapConflict(t *testing.T) {
 
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	if errs := url.Commit([]uint32{1}); len(errs) != 0 {
 		t.Error("Failed to commit transitions.")
 	}
@@ -149,9 +157,9 @@ func TestSortedMapConflict(t *testing.T) {
 }
 
 func TestQueueConflict(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")
@@ -165,6 +173,7 @@ func TestQueueConflict(t *testing.T) {
 	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Import(transitions)
+	url.PostImport()
 	if errs := url.Commit([]uint32{1}); len(errs) != 0 {
 		t.Error("Failed to commit transitions.")
 	}
@@ -193,7 +202,7 @@ func TestQueueConflict(t *testing.T) {
 	t.Log(txs)
 	t.Log(groups)
 	t.Log(flags)
-	if len(txs) != 2 {
+	if len(txs) != 1 || txs[0] != 3 {
 		t.Fail()
 	}
 }

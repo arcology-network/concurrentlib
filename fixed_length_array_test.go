@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	cachedstorage "github.com/arcology-network/common-lib/cachedstorage"
 	"github.com/arcology-network/common-lib/types"
 	"github.com/arcology-network/concurrentlib"
 	"github.com/arcology-network/concurrenturl/v2"
@@ -76,15 +77,15 @@ func formatValue(value interface{}) string {
 func formatTransitions(transitions []urlcommon.UnivalueInterface) string {
 	var str string
 	for _, t := range transitions {
-		str += fmt.Sprintf("[%v:%v,%v,%v,%v]%s%s\n", t.(*urltype.Univalue).GetTx(), t.(*urltype.Univalue).Reads(), t.(*urltype.Univalue).Writes(), t.(*urltype.Univalue).Preexist(), t.(*urltype.Univalue).Composite(), t.(*urltype.Univalue).GetPath(), formatValue(t.(*urltype.Univalue).Value()))
+		str += fmt.Sprintf("[%v:%v,%v,%v,%v]%s%s\n", t.(*urltype.Univalue).GetTx(), t.(*urltype.Univalue).Reads(), t.(*urltype.Univalue).Writes(), t.(*urltype.Univalue).Preexist(), t.(*urltype.Univalue).Composite(), *(t.(*urltype.Univalue).GetPath()), formatValue(t.(*urltype.Univalue).Value()))
 	}
 	return str
 }
 
 func TestFLABasic(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")

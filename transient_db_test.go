@@ -5,24 +5,30 @@ import (
 	"math/big"
 	"testing"
 
+	cachedstorage "github.com/arcology-network/common-lib/cachedstorage"
 	"github.com/arcology-network/common-lib/types"
 	"github.com/arcology-network/concurrentlib"
 	"github.com/arcology-network/concurrenturl/v2"
 	urlcommon "github.com/arcology-network/concurrenturl/v2/common"
+	curstorage "github.com/arcology-network/concurrenturl/v2/storage"
 	commutative "github.com/arcology-network/concurrenturl/v2/type/commutative"
 )
 
 func TestTransientDBBasic(t *testing.T) {
-	persistentDB := urlcommon.NewDataStore()
+	persistentDB := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	persistentDB.Save(urlcommon.NewPlatform().Eth10Account(), meta)
-	transientDB := urlcommon.NewTransientDB(persistentDB)
+	persistentDB.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
+	transientDB := curstorage.NewTransientDB(persistentDB)
+
+	// if err := url.CreateAccount(ccurlcommon.SYSTEM, url.Platform.Eth10(), alice); err != nil { // CreateAccount account structure {
+	// 	t.Error(err)
+	// }
 
 	// transientDB := urlcommon.NewDataStore()
 	// meta, _ := noncommutative.NewMeta(urlcommon.ACCOUNT_BASE_URL)
 	// transientDB.Save(urlcommon.ACCOUNT_BASE_URL, meta)
 
-	url := concurrenturl.NewConcurrentUrl(transientDB)
+	url := concurrenturl.NewConcurrentUrl(persistentDB)
 
 	account1 := types.Address("contractAddress1")
 	account2 := types.Address("contractAddress2")
@@ -53,6 +59,7 @@ func TestTransientDBBasic(t *testing.T) {
 	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(transientDB)
@@ -101,6 +108,7 @@ func TestTransientDBBasic(t *testing.T) {
 	_, transitions = url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(transientDB)
@@ -156,6 +164,7 @@ func TestTransientDBBasic(t *testing.T) {
 	_, transitions = url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(transientDB)

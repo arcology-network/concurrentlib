@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	cachedstorage "github.com/arcology-network/common-lib/cachedstorage"
 	"github.com/arcology-network/common-lib/types"
 	"github.com/arcology-network/concurrentlib"
 	"github.com/arcology-network/concurrenturl/v2"
@@ -14,9 +15,9 @@ import (
 )
 
 func TestContainersBasic(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account1 := types.Address("contractAddress1")
@@ -124,6 +125,7 @@ func TestContainersBasic(t *testing.T) {
 	t.Log("\n" + formatTransitions(transitions))
 
 	url.Import(transitions)
+	url.PostImport()
 	if errs := url.Commit([]uint32{1}); len(errs) != 0 {
 		t.Error("Failed to commit transitions.")
 	}

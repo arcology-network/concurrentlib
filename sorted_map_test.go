@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	ethcommon "github.com/arcology-network/3rd-party/eth/common"
+	cachedstorage "github.com/arcology-network/common-lib/cachedstorage"
 	"github.com/arcology-network/common-lib/types"
 	"github.com/arcology-network/concurrentlib"
 	"github.com/arcology-network/concurrenturl/v2"
@@ -13,9 +14,9 @@ import (
 )
 
 func TestSMBasic(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	url := concurrenturl.NewConcurrentUrl(store)
 
 	account := types.Address("contractAddress")
@@ -87,9 +88,9 @@ func TestSMBasic(t *testing.T) {
 }
 
 func TestSMCreateTwoMapsInDiffAccounts(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account1 := types.Address("contractAddress1")
 	account2 := types.Address("contractAddress2")
 	id1 := "map1"
@@ -118,9 +119,9 @@ func TestSMCreateTwoMapsInDiffAccounts(t *testing.T) {
 }
 
 func TestSMCreateTwoDiffMapsInSameAccount(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 	id2 := "map2"
@@ -132,6 +133,7 @@ func TestSMCreateTwoDiffMapsInSameAccount(t *testing.T) {
 	_, transitions := url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -158,9 +160,9 @@ func TestSMCreateTwoDiffMapsInSameAccount(t *testing.T) {
 }
 
 func TestSMCreateAndAddKey(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 	id2 := "map2"
@@ -171,6 +173,7 @@ func TestSMCreateAndAddKey(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -197,9 +200,9 @@ func TestSMCreateAndAddKey(t *testing.T) {
 }
 
 func TestSMCreateAndDeleteExistKey(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 	id2 := "map2"
@@ -211,6 +214,7 @@ func TestSMCreateAndDeleteExistKey(t *testing.T) {
 	sm.SetValue(account, id1, []byte("somekey"), []byte("somevalue"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -237,9 +241,9 @@ func TestSMCreateAndDeleteExistKey(t *testing.T) {
 }
 
 func TestSMCreateAndDeleteNonexistKey(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 	id2 := "map2"
@@ -250,6 +254,7 @@ func TestSMCreateAndDeleteNonexistKey(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -276,9 +281,9 @@ func TestSMCreateAndDeleteNonexistKey(t *testing.T) {
 }
 
 func TestSMCreateAndUpdateKey(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 	id2 := "map2"
@@ -290,6 +295,7 @@ func TestSMCreateAndUpdateKey(t *testing.T) {
 	sm.SetValue(account, id1, []byte("somekey"), []byte("somevalue"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -316,9 +322,9 @@ func TestSMCreateAndUpdateKey(t *testing.T) {
 }
 
 func TestSMCreateAndGetSize(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 	id2 := "map2"
@@ -330,6 +336,7 @@ func TestSMCreateAndGetSize(t *testing.T) {
 	sm.SetValue(account, id1, []byte("somekey"), []byte("somevalue"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -356,9 +363,9 @@ func TestSMCreateAndGetSize(t *testing.T) {
 }
 
 func TestSMCreateAndAddThenDelete(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 	id2 := "map2"
@@ -369,6 +376,7 @@ func TestSMCreateAndAddThenDelete(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -396,9 +404,9 @@ func TestSMCreateAndAddThenDelete(t *testing.T) {
 }
 
 func TestSMAddKeyAndDeleteNonexistKey(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 
@@ -408,6 +416,7 @@ func TestSMAddKeyAndDeleteNonexistKey(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -428,15 +437,15 @@ func TestSMAddKeyAndDeleteNonexistKey(t *testing.T) {
 	t.Log(txs)
 	t.Log(groups)
 	t.Log(flags)
-	if len(txs) != 2 {
+	if len(txs) != 1 || txs[0] != 2 {
 		t.Fail()
 	}
 }
 
 func TestSMAddKeyAndGetSize(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 
@@ -446,6 +455,7 @@ func TestSMAddKeyAndGetSize(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -466,15 +476,15 @@ func TestSMAddKeyAndGetSize(t *testing.T) {
 	t.Log(txs)
 	t.Log(groups)
 	t.Log(flags)
-	if len(txs) != 2 {
+	if len(txs) != 1 || txs[0] != 2 {
 		t.Fail()
 	}
 }
 
 func TestSMAddThenDeleteAndGetSize(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 
@@ -484,6 +494,7 @@ func TestSMAddThenDeleteAndGetSize(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -505,15 +516,15 @@ func TestSMAddThenDeleteAndGetSize(t *testing.T) {
 	t.Log(txs)
 	t.Log(groups)
 	t.Log(flags)
-	if len(txs) != 2 {
+	if len(txs) != 1 || txs[0] != 2 {
 		t.Fail()
 	}
 }
 
 func TestSMCreateAndSetKeyToSameMap(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id1 := "map1"
 	id2 := "map2"
@@ -524,6 +535,7 @@ func TestSMCreateAndSetKeyToSameMap(t *testing.T) {
 	sm.Create(account, id1, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url1 := concurrenturl.NewConcurrentUrl(store)
@@ -533,11 +545,11 @@ func TestSMCreateAndSetKeyToSameMap(t *testing.T) {
 	sm2 := concurrentlib.NewSortedMap(url2, &txContext{index: 2})
 
 	if !sm1.Create(account, id2, concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256) {
-		t.Log("Create map2 failed.")
+		t.Error("Create map2 failed.")
 		return
 	}
 	if sm2.SetValue(account, id2, []byte("somekey"), []byte("somevalue"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256) {
-		t.Log("Successfully set value on nonexist map.")
+		t.Error("Successfully set value on nonexist map.")
 		return
 	}
 
@@ -550,15 +562,15 @@ func TestSMCreateAndSetKeyToSameMap(t *testing.T) {
 	t.Log(txs)
 	t.Log(groups)
 	t.Log(flags)
-	if len(txs) != 2 {
+	if len(txs) != 1 || txs[0] != 2 {
 		t.Fail()
 	}
 }
 
 func TestExportDoNotContainKeysInMetadata(t *testing.T) {
-	store := urlcommon.NewDataStore()
+	store := cachedstorage.NewDataStore()
 	meta, _ := commutative.NewMeta(urlcommon.NewPlatform().Eth10Account())
-	store.Save(urlcommon.NewPlatform().Eth10Account(), meta)
+	store.Inject(urlcommon.NewPlatform().Eth10Account(), meta)
 	account := types.Address("contractAddress")
 	id := "mapID"
 
@@ -569,6 +581,7 @@ func TestExportDoNotContainKeysInMetadata(t *testing.T) {
 	sm.SetValue(account, id, []byte("key1"), []byte("value1"), concurrentlib.DataTypeUint256, concurrentlib.DataTypeUint256)
 	_, transitions := url.Export(true)
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{0})
 
 	url = concurrenturl.NewConcurrentUrl(store)
@@ -578,6 +591,7 @@ func TestExportDoNotContainKeysInMetadata(t *testing.T) {
 	_, transitions = url.Export(true)
 	t.Log("\n" + formatTransitions(transitions))
 	url.Import(transitions)
+	url.PostImport()
 	url.Commit([]uint32{1})
 
 	url = concurrenturl.NewConcurrentUrl(store)
