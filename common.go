@@ -50,24 +50,12 @@ func getAccountRootPath(url *concurrenturl.ConcurrentUrl, account types.Address)
 	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/")
 }
 
-func getStorageRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
-	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/")
-}
-
-func getDeferRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
-	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/defer/")
-}
-
 func getDeferCallPath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
 	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/defer/", id)
 }
 
 func getContainerRootPath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
 	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/", id, "/")
-}
-
-func getContainerTypeRootPath(url *concurrenturl.ConcurrentUrl, account types.Address) string {
-	return commonlib.StrCat(url.Platform.Eth10Account(), string(account), "/storage/containers/!/")
 }
 
 func getContainerTypePath(url *concurrenturl.ConcurrentUrl, account types.Address, id string) string {
@@ -106,28 +94,8 @@ func makeStorageRootPath(url *concurrenturl.ConcurrentUrl, account types.Address
 		if err := url.CreateAccount(txIndex, url.Platform.Eth10(), string(account)); err != nil {
 			return false
 		}
-		// if err := url.Initialize(url.Platform.Eth10(), string(account)); err != nil {
-		// 	return false
-		// }
 	}
 
-	// storageRoot := getStorageRootPath(url, account)
-	// if value, err := url.Read(txIndex, storageRoot); err != nil {
-	// 	return false
-	// } else if value == nil { // No containers in this account.
-	// 	if path, err := noncommutative.NewMeta(storageRoot); err != nil {
-	// 		return false
-	// 	} else if err := url.Write(txIndex, storageRoot, path); err != nil {
-	// 		return false
-	// 	}
-
-	// 	containerTypeRoot := getContainerTypeRootPath(url, account)
-	// 	if path, err := noncommutative.NewMeta(containerTypeRoot); err != nil {
-	// 		return false
-	// 	} else if err := url.Write(txIndex, containerTypeRoot, path); err != nil {
-	// 		return false
-	// 	}
-	// }
 	return true
 }
 

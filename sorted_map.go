@@ -153,6 +153,21 @@ func (sm *SortedMap) getKeys(account types.Address, id string) ([][]byte, bool) 
 	}
 }
 
+func (sm *SortedMap) peekKeys(account types.Address, id string) ([][]byte, bool) {
+	if value, err := sm.url.TryRead(sm.context.GetIndex(), getContainerRootPath(sm.url, account, id)); err != nil || value == nil {
+		return nil, false
+	} else {
+		keys := make([][]byte, 0, len(value.(*commutative.Meta).PeekKeys())-2)
+		for _, key := range value.(*commutative.Meta).PeekKeys() {
+			if len(key) > 1 {
+				b, _ := hex.DecodeString(key[1:])
+				keys = append(keys, b)
+			}
+		}
+		return keys, true
+	}
+}
+
 func (sm *SortedMap) getIterator(account types.Address, id string) (*commutative.Meta, bool) {
 	if value, err := sm.url.Read(sm.context.GetIndex(), getContainerRootPath(sm.url, account, id)); err != nil || value == nil {
 		return nil, false
