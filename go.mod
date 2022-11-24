@@ -2,11 +2,17 @@ module github.com/arcology-network/concurrentlib
 
 go 1.19
 
+// replace github.com/arcology-network/common-lib => ../common-lib/
+
+// replace github.com/arcology-network/concurrenturl => ../concurrenturl/
+
+// replace github.com/arcology-network/urlarbitrator-engine => ../urlarbitrator-engine/
+
 require (
 	github.com/arcology-network/3rd-party v0.0.0-20221110004651-3ae5c3009a22
-	github.com/arcology-network/common-lib v0.0.0-20221110013709-f355641f88df
-	github.com/arcology-network/concurrenturl v0.0.0-20221110014513-705bbd1cba8c
-	github.com/arcology-network/urlarbitrator-engine v0.0.0-20221110025906-6a811a6a0cd8
+	github.com/arcology-network/common-lib v0.0.0-20221124074600-09b0a62272cb
+	github.com/arcology-network/concurrenturl v1.7.1
+	github.com/arcology-network/urlarbitrator-engine v1.7.1
 )
 
 require (
