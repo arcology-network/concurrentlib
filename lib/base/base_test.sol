@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 import "../runtime/Runtime.sol";
 
-contract BaseLinearTest is Runtime{    
+contract BaseTest is Runtime{    
     address constant public API = address(0x84); 
 
     uint[] public arr2 = [1, 2, 3];
@@ -68,7 +68,7 @@ contract BaseLinearTest is Runtime{
 
     function call() public{ 
         require(peek() == 1); 
-        pop();
+        popBack();
         require(peek() == 1); 
     }
 
@@ -86,10 +86,10 @@ contract BaseLinearTest is Runtime{
         return  abi.decode(data, (uint256));
     }
 
-    function pop() public returns(bytes memory) {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("pop()"));
-        require(success, "Bytes.pop() Failed");
-        return abi.decode(data, (bytes)); 
+    function popBack() public virtual returns(bytes memory) { // 80 26 32 97
+        bytes memory v = getIndex(length() - 1);
+        delIndex(length() - 1);
+        return v;
     }
 
     function push(bytes memory elem) public {
