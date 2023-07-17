@@ -9,7 +9,7 @@ go 1.19
 // replace github.com/arcology-network/urlarbitrator-engine => ../urlarbitrator-engine/
 
 require (
-	github.com/arcology-network/3rd-party v0.0.0-20221110004651-3ae5c3009a22
+	github.com/arcology-network/3rd-party v1.7.1 
 	github.com/arcology-network/common-lib v0.0.0-20221124074600-09b0a62272cb
 	github.com/arcology-network/concurrenturl v1.7.1
 	github.com/arcology-network/urlarbitrator-engine v1.7.1
