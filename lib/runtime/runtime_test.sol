@@ -7,8 +7,6 @@ import "../array/U256Cum.sol";
 
 
 contract ResettableDeployer {
-    // uint256 public immutable a;
-    // This is a valid constructor
     TestResettable resettable;
     constructor () {
         resettable = new TestResettable();

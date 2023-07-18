@@ -4,9 +4,18 @@ pragma solidity ^0.8.19;
 // import "../noncommutative/base/Base.sol";
 import "../map/Map.sol";
 
+/**
+ * @title U256Set Contract
+ * @dev The U256Set contract is a specialization of the U256Map contract that provides a simple set data structure.
+ *      It inherits from the U256Map contract and utilizes its key-value storage functionality to implement the set.
+ */
 contract U256Set is U256Map { 
-   constructor() {}
+    constructor() {}
 
+    /**
+     * @notice Add an element to the U256Set.
+     * @param key The uint256 element to add to the set.
+     */
     function set(uint256 key) public { // 80 26 32 97
         Base.setKey((abi.encodePacked(key)), abi.encodePacked(uint256(1)));       
     }
