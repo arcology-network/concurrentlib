@@ -2,8 +2,8 @@
 pragma solidity ^0.8.19;
 
 import "./Multiprocess.sol";
-import "../u256cum/U256Cum.sol";
-import "../bool/Bool.sol";
+import "../array/U256Cum.sol";
+import "../array/Bool.sol";
 
 contract MixedRecursiveMultiprocessTest {
     Bool container = new Bool();

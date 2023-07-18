@@ -2,8 +2,8 @@
 pragma solidity ^0.8.19;
 
 import "./Multiprocess.sol";
-import "../noncommutative/bool/Bool.sol";
-import "../commutative/u256/U256Cumulative.sol";
+import "../array/Bool.sol";
+import "../array/U256Cum.sol";
 
 contract Benchmarking {
     function reverse(bytes memory message) public pure {

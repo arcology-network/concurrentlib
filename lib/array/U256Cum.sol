@@ -4,8 +4,8 @@ pragma solidity ^0.8.19;
 contract U256Cumulative {
     address constant public API = address(0x85);    
 
-    constructor (uint256 min, uint256 max) {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("New(uint256, uint256, uint256)", min, max));
+    constructor (uint256 minv, uint256 maxv) {
+        (bool success,) = address(API).call(abi.encodeWithSignature("New(uint256, uint256, uint256)", minv, maxv));
         assert(success);
     }
 
