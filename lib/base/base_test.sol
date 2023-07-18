@@ -28,7 +28,10 @@ contract BaseTest is Runtime{
         require(peek() == 0);  
 
         require(indexByKey(keyByIndex(1)) == 1);
-    
+        require(indexByKey(keyByIndex(1)) == 1);
+        // uint256 idx = indexByKey(keyByIndex(1));
+
+        //  getByIndex(idx);
         bytes memory stored = getByIndex(1);
         bytes memory retrivedByKey = getByKey(keyByIndex(1));
         require(keccak256(retrivedByKey) == keccak256(stored));
@@ -65,8 +68,6 @@ contract BaseTest is Runtime{
             require(stored[i] == elems[i]);
         }
         require(length() == 1); 
-
-
 
         // clear();
         require(peek() == 0);  

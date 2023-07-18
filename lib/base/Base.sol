@@ -75,8 +75,10 @@ contract Base is Runtime {
      * @return The key associated with the given index.
      */
     function keyByIndex(uint256 idx) public returns(bytes memory) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
-        return data;     
+        if (idx < length()) {
+            (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
+            return data;  
+        }   
     }
 
     /**
