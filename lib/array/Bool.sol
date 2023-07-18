@@ -16,7 +16,7 @@ contract Bool is Base {
      * @param elem The boolean element to add to the array.
      */
     function push(bool elem) public virtual { //9e c6 69 25
-        Base.setKey(uuid(), abi.encode(elem));
+        Base.setByKey(uuid(), abi.encode(elem));
     }    
 
     /**
@@ -33,7 +33,7 @@ contract Bool is Base {
      * @return The boolean element stored at the given index.
      */
     function get(uint256 idx) public virtual  returns(bool)  { // 31 fe 88 d0
-        return abi.decode(Base.getIndex(idx), (bool));  
+        return abi.decode(Base.getByIndex(idx), (bool));  
     }
 
     /**
@@ -42,6 +42,6 @@ contract Bool is Base {
      * @param elem The boolean element to be stored at the specified index.
      */
     function set(uint256 idx, bool elem) public { // 7a fa 62 38
-        Base.setIndex(idx, abi.encode(elem));    
+        Base.setByIndex(idx, abi.encode(elem));    
     }
 }

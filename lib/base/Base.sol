@@ -53,8 +53,8 @@ contract Base is Runtime {
      * @return The data of the removed element.
      */
     function popBack() public virtual returns(bytes memory) {
-        bytes memory v = getIndex(length() - 1);
-        delIndex(length() - 1);
+        bytes memory v = getByIndex(length() - 1);
+        delByIndex(length() - 1);
         return v;
     }
 
@@ -64,9 +64,29 @@ contract Base is Runtime {
      * @param encoded The data to be stored.
      * @return success true if the data was successfully updated, false otherwise.
      */
-    function setIndex(uint256 idx, bytes memory encoded) public returns(bool) {
+    function setByIndex(uint256 idx, bytes memory encoded) public returns(bool) {
         (bool success,) = address(API).call(abi.encodeWithSignature("setIndex(uint256,bytes)", idx, encoded));   
         return success;     
+    }
+
+    /**
+     * @notice Retrieves the key associated with the given index in the concurrent container.
+     * @param idx The index for which to retrieve the key.
+     * @return The key associated with the given index.
+     */
+    function keyByIndex(uint256 idx) public returns(bytes memory) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
+        return data;     
+    }
+
+    /**
+     * @notice Retrieves the index associated with the given key in the concurrent container.
+     * @param key The key for which to retrieve the index.
+     * @return The index associated with the given key.
+     */
+    function indexByKey(bytes memory key) public returns(uint256) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("indexByKey(bytes)", key));   
+        return abi.decode(data,(uint256));     
     }
 
     /**
@@ -75,7 +95,7 @@ contract Base is Runtime {
      * @param elem The data to be stored.
      * @return success true if the data was successfully updated, false otherwise.
      */
-    function setKey(bytes memory key, bytes memory elem) public returns(bool) {
+    function setByKey(bytes memory key, bytes memory elem) public returns(bool) {
         (bool success,) = address(API).call(abi.encodeWithSignature("setKey(bytes,bytes)", key, elem));
         return success;   
     }
@@ -85,7 +105,7 @@ contract Base is Runtime {
      * @param idx The index of the data to be deleted.
      * @return success true if the data was successfully deleted, false otherwise.
      */
-    function delIndex(uint256 idx) public returns(bool) {
+    function delByIndex(uint256 idx) public returns(bool) {
         (bool success,) = address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));  
         return success;   
     }
@@ -95,7 +115,7 @@ contract Base is Runtime {
      * @param key The key associated with the data to be deleted.
      * @return success true if the data was successfully deleted, false otherwise.
      */
-    function delKey(bytes memory key) public returns(bool) {
+    function delByKey(bytes memory key) public returns(bool) {
        (bool success,) = address(API).call(abi.encodeWithSignature("delKey(bytes)", key));
        return success;
     }
@@ -105,7 +125,7 @@ contract Base is Runtime {
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
      */
-    function getIndex(uint256 idx) public virtual returns(bytes memory) {
+    function getByIndex(uint256 idx) public virtual returns(bytes memory) {
         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
         if (success) {
             return abi.decode(data, (bytes));  
@@ -118,7 +138,7 @@ contract Base is Runtime {
      * @param key The key associated with the data to retrieve.
      * @return The data stored at the specified key.
      */
-    function getKey(bytes memory key) public returns(bytes memory)  {
+    function getByKey(bytes memory key) public returns(bytes memory)  {
         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
         if (success) {
             return abi.decode(data, (bytes));  

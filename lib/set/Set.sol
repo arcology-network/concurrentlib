@@ -17,6 +17,6 @@ contract U256Set is U256Map {
      * @param key The uint256 element to add to the set.
      */
     function set(uint256 key) public { // 80 26 32 97
-        Base.setKey((abi.encodePacked(key)), abi.encodePacked(uint256(1)));       
+        Base.setByKey((abi.encodePacked(key)), abi.encodePacked(uint256(1)));       
     }
 }

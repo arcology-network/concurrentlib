@@ -27,7 +27,12 @@ contract BaseTest is Runtime{
         require(length() == 2); 
         require(peek() == 0);  
 
-        bytes memory stored = getIndex(1);
+        require(indexByKey(keyByIndex(1)) == 1);
+    
+        bytes memory stored = getByIndex(1);
+        bytes memory retrivedByKey = getByKey(keyByIndex(1));
+        require(keccak256(retrivedByKey) == keccak256(stored));
+
         require(stored.length == byteArray.length);
         for (uint  i = 0; i < byteArray.length; i ++) {
             require(stored[i] == byteArray[i]);
@@ -37,29 +42,31 @@ contract BaseTest is Runtime{
         for (uint  i = 0; i < elems.length; i ++) {
             elems[i] = 0xaa;
         }
-        setIndex(1, elems);
+        setByIndex(1, elems);
        
-        stored = getIndex(0);
+        stored = getByIndex(0);
         require(stored.length == byteArray.length);
         for (uint  i = 0; i < byteArray.length; i ++) {
             require(stored[i] == byteArray[i]);
         }
 
-        stored = getIndex(1);
+        stored = getByIndex(1);
         require(stored.length == elems.length); 
         for (uint  i = 0; i < elems.length; i ++) {
             require(stored[i] == elems[i]);
         }
 
         // stored = pop();
-        stored = getIndex(length() - 1);
-        delIndex(length() - 1);
+        stored = getByIndex(length() - 1);
+        delByIndex(length() - 1);
         // stored = pop();
         // require(keccak256(temp) == keccak256(stored));
         for (uint  i = 0; i < elems.length; i ++) {
             require(stored[i] == elems[i]);
         }
         require(length() == 1); 
+
+
 
         // clear();
         require(peek() == 0);  
@@ -70,6 +77,16 @@ contract BaseTest is Runtime{
         require(peek() == 1); 
         popBack();
         require(peek() == 1); 
+    }
+
+    function keyByIndex(uint256 idx) public returns(bytes memory) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
+        return data;     
+    }
+
+    function indexByKey(bytes memory key) public returns(uint256) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("indexByKey(bytes)", key));   
+        return abi.decode(data,(uint256));     
     }
 
     function peek() public returns(uint256) {
@@ -87,33 +104,33 @@ contract BaseTest is Runtime{
     }
 
     function popBack() public virtual returns(bytes memory) { // 80 26 32 97
-        bytes memory v = getIndex(length() - 1);
-        delIndex(length() - 1);
+        bytes memory v = getByIndex(length() - 1);
+        delByIndex(length() - 1);
         return v;
     }
 
     function push(bytes memory elem) public {
-        setKey(uuid(), (elem));
+        setByKey(uuid(), (elem));
     }   
     
-    function setIndex(uint256 idx, bytes memory encoded) public { // 7a fa 62 38
+    function setByIndex(uint256 idx, bytes memory encoded) public { // 7a fa 62 38
         address(API).call(abi.encodeWithSignature("setIndex(uint256,bytes)", idx, encoded));     
     }
 
-    function setKey(bytes memory key, bytes memory elem) public {
+    function setByKey(bytes memory key, bytes memory elem) public {
         address(API).call(abi.encodeWithSignature("setKey(bytes,bytes)", key, elem));
     }
 
-    function delIndex(uint256 idx) public { // 7a fa 62 38
+    function delByIndex(uint256 idx) public { // 7a fa 62 38
         address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));     
     }
 
-    function delKey(bytes memory key) public {
-        address(API).call(abi.encodeWithSignature("delKey(bytes)", key));
+    function delByIndex(bytes memory key) public {
+        address(API).call(abi.encodeWithSignature("delIndex(bytes)", key));
     }
 
 
-    function getIndex(uint256 idx) public virtual returns(bytes memory) { // 31 fe 88 d0
+    function getByIndex(uint256 idx) public virtual returns(bytes memory) { // 31 fe 88 d0
         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
         if (success) {
             return abi.decode(data, (bytes));  
@@ -121,7 +138,7 @@ contract BaseTest is Runtime{
         return data;
     }
 
-    function getKey(bytes memory key) public returns(bytes memory)  {
+    function getByKey(bytes memory key) public returns(bytes memory)  {
         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
         if (success) {
             return abi.decode(data, (bytes));  
@@ -129,33 +146,33 @@ contract BaseTest is Runtime{
         return data;
     }
 
-    // function getIndex(uint256 idx) public returns(bytes memory)  {
-    //     (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
+    // function getByIndex(uint256 idx) public returns(bytes memory)  {
+    //     (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getByIndex(uint256)", idx));
     //     if (success) {
     //         return abi.decode(data, (bytes)); 
     //     }
     //     return "";
     // }
 
-    // function setIndex(uint256 idx, bytes memory elem) public {
-    //     (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("setIndex(uint256,bytes)", idx, elem));
-    //     require(success, "Bytes.setIndex() Failed");
+    // function setByIndex(uint256 idx, bytes memory elem) public {
+    //     (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("setByIndex(uint256,bytes)", idx, elem));
+    //     require(success, "Bytes.setByIndex() Failed");
     // }
 
-    // function getKey(uint256 idx) public returns(bytes memory)  {
-    //     (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(uint256)", idx));
-    //     require(success, "Bytes.getIndex() Failed");
+    // function getByKey(uint256 idx) public returns(bytes memory)  {
+    //     (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getByKey(uint256)", idx));
+    //     require(success, "Bytes.getByIndex() Failed");
     //     return abi.decode(data, (bytes));  
     // }
 
-    // function setKey(uint256 idx, bytes memory elem) public {
-    //     (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("setKey(uint256,bytes)", idx, elem));
-    //     require(success, "Bytes.setIndex() Failed");
+    // function setByKey(uint256 idx, bytes memory elem) public {
+    //     (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("setByKey(uint256,bytes)", idx, elem));
+    //     require(success, "Bytes.setByIndex() Failed");
     // }
 
     function clear() public {
         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("clear()"));
-        require(success, "Bytes.setIndex() Failed");
+        require(success, "Bytes.setByIndex() Failed");
     }
 }
 
@@ -185,7 +202,7 @@ contract BaseTest is Runtime{
 //         require(length() == 2); 
 //         require(peek() == 0);  
 
-//         bytes memory stored = getIndex(1);
+//         bytes memory stored = getByIndex(1);
 //         require(stored.length == byteArray.length);
 //         for (uint  i = 0; i < byteArray.length; i ++) {
 //             require(stored[i] == byteArray[i]);
@@ -195,15 +212,15 @@ contract BaseTest is Runtime{
 //         for (uint  i = 0; i < elems.length; i ++) {
 //             elems[i] = 0xaa;
 //         }
-//         setIndex(1, elems);
+//         setByIndex(1, elems);
        
-//         stored = getIndex(0);
+//         stored = getByIndex(0);
 //         require(stored.length == byteArray.length);
 //         for (uint  i = 0; i < byteArray.length; i ++) {
 //             require(stored[i] == byteArray[i]);
 //         }
 
-//         stored = getIndex(1);
+//         stored = getByIndex(1);
 //         require(stored.length == elems.length); 
 //         for (uint  i = 0; i < elems.length; i ++) {
 //             require(stored[i] == elems[i]);
@@ -251,19 +268,19 @@ contract BaseTest is Runtime{
 //         require(success, "Bytes.push() Failed");
 //     }   
 
-//     function getKey(uint256 idx) public returns(bytes memory)  {
-//         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(uint256)", idx));
-//         require(success, "Bytes.getIndex() Failed");
+//     function getByKey(uint256 idx) public returns(bytes memory)  {
+//         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getByKey(uint256)", idx));
+//         require(success, "Bytes.getByIndex() Failed");
 //         return abi.decode(data, (bytes));  
 //     }
 
-//     function setKey(uint256 idx, bytes memory elem) public {
-//         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("setKey(uint256,bytes)", idx, elem));
-//         require(success, "Bytes.setIndex() Failed");
+//     function setByKey(uint256 idx, bytes memory elem) public {
+//         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("setByKey(uint256,bytes)", idx, elem));
+//         require(success, "Bytes.setByIndex() Failed");
 //     }
 
 //     function clear() public {
 //         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("clear()"));
-//         require(success, "Bytes.setIndex() Failed");
+//         require(success, "Bytes.setByIndex() Failed");
 //     }
 // }

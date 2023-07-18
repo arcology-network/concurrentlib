@@ -27,7 +27,7 @@ contract Multiprocess is Base, Revertible {
      * @param elem The executable message data to be pushed into the container.
      */
     function push(bytes memory elem) public virtual { // 9e c6 69 25
-        Base.setKey(uuid(), abi.encode(elem));
+        Base.setByKey(uuid(), abi.encode(elem));
     }    
  
     /**
@@ -44,7 +44,7 @@ contract Multiprocess is Base, Revertible {
      * @return The executable message at the specified index.
      */
     function get(uint256 idx) public virtual returns(bytes memory) { // 31 fe 88 d0
-        return abi.decode(Base.getIndex(idx), (bytes));  
+        return abi.decode(Base.getByIndex(idx), (bytes));  
     }
 
     /**
@@ -53,7 +53,7 @@ contract Multiprocess is Base, Revertible {
      * @param elem The executable message data to be stored at the specified index.
      */
     function set(uint256 idx, bytes memory elem) public { // 7a fa 62 38
-        Base.setIndex(idx, abi.encode(elem));   
+        Base.setByIndex(idx, abi.encode(elem));   
     }
 
     /**

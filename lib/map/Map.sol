@@ -28,7 +28,7 @@ contract U256Map is Base {
      * @param value The uint256 value associated with the key.
      */
     function set(uint256 key, uint256 value) public { // 80 26 32 97
-        Base.setKey((abi.encodePacked(key)), abi.encodePacked(value));       
+        Base.setByKey((abi.encodePacked(key)), abi.encodePacked(value));       
     }
 
     /**
@@ -38,7 +38,7 @@ contract U256Map is Base {
      * @return value The uint256 value associated with the key.
      */
     function get(uint256 key) public virtual returns(bool success, uint256 value){ // 9e c6 69 25
-        bytes memory data = Base.getKey(abi.encodePacked(key));
+        bytes memory data = Base.getByKey(abi.encodePacked(key));
         if (data.length > 0) {
             return (true, abi.decode(data, (uint256)));  
         }
@@ -50,6 +50,6 @@ contract U256Map is Base {
      * @param key The uint256 key to delete.
      */
     function del(uint256 key) public { // 80 26 32 97
-        Base.delKey((abi.encodePacked(key)));  
+        Base.delByKey((abi.encodePacked(key)));  
     }
 }
