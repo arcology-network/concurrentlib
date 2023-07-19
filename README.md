@@ -69,19 +69,19 @@ The main difference between the two contracts is how they handle the concurrent 
 
 In CumulativeU256ParaCompute, the U256Cumulative container handles concurrent delta changes. It allows concurrent additions and subtractions to the value and prevents any out-of-bounds changes. Therefore, the cumulative value correctly reflects the sum of the two `add()` calls, which is 4.
 
-#  3. Conclusion
+##  2.4. Conclusion
 The difference in results is due to the handling of concurrent state changes. Only the U256Cumulative container ensures thread safety and provides the expected result.
 
 
-#  4. Benchmark
+#  3. Benchmark
 The benchmark contract [MpBenchmarking](./lib/multiprocess/mp_benchmarking.sol) is designed to test and benchmark the reverse function using different numbers of threads (or cores) for parallel processing. The reverse function in the contract takes a bytes array as input and reverses its contents. It does so by creating a new bytes array called reversed and then iterating through the original input array in reverse order, storing the elements in the reversed array. 
 
 Finally, it calculates the `keccak256` hash of the reversed array, The execution time for each thread count (1, 2, 4, 8, 12, 16, 32, 64) was recorded for each of the 10 repetitions. Statistics (min, max, mean, and standard deviation) were extracted from the test. 
 
-##  4.1. Results
+##  3.1. Results
 ![Alt text](img/benchmark.svg "String Reversal & Keccak 10k runs")
 
-##  4.2. Analysis:
+##  3.2. Analysis:
 Test case
 Decreasing Execution Time with Increasing Threads: As the number of threads increases, the execution time generally decreases. This trend is evident across the different thread counts. 
 It suggests that the benchmark benefits from parallelization, and as more threads are utilized, the computation becomes more efficient. While increasing the number of threads initially leads 
