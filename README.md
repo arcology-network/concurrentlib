@@ -78,7 +78,7 @@ The benchmark contract [MpBenchmarking](./lib/multiprocess/mp_benchmarking.sol) 
 
 Finally, it calculates the `keccak256` hash of the reversed array, The execution time for each thread count (1, 2, 4, 8, 12, 16, 32, 64) was recorded for each of the 10 repetitions. Statistics (min, max, mean, and standard deviation) were extracted from the test. 
 
-##  3.1. Results (Execution time)
+##  3.1. Results
 ![Alt text](img/benchmark.svg "String Reversal & Keccak 10k runs")
 
 ##  3.2. Analysis:
