@@ -48,7 +48,7 @@ This contract uses the U256Cumulative concurrent container from the library, whi
 // Example contract using the Multiprocess library and U256Cumulative for cumulative operations
 // to perform parallel additions and ensure state consistency
 contract CumulativeU256ParaCompute {
-    U256Cumulative cumulative = new U256Cumulative(0, 100); 
+    U256Cumulative cumulative = new U256Cumulative(0, 100);  // Concurrent uint256
 
     function calculate() public {       
         Multiprocess mp = new Multiprocess(2);   // Create Multiprocess instance with 2 threads
@@ -63,13 +63,29 @@ contract CumulativeU256ParaCompute {
     }  
 }
 ```
-
 ##  2.3. Difference:
 
 The main difference between the two contracts is how they handle the concurrent state changes during concurrent execution. In U256ParaCompute, the num variable is a regular state variable, and concurrent execution of the add function results in a race condition where both functions might attempt to update the num variable at the same time. Arcology's concurrency will detect it at runtime and revert the execution of one transtions. As a result, the final value of num only reflects the delta change from one call.
 
 In CumulativeU256ParaCompute, the U256Cumulative container handles concurrent delta changes. It allows concurrent additions and subtractions to the value and prevents any out-of-bounds changes. Therefore, the cumulative value correctly reflects the sum of the two `add()` calls, which is 4.
 
-
 #  3. Conclusion
 The difference in results is due to the handling of concurrent state changes. Only the U256Cumulative container ensures thread safety and provides the expected result.
+
+
+#  4. Benchmark
+The benchmark contract [MpBenchmarking](./lib/multiprocess/mp_benchmarking.sol) is designed to test and benchmark the reverse function using different numbers of threads (or cores) for parallel processing. The reverse function in the contract takes a bytes array as input and reverses its contents. It does so by creating a new bytes array called reversed and then iterating through the original input array in reverse order, storing the elements in the reversed array. 
+
+Finally, it calculates the `keccak256` hash of the reversed array, The execution time for each thread count (1, 2, 4, 8, 12, 16, 32, 64) was recorded for each of the 10 repetitions. Statistics (min, max, mean, and standard deviation) were extracted from the test. 
+
+##  4.1. Results
+![Alt text](img/benchmark.svg "String Reversal & Keccak 10k runs")
+
+##  4.2. Analysis:
+Test case
+Decreasing Execution Time with Increasing Threads: As the number of threads increases, the execution time generally decreases. This trend is evident across the different thread counts. 
+It suggests that the benchmark benefits from parallelization, and as more threads are utilized, the computation becomes more efficient. While increasing the number of threads initially leads 
+to significant reductions in execution time, the rate of improvement starts to slow down as the number of threads increases.
+
+Given that the test machine only has physical 32 cores, adding more threads beyond 32 (e.g., comparing 32 threads and 64 threads) is unlikely to result in significant improvements in 
+performance for this specific benchmark. 
