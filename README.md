@@ -53,7 +53,7 @@ contract CumulativeU256ParaCompute {
     function calculate() public {       
         Multiprocess mp = new Multiprocess(2);   // Create Multiprocess instance with 2 threads
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));     
-        mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)); call  
+        mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));   
         mp.run();   							// Call the functions in parallel
         require(cumulative.get() == 4);         // Ensure that the cumulative value is 4
     }
