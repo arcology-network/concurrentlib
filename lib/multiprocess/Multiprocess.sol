@@ -30,9 +30,15 @@ contract Multiprocess is Base, Revertible {
         setByKey(uuid(), input);
     } 
 
-    function push(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual { // 9e c6 69 25
-          setByKey(uuid(), abi.encode(gaslimit, contractAddr, funcCall));
-    } 
+    /**
+     * @notice Push an executable message into the container with specified gas limit, contract address, and function call data.
+     * @param gaslimit The gas limit for the execution of the function call.
+     * @param contractAddr The address of the smart contract to execute the function on.
+     * @param funcCall The encoded function call data.
+     */
+    function push(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual {
+        setByKey(uuid(), abi.encode(gaslimit, contractAddr, funcCall));
+    }
  
     /**
      * @notice Pop an executable message from the container.
