@@ -17,8 +17,8 @@ contract U256ParallelTest {
         require(container.length() == 3);
 
         Multiprocess mp = new Multiprocess(1);
-        mp.push(abi.encode(1000000, address(this), abi.encodeWithSignature("push(uint256)", 41)));
-        mp.push(abi.encode(1000000, address(this), abi.encodeWithSignature("push(uint256)", 51)));
+        mp.push(1000000, address(this), abi.encodeWithSignature("push(uint256)", 41));
+        mp.push(1000000, address(this), abi.encodeWithSignature("push(uint256)", 51));
         require(mp.length() == 2);
         require(container.length() == 3);
 
@@ -36,8 +36,8 @@ contract U256ParallelTest {
 
 
         mp.clear();
-        mp.push(abi.encode(1000000, address(this), abi.encodeWithSignature("get(uint256)", 0)));
-        mp.push(abi.encode(1000000, address(this), abi.encodeWithSignature("get(uint256)", 1)));
+        mp.push(1000000, address(this), abi.encodeWithSignature("get(uint256)", 0));
+        mp.push(1000000, address(this), abi.encodeWithSignature("get(uint256)", 1));
         require(mp.length() == 2);
         mp.run();
 
@@ -52,8 +52,8 @@ contract U256ParallelTest {
 
         // // Here should be one conflict
         // mp.clear();
-        mp.push(abi.encode(100000, address(this), abi.encodeWithSignature("pop()")));
-        mp.push(abi.encode(100000, address(this), abi.encodeWithSignature("pop()")));
+        mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
+        mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
         mp.run();
 
         require(container.length() == 1);  // Only one transaction went through, so only one pop() took effect
@@ -90,10 +90,10 @@ contract ArrayParallelTest {
         push(0, 11);
         push(0, 12);
 
-         mp.push(abi.encode(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 0, 13)));
-         mp.push(abi.encode(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 0, 14)));
-         mp.push(abi.encode(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 1, 51)));
-         mp.push(abi.encode(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 1, 52)));
+         mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 0, 13));
+         mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 0, 14));
+         mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 1, 51));
+         mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 1, 52));
         require(mp.length() == 4);
         mp.run();
 

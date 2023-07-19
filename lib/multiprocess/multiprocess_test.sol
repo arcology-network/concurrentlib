@@ -9,8 +9,8 @@ contract ParaNativeAssignmentTest {
     uint256[2] results;
     function call() public  { 
        Multiprocess mp = new Multiprocess(2); 
-       mp.push(abi.encode(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 0)));
-       mp.push(abi.encode(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 1)));
+       mp.push(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 0));
+       mp.push(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 1));
        require(mp.length() == 2);
     //    mp.run();
 
@@ -29,9 +29,9 @@ contract ParaFixedLengthWithConflictTest {
        results[0] = 100;
        results[1] = 200;
        Multiprocess mp = new Multiprocess(2);
-       mp.push(abi.encode(400000, address(this), abi.encodeWithSignature("updater(uint256)", 11)));
-       mp.push(abi.encode(400000, address(this), abi.encodeWithSignature("updater(uint256)", 33)));
-       mp.push(abi.encode(400000, address(this), abi.encodeWithSignature("updater(uint256)", 55)));
+       mp.push(400000, address(this), abi.encodeWithSignature("updater(uint256)", 11));
+       mp.push(400000, address(this), abi.encodeWithSignature("updater(uint256)", 33));
+       mp.push(400000, address(this), abi.encodeWithSignature("updater(uint256)", 55));
        mp.run();     
        require(results[0] == 111);  // 11 and 33 will be reverted due to conflicts
        require(results[1] == 211); 
@@ -50,8 +50,8 @@ contract ParaContainerConcurrentPushTest {
        container.push(true);
 
        Multiprocess mp = new Multiprocess(2);
-       mp.push(abi.encode(1000000, address(this), abi.encodeWithSignature("appender()")));
-       mp.push(abi.encode(1000000, address(this), abi.encodeWithSignature("appender()")));
+       mp.push(1000000, address(this), abi.encodeWithSignature("appender()"));
+       mp.push(1000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
        require(container.length() == 3);    
        require(container2.length() == 2);   
@@ -71,14 +71,14 @@ contract MultiTempParaTest {
     bytes32[2] results;
     function call() public  { 
        Multiprocess mp = new Multiprocess(2);
-       mp.push(abi.encode(1000000, address(this), abi.encodeWithSignature("appender()")));
-       mp.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
+       mp.push(1000000, address(this), abi.encodeWithSignature("appender()"));
+       mp.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
        require(container.length() == 2);     
 
        Multiprocess mp2 = new Multiprocess(2);
-       mp2.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
-       mp2.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
+       mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
+       mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.run();
        require(container.length() == 4);  
     }
@@ -95,7 +95,7 @@ contract MultiGlobalParaSingleInUse {
     Multiprocess mp = new Multiprocess(2);
     function call() public  {  
        mp2 = new Multiprocess(2);
-       mp2.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
+       mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.run();
        require(container.length() == 2);    
     }
@@ -114,14 +114,14 @@ contract MultiGlobalPara {
     function call() public  {  
        mp = new Multiprocess(2);
        mp2 = new Multiprocess(2);
-       mp.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
-       mp.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
+       mp.push(4000000, address(this), abi.encodeWithSignature("appender()"));
+       mp.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
        require(container.length() == 2);     
       
        mp2 = new Multiprocess(2);
-       mp2.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
-       mp2.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
+       mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
+       mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.run();
        require(container.length() == 4);  
 
@@ -139,20 +139,20 @@ contract MultiLocalParaTestWithClear {
     bytes32[2] results;
     function call() public  { 
        Multiprocess mp = new Multiprocess(2);
-       mp.push(abi.encode(1000000, address(this), abi.encodeWithSignature("appender()")));
+       mp.push(1000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
        require(container.length() == 1);    
 
        mp.clear();       
        require(mp.length() == 0);   
 
-       mp.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
+       mp.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
        require(container.length() == 2);    
 
        Multiprocess mp2 = new Multiprocess(2);
-       mp2.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
-       mp2.push(abi.encode(4000000, address(this), abi.encodeWithSignature("appender()")));
+       mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
+       mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.run();
        require(container.length() == 4);  
     }
@@ -168,14 +168,14 @@ contract ParallelizerArrayTest {
 
     function call() public  { 
        parallelizers[0] = new Multiprocess(2);
-       parallelizers[0] .push(abi.encode(1000000, address(this), abi.encodeWithSignature("appender()")));
-       parallelizers[0] .push(abi.encode(1000000, address(this), abi.encodeWithSignature("appender()")));
+       parallelizers[0] .push(1000000, address(this), abi.encodeWithSignature("appender()"));
+       parallelizers[0] .push(1000000, address(this), abi.encodeWithSignature("appender()"));
        parallelizers[0] .run();
        require(container.length() == 2);  
 
        parallelizers[1] = new Multiprocess(2);
-       parallelizers[1] .push(abi.encode(1000000, address(this), abi.encodeWithSignature("appender()")));
-       parallelizers[1] .push(abi.encode(1000000, address(this), abi.encodeWithSignature("appender()")));
+       parallelizers[1] .push(1000000, address(this), abi.encodeWithSignature("appender()"));
+       parallelizers[1] .push(1000000, address(this), abi.encodeWithSignature("appender()"));
        parallelizers[1] .run();
        require(container.length() == 4);  
     }
@@ -189,15 +189,15 @@ contract MultiParaCumulativeU256 {
     U256Cumulative cumulative = new U256Cumulative(0, 100);     
     function call() public {
         Multiprocess mp1 = new Multiprocess(1);
-        mp1.push(abi.encode(400000, address(this), abi.encodeWithSignature("add(uint256)", 2)));
+        mp1.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 2));
         mp1.run();
 
         Multiprocess mp2 = new Multiprocess(1);
-        mp2.push(abi.encode(400000, address(this), abi.encodeWithSignature("add(uint256)", 2)));
+        mp2.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 2));
         mp2.run();  
 
         Multiprocess mp3 = new Multiprocess(1);
-        mp3.push(abi.encode(400000, address(this), abi.encodeWithSignature("sub(uint256)", 2)));
+        mp3.push(400000, address(this), abi.encodeWithSignature("sub(uint256)", 2));
         mp3.run();   
 
         add(3);
@@ -217,7 +217,7 @@ contract RecursiveParallelizerOnNativeArrayTest {
     uint256[2] results;
     function call() public {
         Multiprocess mp = new Multiprocess(1);
-        mp.push(abi.encode(9999999, address(this), abi.encodeWithSignature("add()"))); // Only one will go through
+        mp.push(9999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.run();
 
         require(results[0] == 11);
@@ -226,7 +226,7 @@ contract RecursiveParallelizerOnNativeArrayTest {
 
     function add() public { //9e c6 69 25
         Multiprocess mp2 = new Multiprocess(1); 
-        mp2.push(abi.encode(11111111, address(this), abi.encodeWithSignature("add2()")));
+        mp2.push(11111111, address(this), abi.encodeWithSignature("add2()"));
         mp2.run();              
     }  
 
@@ -243,7 +243,7 @@ contract RecursiveParallelizerOnContainerTest {
 
     function call() public {
         Multiprocess mp = new Multiprocess(1);
-        mp.push(abi.encode(9999999, address(this), abi.encodeWithSignature("add()"))); // Only one will go through
+        mp.push(9999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.run();
 
         require(results[0] == 11);
@@ -256,7 +256,7 @@ contract RecursiveParallelizerOnContainerTest {
         container.push(true);
         cumulative.add(10);
         Multiprocess mp2 = new Multiprocess(1); 
-        mp2.push(abi.encode(11111111, address(this), abi.encodeWithSignature("add2()")));
+        mp2.push(11111111, address(this), abi.encodeWithSignature("add2()"));
         mp2.run();              
     }  
 
@@ -274,8 +274,8 @@ contract MaxRecursiveDepth4Test {
     function call() public {
         // container.push(true);       
         Multiprocess mp = new Multiprocess(1);
-        mp.push(abi.encode(99999999, address(this), abi.encodeWithSignature("add()"))); // Only one will go through
-        mp.push(abi.encode(99999999, address(this), abi.encodeWithSignature("add()"))); // Only one will go through
+        mp.push(99999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
+        mp.push(99999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.run();
 
         require(container.length() == 14); 
@@ -284,8 +284,8 @@ contract MaxRecursiveDepth4Test {
 
     function add() public { //9e c6 69 25
         Multiprocess mp2 = new Multiprocess(1); 
-        mp2.push(abi.encode(41111111, address(this), abi.encodeWithSignature("add2()")));
-        mp2.push(abi.encode(41111111, address(this), abi.encodeWithSignature("add2()")));
+        mp2.push(41111111, address(this), abi.encodeWithSignature("add2()"));
+        mp2.push(41111111, address(this), abi.encodeWithSignature("add2()"));
 
         mp2.run();
         mp2.rollback();
@@ -294,8 +294,8 @@ contract MaxRecursiveDepth4Test {
 
     function add2() public { //9e c6 69 25
         Multiprocess mp2 = new Multiprocess(1); 
-        mp2.push(abi.encode(21111111, address(this), abi.encodeWithSignature("add3()")));
-        mp2.push(abi.encode(21111111, address(this), abi.encodeWithSignature("add3()")));
+        mp2.push(21111111, address(this), abi.encodeWithSignature("add3()"));
+        mp2.push(21111111, address(this), abi.encodeWithSignature("add3()"));
         mp2.run();
         mp2.rollback();
         container.push(true);              
@@ -313,16 +313,16 @@ contract MaxSelfRecursiveDepth4Test {
     function call() public {
         // container.push(true);       
         mp = new Multiprocess(1);
-        mp.push(abi.encode(99999999, address(this), abi.encodeWithSignature("add()"))); // Only one will go through
-        mp.push(abi.encode(99999999, address(this), abi.encodeWithSignature("add()"))); // Only one will go through
+        mp.push(99999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
+        mp.push(99999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.run();
         require(container.length() == 30); // 2 + 4 + 8 + 16
     } 
 
     function add() public { //9e c6 69 25
         Multiprocess mp2 = new Multiprocess(1); 
-        mp2.push(abi.encode(41111111, address(this), abi.encodeWithSignature("add()")));
-        mp2.push(abi.encode(41111111, address(this), abi.encodeWithSignature("add()")));
+        mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
+        mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
         mp2.run();
         mp2.rollback();
         container.push(true);              
@@ -340,8 +340,8 @@ contract MaxRecursiveDepthOffLimitTest {
 
         container.push(true);       
         mp = new Multiprocess(1);
-        mp.push(abi.encode(9999999, address(this), abi.encodeWithSignature("add()")));
-        mp.push(abi.encode(9999999, address(this), abi.encodeWithSignature("add()"))); 
+        mp.push(9999999, address(this), abi.encodeWithSignature("add()"));
+        mp.push(9999999, address(this), abi.encodeWithSignature("add()")); 
         mp.run();
   
         require(container.length() == 31); // 1 + (2 + 4 + 8 + 16) 
@@ -351,8 +351,8 @@ contract MaxRecursiveDepthOffLimitTest {
     function add() public { //9e c6 69 25
         cumulative.add(10);
         Multiprocess mp2 = new Multiprocess(1); 
-        mp2.push(abi.encode(41111111, address(this), abi.encodeWithSignature("add()")));
-        mp2.push(abi.encode(41111111, address(this), abi.encodeWithSignature("add()")));
+        mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
+        mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
         mp2.run();
         mp2.rollback();
         container.push(true);              
@@ -365,8 +365,8 @@ contract ParaFixedLengthWithConflictRollbackTest {
     function call() public {
         // container = new Bool();
         Multiprocess mp = new Multiprocess(2);
-        mp.push(abi.encode(9999999, address(this), abi.encodeWithSignature("worker()"))); // Only one will go through
-        mp.push(abi.encode(9999999, address(this), abi.encodeWithSignature("worker()"))); // Only one will go through
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker()")); // Only one will go through
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker()")); // Only one will go through
         mp.run();
         require(container.length() == 2);
 
@@ -376,7 +376,7 @@ contract ParaFixedLengthWithConflictRollbackTest {
 
     function worker() public { //9e c6 69 25
         Multiprocess mp2 = new Multiprocess(2); 
-        mp2.push(abi.encode(1999999, address(this), abi.encodeWithSignature("appender()")));
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender()"));
         mp2.run();   
         mp2.rollback();
     }   

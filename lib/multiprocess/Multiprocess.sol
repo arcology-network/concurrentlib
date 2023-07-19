@@ -24,11 +24,15 @@ contract Multiprocess is Base, Revertible {
 
     /**
      * @notice Push an executable message into the container.
-     * @param elem The executable message data to be pushed into the container.
+     * @param input The executable message data to be pushed into the container.
      */
-    function push(bytes memory elem) public virtual { // 9e c6 69 25
-        Base.setByKey(uuid(), abi.encode(elem));
-    }    
+    function push(bytes memory input) public virtual { // 9e c6 69 25
+        setByKey(uuid(), input);
+    } 
+
+    function push(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual { // 9e c6 69 25
+          setByKey(uuid(), abi.encode(gaslimit, contractAddr, funcCall));
+    } 
  
     /**
      * @notice Pop an executable message from the container.

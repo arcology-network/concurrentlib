@@ -157,7 +157,7 @@ contract GeneScience {
 
         // generate 256 bits of random, using as much entropy as we can from
         // sources that can't change between calls.
-        randomN = uint256(keccak256(abi.encodePacked(randomN, _genes1, _genes2, _targetBlock)));
+        randomN = uint256(keccak256(abi.encodePacked(randomN, _genes1, _genes2, _targetBlock));
         uint256 randomIndex = 0;
 
         uint8[] memory genes1Array = decode(_genes1);

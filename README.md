@@ -21,7 +21,7 @@ This repository contains a set of Solidity API that implement concurrent contain
 There are two examples  U256ParaCompute and CumulativeU256ParaCompute, demonstrate the use of the Multiprocess and cumulative u256 libraries together.
 
 ## 2.1. U256ParaCompute:
-In this contract, there is a variable num which is initially set to 0. The `calculate()` function uses the Multiprocess library to execute two calls to the add(uint256) function in parallel. The add function increments the num variable by the given element. After the parallel execution, the contract checks if num is equal to 2, which should be the case because the two add(uint256) functions were executed in parallel, both adding 2 to the num variable.
+In this contract, there is a variable num which is initially set to 0. The `calculate()` function uses the Multiprocess library to execute two calls to the `add(uint256)` function in parallel. The add function increments the num variable by the given element. After the parallel execution, the contract checks if num is equal to 2, which should be the case because the two `add(uint256)` functions were executed in parallel, both adding 2 to the num variable.
 
 ```js
 contract U256ParaCompute {
@@ -29,8 +29,8 @@ contract U256ParaCompute {
 
     function calculate() public {     
         Multiprocess mp = new Multiprocess(2);  // Create Multiprocess instance with 2 threads         
-        mp.push(abi.encode(200000, address(this), abi.encodeWithSignature("add(uint256)", 2))); 
-        mp.push(abi.encode(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)));
+        mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)); 
+        mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));
         mp.run(); 					            // Call the functions in parallel
         require(num == 2);                      // Ensure that the 'num' variable is 2
     }
@@ -42,7 +42,7 @@ contract U256ParaCompute {
 ```
 
 ##  2.2. CumulativeU256ParaCompute:
-This contract uses the U256Cumulative concurrent container from the library, which allows cumulative operations in full concurrency. It has both minimum and maximum bounds and allows concurrent delta changes as long as they are not mixed with reads. The calculate() function also uses the Multiprocess library to execute two calls to the add(uint256) function in parallel. The add function uses the U256Cumulative container to add the given element to the cumulative value. After the parallel execution, the contract checks if the cumulative value stored in the container is equal to 4.
+This contract uses the U256Cumulative concurrent container from the library, which allows cumulative operations in full concurrency. It has both minimum and maximum bounds and allows concurrent delta changes as long as they are not mixed with reads. The `calculate()` function also uses the Multiprocess library to execute two calls to the `add(uint256)` function in parallel. The add function uses the U256Cumulative container to add the given element to the cumulative value. After the parallel execution, the contract checks if the cumulative value stored in the container is equal to 4.
 
 ```js
 // Example contract using the Multiprocess library and U256Cumulative for cumulative operations
@@ -50,11 +50,10 @@ This contract uses the U256Cumulative concurrent container from the library, whi
 contract CumulativeU256ParaCompute {
     U256Cumulative cumulative = new U256Cumulative(0, 100); 
 
-    function calculate() public {
-       
+    function calculate() public {       
         Multiprocess mp = new Multiprocess(2);   // Create Multiprocess instance with 2 threads
-        mp.push(abi.encode(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)));     
-        mp.push(abi.encode(200000, address(this), abi.encodeWithSignature("add(uint256)", 2))); call  
+        mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));     
+        mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)); call  
         mp.run();   							// Call the functions in parallel
         require(cumulative.get() == 4);         // Ensure that the cumulative value is 4
     }
@@ -69,7 +68,7 @@ contract CumulativeU256ParaCompute {
 
 The main difference between the two contracts is how they handle the concurrent state changes during concurrent execution. In U256ParaCompute, the num variable is a regular state variable, and concurrent execution of the add function results in a race condition where both functions might attempt to update the num variable at the same time. Arcology's concurrency will detect it at runtime and revert the execution of one transtions. As a result, the final value of num only reflects the delta change from one call.
 
-In CumulativeU256ParaCompute, the U256Cumulative container handles concurrent delta changes. It allows concurrent additions and subtractions to the value and prevents any out-of-bounds changes. Therefore, the cumulative value correctly reflects the sum of the two add() calls, which is 4.
+In CumulativeU256ParaCompute, the U256Cumulative container handles concurrent delta changes. It allows concurrent additions and subtractions to the value and prevents any out-of-bounds changes. Therefore, the cumulative value correctly reflects the sum of the two `add()` calls, which is 4.
 
 
 #  3. Conclusion

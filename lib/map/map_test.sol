@@ -38,8 +38,8 @@ contract ConcurrenctMapTest {
     U256Map map = new U256Map();
     function call() public  { 
        Multiprocess mp = new Multiprocess(2); 
-       mp.push(abi.encode(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 11)));
-       mp.push(abi.encode(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 33)));
+       mp.push(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 11));
+       mp.push(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 33));
        require(mp.length() == 2);
 
         (,uint256 v) = map.get(11);

@@ -27,7 +27,7 @@ contract ClockAuction is Pausable, ClockAuctionBase {
     ///  Always transfers to the NFT contract, but can be called either by
     ///  the owner or the NFT contract.
     function withdrawBalance() external {
-        address payable nftAddress = address(uint160(address(nonFungibleContract)));
+        address payable nftAddress = address(uint160(address(nonFungibleContract));
 
         require(
             msg.sender == owner ||

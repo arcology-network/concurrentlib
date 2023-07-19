@@ -243,7 +243,7 @@ contract KittyBase is KittyAccessControl {
         // Emit the transfer event.
         emit Transfer(_from, _to, _tokenId);
 
-        if (balanceUpdated && !(_from == address(0) && _to == address(0))) {
+        if (balanceUpdated && !(_from == address(0) && _to == address(0)) {
             system.callDefer("deferBalanceUpdate");
         }
     }
