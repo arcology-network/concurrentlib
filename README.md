@@ -28,14 +28,14 @@ contract U256ParaCompute {
     uint256 num = 0;
 
     function calculate() public {     
-        Multiprocess mp = new Multiprocess(2);                              // Create Multiprocess instance with 2 threads         
+        Multiprocess mp = new Multiprocess(2);                            // Create Multiprocess instance with 2 threads         
         mp.push(abi.encode(200000, address(this), abi.encodeWithSignature("add(uint256)", 2))); // First function call    
         mp.push(abi.encode(200000, address(this), abi.encodeWithSignature("add(uint256)", 2))); // Second function call    
         mp.run(); 					                                                            // Call the function in parallel
         require(num == 2);                                                                      // Ensure that the 'num' variable is 2
     }
 
-    function add(uint256 elem) public {                                    // Perform addition to the 'num' variable
+    function add(uint256 elem) public {                                   // Perform addition to the 'num' variable
         num += elem;
     }  
 }
