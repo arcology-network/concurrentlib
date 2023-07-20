@@ -2,6 +2,7 @@
 pragma solidity ^0.8.19;
 
 /**
+ * @author Arcology Network
  * @title U256Cumulative
  * @dev The U256Cumulative contract is an integer designed for cumulative operations in full concurrency. 
  * It has both minimum and maximum bounds and allows concurrent delta changes as long as they are not mixed 

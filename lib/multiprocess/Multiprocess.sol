@@ -5,6 +5,7 @@ import "../runtime/Runtime.sol";
 import "../array/Bool.sol";
 
 /**
+ * @author Arcology Network
  * @title Multiprocess Container
  * @dev The Multiprocess contract inherits from "Base" and "Revertible" contracts.
  *      It serves as a container for executable messages, enabling parallel processing
@@ -15,7 +16,7 @@ contract Multiprocess is Base, Revertible {
 
     /**
      * @notice Constructor to initialize the Multiprocess container.
-     * @param threads The number of processes (ranging from 1 to 2048) of execution for parallel processing.
+     * @param threads The number of parallel processors (ranging from 1 to 255) for parallel processing.
      */
     constructor (uint256 threads) {
         Base.API = address(0xb0);
@@ -68,9 +69,8 @@ contract Multiprocess is Base, Revertible {
 
     /**
      * @notice Execute the executable messages in the container concurrently.
-     * @dev This function processes the executable messages concurrently,
-     *      similar to Python's `multiprocessing` or C++ thread libraries,
-     *      using the specified number of threads for concurrent execution.
+     * @dev This function processes the executable messages concurrently with the number 
+     *      of threads specified in the constructor.
      */
     function run() public {       
         foreach(abi.encode(numProcesses));

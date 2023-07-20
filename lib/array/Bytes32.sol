@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import "../base/Base.sol";
 
 /**
+ * @author Arcology Network
  * @title Bytes32 Concurrent Array
  * @dev The Bytes32 contract is a concurrent array specialized for storing bytes32 data.
  *      It inherits from the Base contract to utilize container functionalities for bytes32 storage.

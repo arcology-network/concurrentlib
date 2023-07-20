@@ -2,6 +2,7 @@
 pragma solidity ^0.8.19;
 
 /**
+ * @author Arcology Network
  * @title Runtime Contract
  * @dev The Runtime contract provides runtime information to developers.
  *      It exposes functions to retrieve pseudo-process IDs (PIDs) and pseudo-random UUIDs.

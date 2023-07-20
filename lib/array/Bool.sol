@@ -3,7 +3,8 @@ pragma solidity ^0.8.19;
 
 import "../base/Base.sol";
 
-/**
+/** 
+ * @author Arcology Network
  * @title Bool Concurrent Array
  * @dev The Bool contract is a concurrent array specialized for storing boolean values.
  *      It inherits from the Base contract to utilize container functionalities for boolean storage.

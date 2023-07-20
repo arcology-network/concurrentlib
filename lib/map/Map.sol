@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import "../base/Base.sol";
 
 /**
+ * @author Arcology Network
  * @title U256Map Contract
  * @dev The U256Map contract provides a simple mapping structure to associate
  *      uint256 keys with uint256 values. It inherits from the "Base" contract

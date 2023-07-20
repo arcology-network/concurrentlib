@@ -5,6 +5,7 @@ pragma solidity ^0.8.19;
 import "../base/Base.sol";
 
 /**
+ * @author Arcology Network
  * @title Int256 Concurrent Array
  * @dev The Int256 contract is a concurrent array specialized for storing int256 data.
  *      It inherits from the Base contract to utilize container functionalities for int256 storage.

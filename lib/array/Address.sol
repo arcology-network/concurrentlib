@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import "../base/Base.sol";
 
 /**
+ * @author Arcology Network
  * @title Address Concurrent Array
  * @dev The Address contract is a concurrent array specialized for storing addresses.
  *      It inherits from the Base contract to utilize container functionalities for address storage.

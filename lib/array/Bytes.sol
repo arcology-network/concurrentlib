@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import "../base/Base.sol";
 
 /**
+ * @author Arcology Network
  * @title Bytes Concurrent Array
  * @dev The Bytes contract is a concurrent array specialized for storing bytes data.
  *      It inherits from the Base contract to utilize container functionalities for bytes storage.

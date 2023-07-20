@@ -3,6 +3,7 @@ pragma solidity ^0.8.19;
 import "../runtime/Runtime.sol";
 
 /**
+ * @author Arcology Network
  * @title Base Concurrent Container
  * @dev The Base contract is a concurrent container designed for concurrent operations,
  *      allowing elements to be added in different processes running in parallel without
@@ -75,10 +76,8 @@ contract Base is Runtime {
      * @return The key associated with the given index.
      */
     function keyByIndex(uint256 idx) public returns(bytes memory) {
-        if (idx < length()) {
-            (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
-            return data;  
-        }   
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
+        return data;  
     }
 
     /**

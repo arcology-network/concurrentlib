@@ -5,6 +5,7 @@ pragma solidity ^0.8.19;
 import "../map/Map.sol";
 
 /**
+ * @author Arcology Network
  * @title U256Set Contract
  * @dev The U256Set contract is a specialization of the U256Map contract that provides a simple set data structure.
  *      It inherits from the U256Map contract and utilizes its key-value storage functionality to implement the set.
