@@ -40,24 +40,23 @@ contract U256Cumulative {
         return abi.decode(data, (uint256));
     }
 
-
     /**
      * @notice Add the given value to the cumulative variable.
-     * @param v The value to be added to the cumulative variable.
+     * @param delta The value to be added to the cumulative variable.
      * @return A boolean indicating the success of the operation.
      */
-    function add(uint256 v) public returns(bool) { 
-        (bool success,) = address(API).call(abi.encodeWithSignature("add(uint256)", v));
+    function add(uint256 delta) public returns(bool) { 
+        (bool success,) = address(API).call(abi.encodeWithSignature("add(uint256)", delta));
         return success; 
     }
 
     /**
      * @notice Subtract the given value from the cumulative variable.
-     * @param v The value to be subtracted from the cumulative variable.
+     * @param delta The value to be subtracted from the cumulative variable.
      * @return A boolean indicating the success of the operation.
      */
-    function sub(uint256 v) public returns(bool) { 
-        (bool success,) = address(API).call(abi.encodeWithSignature("sub(uint256)", v));
+    function sub(uint256 delta) public returns(bool) { 
+        (bool success,) = address(API).call(abi.encodeWithSignature("sub(uint256)", delta));
         return success;
     }   
 

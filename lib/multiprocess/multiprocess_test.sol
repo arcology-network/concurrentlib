@@ -562,3 +562,42 @@ contract CumulativeU256ParaCompute {
         cumulative.add(elem);                                                      // Perform addition to the variable
     }  
 }
+
+contract NativeStorage {   
+    uint256 public x = 1 ;
+    uint256 public y = 100 ;
+
+    function incrementX() public {x ++;}
+    function incrementY() public {y += 2;}
+
+    function getX() public view returns(uint256) {return x;}
+    function getY() public view returns(uint256) {return y;}
+}
+
+// contract NativeStorageAssignmentTest {
+//     NativeStorage results = new NativeStorage() ;
+//     function call() public  { 
+//         Multiprocess mp = new Multiprocess(2); 
+//         mp.push(50000, address(results), abi.encodeWithSignature("incrementX()"));
+//         mp.push(50000, address(results), abi.encodeWithSignature("incrementY()"));
+//         mp.push(50000, address(results), abi.encodeWithSignature("incrementX()"));
+//         mp.push(50000, address(results), abi.encodeWithSignature("incrementY()"));
+//         mp.run();
+//         require(results.getX() == 2);
+//         require(results.getY() == 102);
+//     }
+// } 
+
+contract NativeStorageAssignmentTest {
+    NativeStorage results = new NativeStorage() ;
+    function call() public  { 
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(results), abi.encodeWithSignature("incrementX()"));
+        mp.push(50000, address(results), abi.encodeWithSignature("incrementY()"));
+        mp.push(50000, address(results), abi.encodeWithSignature("incrementX()"));
+        // mp.push(50000, address(results), abi.encodeWithSignature("incrementY()"));
+        mp.run();
+        require(results.getX() == 2);
+        require(results.getY() == 102);
+    }
+} 

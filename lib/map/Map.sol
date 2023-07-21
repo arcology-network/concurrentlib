@@ -47,6 +47,15 @@ contract U256Map is Base {
     }    
 
     /**
+     * @notice Get the key based on it index.
+     * @param idx The uint256 index to retrieve the associated key.
+     * @return The key value associated with the index.
+     */
+    function key(uint256 idx) public virtual returns(bytes memory){ // 9e c6 69 25
+        return Base.keyByIndex(idx);
+    }   
+
+    /**
      * @notice Delete a key-value pair from the U256Map.
      * @param key The uint256 key to delete.
      */
