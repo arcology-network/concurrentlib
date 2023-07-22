@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import "./Runtime.sol";
+import "./Storage.sol";
 import "../array/Bool.sol";
 import "../commutative/U256Cum.sol";
 
@@ -19,7 +19,7 @@ contract ResettableDeployer {
     }
 }
 
-contract TestResettable is Revertible {
+contract TestResettable is Storage {
     uint256 [2] public array; 
     constructor () {
         array[0] = 10;

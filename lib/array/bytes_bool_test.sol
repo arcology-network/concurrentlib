@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import "../array/Bytes.sol";
-import "../array/Bool.sol";
+import "./Bytes.sol";
+import "./Bool.sol";
 
 contract PairTest {
     Bytes bytesContainer = new Bytes();
@@ -56,7 +56,6 @@ contract PairTest {
         require(boolContainer.pop());
         require(boolContainer.pop());
         require(!boolContainer.pop());
-        require(boolContainer.length() == 0); 
-        
+        require(boolContainer.length() == 0);         
     }
 }

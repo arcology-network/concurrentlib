@@ -2,16 +2,17 @@
 pragma solidity ^0.8.19;
 
 import "../runtime/Runtime.sol";
-import "../array/Bool.sol";
+import "../storage/Storage.sol";
+import "../base/Base.sol";
 
 /**
  * @author Arcology Network
  * @title Multiprocess Container
- * @dev The Multiprocess contract inherits from "Base" and "Revertible" contracts.
+ * @dev The Multiprocess contract inherits from "Base" and "Storage" contracts.
  *      It serves as a container for executable messages, enabling parallel processing
  *      similar to Python's `multiprocessing` library.
  */
-contract Multiprocess is Base, Revertible {
+contract Multiprocess is Base, Storage {
     uint256 numProcesses = 1;
 
     /**
