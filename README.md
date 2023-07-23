@@ -6,7 +6,7 @@ Please check the [doc](https://doc.arcology.network/concurrent-programming-guide
 
 ## 2. Examples
 
-There are two examples  U256ParaCompute and CumulativeU256ParaCompute, demonstrate the use of the Multiprocess and cumulative u256 libraries together.
+There are two examples  `U256ParaCompute` and `CumulativeU256ParaCompute`, demonstrate the use of the Multiprocess and cumulative u256 libraries together.
 
 ```js
 contract U256ParaCompute {
