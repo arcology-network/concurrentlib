@@ -1,7 +1,7 @@
 # Concurrent Lib 
 This repository contains a set of Solidity API utilizing its parallel execution design to enable concurrent operations on data structures. They are the gateways for Solidity smart contract developers to fully utilize the power of Arcology's parallel execution capabilities.
 
-## 1. Contracts
+## 1. API Doc
 Please check the [doc](https://doc.arcology.network/concurrent-programming-guide/) for more details.
 
 ## 2. Examples
