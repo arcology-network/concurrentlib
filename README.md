@@ -31,7 +31,7 @@ contract U256ParaCompute {
         Multiprocess mp = new Multiprocess(2);  // Create Multiprocess instance with 2 threads         
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)); 
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));
-        mp.run(); 					            // Call the functions in parallel
+        mp.run(); 					      // Call the functions in parallel
         require(num == 2);                      // Ensure that the 'num' variable is 2
     }
 
@@ -54,7 +54,7 @@ contract CumulativeU256ParaCompute {
         Multiprocess mp = new Multiprocess(2);   // Create Multiprocess instance with 2 threads
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));     
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));   
-        mp.run();   							// Call the functions in parallel
+        mp.run();   					// Call the functions in parallel
         require(cumulative.get() == 4);         // Ensure that the cumulative value is 4
     }
 
@@ -63,6 +63,7 @@ contract CumulativeU256ParaCompute {
     }  
 }
 ```
+
 ###  2.3. Difference:
 
 The main difference between the two contracts is how they handle the concurrent state changes during concurrent execution. In U256ParaCompute, the num variable is a regular state variable, and concurrent execution of the add function results in a race condition where both functions might attempt to update the num variable at the same time. Arcology's concurrency will detect it at runtime and revert the execution of one transtions. As a result, the final value of num only reflects the delta change from one call.
