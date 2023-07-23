@@ -31,7 +31,7 @@ contract U256ParaCompute {
         Multiprocess mp = new Multiprocess(2);  // Create Multiprocess instance with 2 threads         
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)); 
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));
-        mp.run(); 					    // Call the functions in parallel
+        mp.run(); 			// Call the functions in parallel
         require(num == 2);                      // Ensure that the 'num' variable is 2
     }
 
