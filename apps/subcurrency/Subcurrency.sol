@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0 <0.9.0;
 
 contract Coin {
@@ -32,5 +31,10 @@ contract Coin {
         balances[msg.sender] -= amount;
         balances[receiver] += amount;
         emit Sent(msg.sender, receiver, amount);
+    }
+
+    // Additional function to query the balance of a specific address.
+    function getter(address addr) public view returns(uint256) {
+        return balances[addr];
     }
 }

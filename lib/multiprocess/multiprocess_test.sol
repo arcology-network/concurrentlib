@@ -106,7 +106,7 @@ contract MultiGlobalParaSingleInUse {
     }
 }
 
-contract MultiGlobalPara {
+contract MultiprocessConcurrentBool {
     Bool container = new Bool();
     
     Multiprocess mp ; 
