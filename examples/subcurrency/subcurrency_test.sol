@@ -19,16 +19,9 @@ contract SubcurrencyCaller {
         require(mp.length() == 4);
         mp.run();
 
-        (, bytes memory data) = address(coin).call(abi.encodeWithSignature("getter(address)", Alice));
-        require(abi.decode(data, (uint256)) == 1111);
-
-        (, data) = address(coin).call(abi.encodeWithSignature("getter(address)", Bob));
-        require(abi.decode(data, (uint256)) == 2222);
-        
-        (, data) = address(coin).call(abi.encodeWithSignature("getter(address)", Carol));
-        require(abi.decode(data, (uint256)) == 3333);
-
-        (, data) = address(coin).call(abi.encodeWithSignature("getter(address)", Dave));
-        require(abi.decode(data, (uint256)) == 4444);
+        require(Coin(coin).getter(Alice) == 1111);
+        require(Coin(coin).getter(Bob) == 2222);
+        require(Coin(coin).getter(Carol) == 3333);
+        require(Coin(coin).getter(Dave) == 4444);
     }
 }
