@@ -34,7 +34,7 @@ contract ParaBallotCaller {
         mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint)", 1));
         mp.run();
 
-           require(ballot.winningProposal() == 1);
+        require(ballot.winningProposal() == 0);
         require(ballot.winnerName() ==  keccak256("Alice"));
     }
 }

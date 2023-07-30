@@ -29,7 +29,7 @@ contract Ballot {
 
     /// Create a new ballot to choose one of `proposalNames`.
     constructor(bytes32[] memory proposalNames) {
-        chairperson = msg.sender; // msg.sender;
+        chairperson = msg.sender;
         voters[chairperson].weight = 1;
 
         // For each of the provided proposal names,
