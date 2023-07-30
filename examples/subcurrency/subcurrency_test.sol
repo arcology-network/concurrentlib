@@ -11,7 +11,7 @@ contract SubcurrencyCaller {
         address Carol = 0x4444444890123456789012345678901234567890;
         address Dave = 0x3333337890123456789012345678901234567890;
    
-        Multiprocess mp = new Multiprocess(1);
+        Multiprocess mp = new Multiprocess(4);
         mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Alice, 1111));
         mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Bob, 2222));
         mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Carol, 3333));
