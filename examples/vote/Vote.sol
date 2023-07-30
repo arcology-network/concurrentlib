@@ -28,8 +28,8 @@ contract Ballot {
     Proposal[] public proposals;
 
     /// Create a new ballot to choose one of `proposalNames`.
-    constructor(address owner, bytes32[] memory proposalNames) {
-        chairperson = owner; // msg.sender;
+    constructor(bytes32[] memory proposalNames) {
+        chairperson = msg.sender; // msg.sender;
         voters[chairperson].weight = 1;
 
         // For each of the provided proposal names,
