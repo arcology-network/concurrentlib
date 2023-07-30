@@ -43,10 +43,12 @@ contract Base is Runtime {
      * @notice Retrieve the committed length of the container. This usually is the length at the previous block height.
      * @return The latest committed length of the container. This is function is thread-safe.
      */
-    function peek() public returns(bytes memory) {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
-        require(success);
-        return data;  
+    function peek() public returns(uint256) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
+        if (data.length > 0) {
+            return abi.decode(data, (uint256));   
+        }
+        return 0;    
     }
 
     /**
