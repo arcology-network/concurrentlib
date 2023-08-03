@@ -12,6 +12,12 @@ contract U256MapTest {
         map.set(11, 111);
         require(map.length() == 2); 
 
+        require(map.valueAt(0) == 100); 
+        require(map.valueAt(1) == 111); 
+
+        require(map.keyAt(0) == 10); 
+        require(map.keyAt(1) == 11); 
+
         require(!map.exist(0));
         require(map.exist(10)); 
         require(map.exist(11)); 
