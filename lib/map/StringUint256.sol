@@ -41,11 +41,20 @@ contract StringUint256Map is Base {
     }    
 
     /**
+     * @notice Get the key based on it index.
+     * @param idx The key to retrieve the associated index.
+     * @return The key value associated with the index.
+     */
+    function keyAt(uint256 idx) public virtual returns(string memory) {    
+        return string(Base.keyByIndex(idx));      
+    }   
+
+    /**
      * @notice Retrieves the value stored at the specified index.
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function at(uint256 idx) public virtual returns(uint256 value){ // 9e c6 69 25
+    function valueAt(uint256 idx) public virtual returns(uint256 value){ // 9e c6 69 25
         return uint256(bytes32(Base.getByIndex(idx)));  
     }    
 

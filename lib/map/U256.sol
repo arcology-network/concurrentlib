@@ -23,15 +23,6 @@ contract U256Map is Base {
     }
 
     /**
-     * @notice Retrieves the value stored at the specified index.
-     * @param idx The index of the element to retrieve.
-     * @return value The value retrieved from the storage array at the given index.    
-     */
-    function at(uint256 idx) public virtual returns(uint256 value){ // 9e c6 69 25
-        return  uint256(bytes32(Base.getByIndex(idx)));
-    }  
-
-    /**
      * @notice Set a key-value pair in the map.
      * @param key The uint256 key to set.
      * @param value The uint256 value associated with the key.
@@ -45,19 +36,27 @@ contract U256Map is Base {
      * @param key The uint256 key to retrieve the associated value.
      * @return value The uint256 value associated with the key.
      */
-    function get(uint256 key) public virtual returns(uint256 value){ // 9e c6 69 25
-        // bytes memory data = Base.getByKey(abi.encodePacked(key));              
+    function get(uint256 key) public virtual returns(uint256 value){ // 9e c6 69 25   
         return uint256(bytes32(Base.getByKey(abi.encodePacked(key))));
     }    
 
     /**
      * @notice Get the key based on it index.
      * @param idx The key to retrieve the associated index.
-     * @return The index value associated with the key.
+     * @return The index key associated with the index.
      */
     function keyAt(uint256 idx) public virtual returns(uint256) {    
         return uint256(bytes32(Base.keyByIndex(idx)));      
     }   
+
+    /**
+     * @notice Retrieves the value stored at the specified index.
+     * @param idx The index of the element to retrieve.
+     * @return value The value retrieved from the storage array at the given index.    
+     */
+    function valueAt(uint256 idx) public virtual returns(uint256 value){ // 9e c6 69 25
+        return  uint256(bytes32(Base.getByIndex(idx)));
+    }  
 
     /**
      * @notice Delete a key-value pair from the map.

@@ -37,15 +37,24 @@ contract AddressBooleanMap is Base {
      * @return The boolean value associated with the key.
      */
     function get(address k) public virtual returns(bool){ 
-        return (abi.decode(Base.getByKey(abi.encodePacked(k)), (bool)));  
-    }    
+        return abi.decode(Base.getByKey(abi.encodePacked(k)), (bool));  
+    }   
+
+    /**
+     * @notice Get the key based on it index.
+     * @param idx The key to retrieve the associated index.
+     * @return The index key associated with the index.
+     */
+    function keyAt(uint256 idx) public virtual returns(address) {    
+        return address(uint160(bytes20(Base.keyByIndex(idx))));
+    }   
 
     /**
      * @notice Retrieves the value stored at the specified index.
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function at(uint256 idx) public virtual returns(bool value){ 
+    function valueAt(uint256 idx) public virtual returns(bool){ 
         return abi.decode(Base.getByIndex(idx), (bool));  
     }    
 

@@ -14,6 +14,7 @@ contract AddressBooleanMapTest {
 
         require(map.length() == 0); 
         map.set(addr1, true);
+  
         map.set(addr2, true);
         map.set(addr3, true);
         require(map.length() == 3); 
@@ -27,6 +28,10 @@ contract AddressBooleanMapTest {
         require(map.get(addr2) == true); 
         require(map.get(addr3) == true); 
         require(!map.exist(addr4)); 
+
+        require(map.keyAt(0) == addr1);
+        require(map.keyAt(1) == addr2);
+        require(map.keyAt(2) == addr3);
 
         map.del(addr1);
         map.del(addr2);
@@ -59,9 +64,13 @@ contract AddressBooleanMapConcurrentTest {
         require(map.get(addr2) == true); 
         require(map.get(addr3) == true); 
 
-        require(map.at(0) == true); 
-        require(map.at(1) == true); 
-        require(map.at(2) == true); 
+        require(map.valueAt(0) == true); 
+        require(map.valueAt(1) == true); 
+        require(map.valueAt(2) == true); 
+
+        require(map.keyAt(0) == addr1); 
+        require(map.keyAt(1) == addr2); 
+        require(map.keyAt(2) == addr3); 
 
         map.del(addr1);
         map.del(addr2);
