@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import "./Map.sol";
+import "./U256.sol";
 import "../multiprocess/Multiprocess.sol";
 
-contract MapTest {
+contract U256MapTest {
     U256Map map = new U256Map();
     constructor() {     
         require(map.length() == 0); 
@@ -34,7 +34,7 @@ contract MapTest {
     }
 }
 
-contract ConcurrenctMapTest {
+contract ConcurrenctU256MapTest {
     U256Map map = new U256Map();
     function call() public  { 
        Multiprocess mp = new Multiprocess(2); 

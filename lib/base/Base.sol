@@ -129,10 +129,7 @@ contract Base is Runtime {
      * @return The data stored at the specified index.
      */
     function getByIndex(uint256 idx) public virtual returns(bytes memory) {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
-        if (success) {
-            return abi.decode(data, (bytes));  
-        }
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
         return data;
     }
 
@@ -142,10 +139,7 @@ contract Base is Runtime {
      * @return The data stored at the specified key.
      */
     function getByKey(bytes memory key) public returns(bytes memory)  {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
-        if (success) {
-            return abi.decode(data, (bytes));  
-        }
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
         return data;
     }
 

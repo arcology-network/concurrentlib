@@ -1,8 +1,9 @@
-import "../../lib/commutative/U256Cum.sol";
-
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 /// @title Voting with delegation.
+
+import "../../lib/commutative/U256Cum.sol";
+
 contract ParaBallot {
     // This declares a new complex type which will
     // be used for variables later.

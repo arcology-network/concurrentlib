@@ -1,28 +1,27 @@
 pragma solidity >=0.8.0 <0.9.0;
 
-contract Coin {
+import "../../lib/array/Bytes32.sol";
+import "../../lib/set/Set.sol";
+
+contract Lotto {
     // The keyword "public" makes variables
     // accessible from other contracts
     address public minter;
-    mapping (address => uint) public balances;
-
-    // Events allow clients to react to specific
-    // contract changes you declare
-    event Sent(address from, address to, uint amount);
-    event GetBalance(uint256 value);
+    uint256 maxParticipants = 5;
+    Bytes32 participants = new Bytes32();
 
     // Constructor code is only run when the contract
     // is created
-    constructor() {
-        minter = msg.sender;
-    }
-
+    constructor() {}
+    
     // Sends an amount of newly created coins to an address
     // Can only be called by the contract creator
-    function mint(address receiver, uint amount) public {
-        require(msg.sender == minter);
-        require(amount < 1e60);
-        balances[receiver] += amount;
+    function Register(address participant, uint amount) public {
+        require(participants.indexByKey(participant) >= participants.length());
+        participants.push()
+        // require(msg.sender == minter);
+        // require(amount < 1e60);
+        // balances[receiver] += amount;
     }
 
     // Sends an amount of existing coins
@@ -35,8 +34,7 @@ contract Coin {
     }
 
     // Additional function to query the balance of a specific address.
-    function getter(address addr) public returns(uint256) {
-        emit GetBalance(balances[addr]);
+    function getter(address addr) public view returns(uint256) {
         return balances[addr];
     }
 }
