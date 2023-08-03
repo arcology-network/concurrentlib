@@ -52,6 +52,15 @@ contract Base is Runtime {
     }
 
     /**
+     * @notice Checks if a key exists in the the data structure. *
+     * @param key The key to check for existence.
+     * @return A boolean indicating whether the key exists in it or not.
+     */
+    function exist(bytes memory key) public virtual returns(bool) {
+        return getByKey(key).length > 0;
+    }
+
+    /**
      * @notice Removes and returns the last element of the container.
      * @return The data of the removed element.
      */

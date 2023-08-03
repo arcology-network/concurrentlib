@@ -23,17 +23,9 @@ contract StringUint256MapTest {
         require(map.exist(k3)); 
         require(!map.exist(k4)); 
 
-        (,uint256 v) = map.get(k1);
-        require(v == 11); 
-
-        (, v) = map.get(k2);
-        require(v == 22); 
-
-        (, v) = map.get(k3);
-        require(v == 33); 
-
-        (, v) = map.get(k4);
-        require(v == type(uint256).max); 
+        require(map.get(k1) == 11); 
+        require(map.get(k2) == 22); 
+        require(map.get(k3) == 33); 
 
         map.del(k1);
         map.del(k2);

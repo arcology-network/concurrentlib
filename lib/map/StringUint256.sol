@@ -19,8 +19,7 @@ contract StringUint256Map is Base {
      * @return true if the key exists, false otherwise.
      */
     function exist(string memory k) public virtual returns(bool) { // 9e c6 69 25
-        (bool success,) = get(k);
-        return success;
+        return Base.exist(bytes(k));
     }
 
     /**
@@ -35,15 +34,10 @@ contract StringUint256Map is Base {
     /**
      * @notice Get the value associated with a given key in the map.
      * @param k The string key to retrieve the associated value.
-     * @return success true if the key exists, false otherwise.
      * @return value The string value associated with the key.
      */
-    function get(string memory k) public virtual returns(bool success, uint256 value){ // 9e c6 69 25
-        bytes memory data = Base.getByKey(bytes(k));
-        if (data.length > 0) {
-            return (true, uint256(bytes32(data)));  
-        }
-        return (false, type(uint256).max);
+    function get(string memory k) public virtual returns(uint256 value){ // 9e c6 69 25
+         return uint256(bytes32(Base.getByKey(bytes(k))));     
     }    
 
     /**
@@ -52,11 +46,7 @@ contract StringUint256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function at(uint256 idx) public virtual returns(uint256 value){ // 9e c6 69 25
-        bytes memory data = Base.getByIndex(idx);
-        if (data.length > 0) {
-            return uint256(bytes32(data));  
-        }
-        return type(uint256).max;
+        return uint256(bytes32(Base.getByIndex(idx)));  
     }    
 
     /**

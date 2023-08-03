@@ -16,11 +16,8 @@ contract U256MapTest {
         require(map.exist(10)); 
         require(map.exist(11)); 
 
-        (,uint256 v) = map.get(11);
-        require(v == 111); 
-
-        (,v) = map.get(10);
-        require(v == 100); 
+        require(map.get(11) == 111);       
+        require(map.get(10) == 100); 
 
         map.del(10);
         require(map.length() == 1); 
@@ -36,24 +33,21 @@ contract U256MapTest {
 
 contract ConcurrenctU256MapTest {
     U256Map map = new U256Map();
-    function call() public  { 
+    function call() public { 
        Multiprocess mp = new Multiprocess(2); 
-       mp.push(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 11));
-       mp.push(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 33));
+       mp.push(500000, address(this), abi.encodeWithSignature("assigner(uint256)", 11));
+       mp.push(500000, address(this), abi.encodeWithSignature("assigner(uint256)", 33));
        require(mp.length() == 2);
+       mp.run();
 
-        (,uint256 v) = map.get(11);
-        require(v == 110); 
-
-        (,v) = map.get(33);
-        require(v == 330); 
+        require(map.get(11) == 110); 
+        require(map.get(33) == 330); 
 
         map.del(11);
         require(map.length() == 1); 
         require(!map.exist(11));
 
-        (,v) = map.get(33);
-        require(v == 330); 
+        require(map.get(33) == 330); 
         map.del(33);
         require(map.length() == 0); 
 

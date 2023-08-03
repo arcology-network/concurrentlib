@@ -73,6 +73,6 @@ contract Multiprocess is Base, Storage {
      *      of threads specified in the constructor.
      */
     function run() public {       
-        foreach(abi.encode(numProcesses));
+        foreach(abi.encodePacked(numProcesses));
     }
 }

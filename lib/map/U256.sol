@@ -15,12 +15,11 @@ contract U256Map is Base {
 
     /**
      * @notice Check if a given key exists in the map.
-     * @param key The uint256 key to check for existence.
+     * @param k The uint256 key to check for existence.
      * @return true if the key exists, false otherwise.
      */
-    function exist(uint256 key) public virtual returns(bool) { // 9e c6 69 25
-        (bool success,) = get(key);
-        return success;
+    function exist(uint256 k) public virtual returns(bool) { // 9e c6 69 25
+        return Base.exist(abi.encodePacked(k)); 
     }
 
     /**
@@ -38,21 +37,17 @@ contract U256Map is Base {
      * @param value The uint256 value associated with the key.
      */
     function set(uint256 key, uint256 value) public { // 80 26 32 97
-        Base.setByKey((abi.encodePacked(key)), abi.encodePacked(value));       
+        Base.setByKey(abi.encodePacked(key), abi.encodePacked(value));       
     }
 
     /**
      * @notice Get the value associated with a given key in the map.
      * @param key The uint256 key to retrieve the associated value.
-     * @return success true if the key exists, false otherwise.
      * @return value The uint256 value associated with the key.
      */
-    function get(uint256 key) public virtual returns(bool success, uint256 value){ // 9e c6 69 25
-        bytes memory data = Base.getByKey(abi.encodePacked(key));
-        if (data.length > 0) {           
-            return (true, uint256(bytes32(data)));  
-        }
-        return (false, type(uint256).max);
+    function get(uint256 key) public virtual returns(uint256 value){ // 9e c6 69 25
+        // bytes memory data = Base.getByKey(abi.encodePacked(key));              
+        return uint256(bytes32(Base.getByKey(abi.encodePacked(key))));
     }    
 
     /**
