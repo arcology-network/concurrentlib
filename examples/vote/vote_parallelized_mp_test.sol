@@ -19,6 +19,7 @@ contract ParaBallotCaller {
         ParaBallot ballot = new ParaBallot(msg.sender, proposalNames);   
 
         Multiprocess mp = new Multiprocess(5);
+
         mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr1));
         mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr2));
         mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr3));
@@ -27,15 +28,18 @@ contract ParaBallotCaller {
         mp.run();
         mp.clear();
 
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint)", 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint)", 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint)", 1));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint)", 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint)", 1));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr1, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr3, 1));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr5, 1));
         mp.run();
         mp.rollback();
 
         require(ballot.winningProposal() == 0);
         require(ballot.winnerName() == keccak256("Alice"));
+
+        require(ballot.checkBallot(0) == 3);
+        require(ballot.checkBallot(1) == 2);
     }
 }
