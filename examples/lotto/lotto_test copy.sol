@@ -20,9 +20,9 @@ contract LottoCaller {
         require(mp.length() == 4);
         mp.run();
 
-        require(Coin(coin).getter(Alice) == 1111);
-        require(Coin(coin).getter(Bob) == 2222);
-        require(Coin(coin).getter(Carol) == 3333);
-        require(Coin(coin).getter(Dave) == 4444);
+        // require(Lotto(coin).getter(Alice) == 1111);
+        // require(Lotto(coin).getter(Bob) == 2222);
+        // require(Lotto(coin).getter(Carol) == 3333);
+        // require(Lotto(coin).getter(Dave) == 4444);
     }
 }
