@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import "../runtime/Runtime.sol";
 import "../storage/Storage.sol";
 import "../base/Base.sol";
 
@@ -13,23 +12,22 @@ import "../base/Base.sol";
  *      similar to Python's `multiprocessing` library.
  */
 contract Multiprocess is Base, Storage {
+    enum Status{ 
+        SUCCESSFUL, 
+        EXECUTION_FAILED, 
+        CONFLICT,
+        ABORTED,
+        FAILED_TO_RETRIVE
+    }
     uint256 numProcesses = 1;
 
     /**
      * @notice Constructor to initialize the Multiprocess container.
      * @param threads The number of parallel processors (ranging from 1 to 255) for parallel processing.
      */
-    constructor (uint256 threads) {
+    constructor (uint256 threads){
         Base.API = address(0xb0);
         numProcesses = threads; 
-    } 
-
-    /**
-     * @notice Push an executable message into the container.
-     * @param input The executable message data to be pushed into the container.
-     */
-    function push(bytes memory input) public virtual { // 9e c6 69 25
-        setByKey(uuid(), input);
     } 
 
     /**
@@ -39,7 +37,18 @@ contract Multiprocess is Base, Storage {
      * @param funcCall The encoded function call data.
      */
     function push(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual {
-        setByKey(uuid(), abi.encode(gaslimit, contractAddr, funcCall));
+        push(gaslimit, 0, contractAddr, funcCall);
+    }
+
+     /**
+     * @notice Push an executable message into the container with specified gas limit, contract address, and function call data.
+     * @param gaslimit The gas limit for the execution of the function call.
+     * @param ethVal The number of wei sent with the message.
+     * @param contractAddr The address of the smart contract to execute the function on.
+     * @param funcCall The encoded function call data.
+     */
+    function push(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
+        setByKey(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
     }
  
     /**
@@ -74,6 +83,12 @@ contract Multiprocess is Base, Storage {
      *      of threads specified in the constructor.
      */
     function run() public {       
-        foreach(abi.encode(numProcesses));
+        foreach(abi.encodePacked(numProcesses));
     }
+}
+
+struct ExecutionResult {   
+    uint256 error;
+    uint256 gasUsed;
+    bytes retData;
 }

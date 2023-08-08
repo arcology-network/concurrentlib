@@ -9,6 +9,7 @@ contract Coin {
     // Events allow clients to react to specific
     // contract changes you declare
     event Sent(address from, address to, uint amount);
+    event GetBalance(uint256 value);
 
     // Constructor code is only run when the contract
     // is created
@@ -34,7 +35,8 @@ contract Coin {
     }
 
     // Additional function to query the balance of a specific address.
-    function getter(address addr) public view returns(uint256) {
+    function getter(address addr) public returns(uint256) {
+        emit GetBalance(balances[addr]);
         return balances[addr];
     }
 }

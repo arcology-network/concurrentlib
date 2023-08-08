@@ -61,10 +61,10 @@ contract ParaBallot {
         // functions are called correctly.
         // As a second argument, you can also provide an
         // explanation about what went wrong.
-        require(
-            msg.sender == chairperson,
-            "Only chairperson can give right to vote."
-        );
+        // require(
+        //     msg.sender == chairperson,
+        //     "Only chairperson can give right to vote."
+        // );
         require(
             !voters[voter].voted,
             "The voter already voted."
@@ -127,7 +127,7 @@ contract ParaBallot {
         require(!sender.voted, "Already voted.");
         sender.voted = true;
         sender.vote = proposal;
-
+        // address(0x60).call(abi.encodePacked(proposal));
         // If `proposal` is out of the range of the array,
         // this will throw automatically and revert all
         // changes.
@@ -155,5 +155,9 @@ contract ParaBallot {
             returns (bytes32 winnerName_)
     {
         winnerName_ = proposals[winningProposal()].name;
+    }
+
+    function checkBallot(uint256 idx) public returns (uint256)  {
+        return proposals[idx].voteCount.get(); 
     }
 }

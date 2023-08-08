@@ -43,10 +43,21 @@ contract Base is Runtime {
      * @notice Retrieve the committed length of the container. This usually is the length at the previous block height.
      * @return The latest committed length of the container. This is function is thread-safe.
      */
-    function peek() public returns(bytes memory) {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
-        require(success);
-        return data;  
+    function peek() public returns(uint256) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
+        if (data.length > 0) {
+            return abi.decode(data, (uint256));   
+        }
+        return 0;    
+    }
+
+    /**
+     * @notice Checks if a key exists in the the data structure. *
+     * @param key The key to check for existence.
+     * @return A boolean indicating whether the key exists in it or not.
+     */
+    function exist(bytes memory key) public virtual returns(bool) {
+        return getByKey(key).length > 0;
     }
 
     /**
@@ -127,10 +138,7 @@ contract Base is Runtime {
      * @return The data stored at the specified index.
      */
     function getByIndex(uint256 idx) public virtual returns(bytes memory) {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
-        if (success) {
-            return abi.decode(data, (bytes));  
-        }
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
         return data;
     }
 
@@ -140,10 +148,7 @@ contract Base is Runtime {
      * @return The data stored at the specified key.
      */
     function getByKey(bytes memory key) public returns(bytes memory)  {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
-        if (success) {
-            return abi.decode(data, (bytes));  
-        }
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
         return data;
     }
 

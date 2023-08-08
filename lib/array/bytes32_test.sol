@@ -18,7 +18,7 @@ contract Bytes32Test {
         container.push(hash1);
         container.push(hash2);
         container.push(hash3);
-        require(container.length() == 4); 
+        require(container.length() == 4);
 
         require(container.get(0) == hash0);
         require(container.get(1) == hash1);

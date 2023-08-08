@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import "./U256.sol";
 import "../multiprocess/Multiprocess.sol";
 
-contract U256DynamicTest {
+contract U256Test {
     U256 container = new U256();
     U256[] array;
 

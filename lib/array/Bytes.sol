@@ -17,7 +17,7 @@ contract Bytes is Base {
      * @param elem The bytes data element to add to the array.
      */
     function push(bytes memory elem) public virtual { //9e c6 69 25
-        Base.setByKey(uuid(), abi.encodePacked(elem));
+        Base.setByKey(uuid(), (elem));
     }    
 
     /**
@@ -43,6 +43,6 @@ contract Bytes is Base {
      * @param elem The bytes data element to be stored at the specified index.
      */
     function set(uint256 idx, bytes memory elem) public { // 7a fa 62 38
-        Base.setByIndex(idx, abi.encodePacked(elem));
+        Base.setByIndex(idx, (elem));
     }
 }
