@@ -653,3 +653,49 @@ contract ParaConflictTest {
         require(shared.get() == 1);
     }
 } 
+
+contract ParaRwConflictTest {
+    uint256 counter = 0;
+    uint256 counterCopy = 0;
+    function call() public  { 
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(this), abi.encodeWithSignature("read()"));
+        mp.push(50000, address(this), abi.encodeWithSignature("write()", 11));
+        mp.run();
+        mp.clear();
+
+        require(counterCopy == 0);
+        require(counter == 0);
+    }
+
+    function read() public {
+        counterCopy = counter;
+    }
+
+    function write(uint256 v) public  {
+        counter = v;
+    }   
+} 
+
+contract ParaPayableConflictTest {
+    uint256 counter = 0;
+    uint256 counterCopy = 0;
+    function call() public  { 
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(this), abi.encodeWithSignature("read()"));
+        mp.push(50000, address(this), abi.encodeWithSignature("write()", 11));
+        mp.run();
+        mp.clear();
+
+        require(counterCopy == 0);
+        require(counter == 0);
+    }
+
+    function read() public {
+        counterCopy = counter;
+    }
+
+    function write(uint256 v) public  {
+        counter = v;
+    }   
+} 
