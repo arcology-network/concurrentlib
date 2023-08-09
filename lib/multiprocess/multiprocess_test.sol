@@ -574,20 +574,6 @@ contract NativeStorage {
     function getY() public view returns(uint256) {return y;}
 }
 
-// contract NativeStorageAssignmentTest {
-//     NativeStorage results = new NativeStorage() ;
-//     function call() public  { 
-//         Multiprocess mp = new Multiprocess(2); 
-//         mp.push(50000, address(results), abi.encodeWithSignature("incrementX()"));
-//         mp.push(50000, address(results), abi.encodeWithSignature("incrementY()"));
-//         mp.push(50000, address(results), abi.encodeWithSignature("incrementX()"));
-//         mp.push(50000, address(results), abi.encodeWithSignature("incrementY()"));
-//         mp.run();
-//         require(results.getX() == 2);
-//         require(results.getY() == 102);
-//     }
-// } 
-
 contract NativeStorageAssignmentTest {
     NativeStorage results = new NativeStorage() ;
     function call() public  { 
@@ -599,5 +585,71 @@ contract NativeStorageAssignmentTest {
         mp.run();
         require(results.getX() == 2);
         require(results.getY() == 102);
+    }
+} 
+
+contract sharedContract{ 
+    uint256 counter = 0;
+    function increment () public {
+        counter ++;
+    }
+
+    function get() public view returns(uint256){
+        return counter;
+    }
+}
+
+contract conflictLeft{ 
+    uint256 internalCounter = 0;
+    function increment () public {
+        internalCounter ++;
+    }
+
+    function callShared (address callee) public {
+        internalCounter ++;
+        sharedContract(callee).increment();
+    }
+    
+    function get() public view returns(uint256){
+        return internalCounter;
+    }
+}
+
+contract conflictRight{ 
+    uint256 internalCounter = 0;
+    function increment () public {
+        internalCounter ++;
+    }
+    
+    function callShared (address callee) public {
+        internalCounter += 2;
+        sharedContract(callee).increment();
+    }
+
+    function get() public view returns(uint256){
+        return internalCounter;
+    }
+}
+
+contract ParaConflictTest {
+    NativeStorage results = new NativeStorage() ;
+    function call() public  { 
+        conflictLeft left = new conflictLeft();
+        conflictRight right = new conflictRight();
+
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(left), abi.encodeWithSignature("increment()"));
+        mp.push(50000, address(right), abi.encodeWithSignature("increment()"));
+        mp.run();
+        mp.clear();
+        require(left.get() == 1);
+        require(right.get() == 1);
+
+        sharedContract shared =  new sharedContract();    
+        mp.push(50000, address(left), abi.encodeWithSignature("callShared(address)", address(shared)));
+        mp.push(50000, address(right), abi.encodeWithSignature("callShared(address)", address(shared)));
+        mp.run();
+
+        require(shared.get() == 1);
     }
 } 
