@@ -24,6 +24,7 @@ contract ParaNativeAssignmentTest {
 }  
  
 contract ParaFixedLengthWithConflictTest {  
+    Bool container = new Bool();
      uint256[2] results;
      function call() public  { 
        results[0] = 100;
@@ -35,11 +36,13 @@ contract ParaFixedLengthWithConflictTest {
        mp.run();     
        require(results[0] == 111);  // 11 and 33 will be reverted due to conflicts
        require(results[1] == 211); 
+       require(container.length() == 1); 
     }
 
     function updater(uint256 num) public {
          results[0] += num;
          results[1] += num;
+         container.push(true);
     }
 }
 
@@ -321,8 +324,8 @@ contract MaxSelfRecursiveDepth4Test {
 
     function add() public { //9e c6 69 25
         Multiprocess mp2 = new Multiprocess(1); 
-        mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
-        mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
+        mp2.push(21111111, address(this), abi.encodeWithSignature("add()"));
+        mp2.push(21111111, address(this), abi.encodeWithSignature("add()"));
         mp2.run();
         mp2.rollback();
         container.push(true);              
@@ -361,17 +364,16 @@ contract MaxRecursiveDepthOffLimitTest {
 
 contract ParaFixedLengthWithConflictRollbackTest {
     Bool container = new Bool();
-    // Bool container2 = new Bool();
+    uint256[2] results;
     function call() public {
-        // container = new Bool();
         Multiprocess mp = new Multiprocess(2);
         mp.push(9999999, address(this), abi.encodeWithSignature("worker()")); // Only one will go through
         mp.push(9999999, address(this), abi.encodeWithSignature("worker()")); // Only one will go through
         mp.run();
-        require(container.length() == 2);
+        require(container.length() == 1);
 
         appender();
-        require(container.length() == 3);
+        require(container.length() == 2);
     } 
 
     function worker() public { //9e c6 69 25
@@ -379,13 +381,14 @@ contract ParaFixedLengthWithConflictRollbackTest {
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender()"));
         mp2.run();   
         mp2.rollback();
+        results[0] = 1;
+        results[1] = 1;
     }   
 
     function appender() public { 
         container.push(true);
     }  
 }
-
 
 contract MixedRecursiveMultiprocessTest {
     Bool container = new Bool();
