@@ -338,8 +338,8 @@ contract MaxRecursiveDepthOffLimitTest {
 
     Multiprocess mp;
     function call() public {
-        cumulative.add(10);
-        require(cumulative.get() == 10);
+        cumulative.add(2);
+        // require(cumulative.get() == 10);
 
         container.push(true);       
         mp = new Multiprocess(1);
@@ -348,11 +348,11 @@ contract MaxRecursiveDepthOffLimitTest {
         mp.run();
   
         require(container.length() == 31); // 1 + (2 + 4 + 8 + 16) 
-        // require(cumulative.get() == 50);
+        require(cumulative.get() == 62);
     } 
 
     function add() public { //9e c6 69 25
-        cumulative.add(10);
+        cumulative.add(2);
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
         mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
@@ -389,6 +389,58 @@ contract ParaFixedLengthWithConflictRollbackTest {
         container.push(true);
     }  
 }
+
+contract ParaSubbranchConflictTest {
+    Bool container = new Bool();
+    uint256[2] results0;
+    uint256[2] results1;
+    function call() public {
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker0()")); // Only one will go through
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker1()")); // Only one will go through
+        mp.run();
+        require(container.length() == 4);
+    } 
+
+    function worker0() public { //9e c6 69 25
+        Multiprocess mp2 = new Multiprocess(2); 
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender00()"));
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender01()"));
+        mp2.run();   
+        mp2.rollback();
+        container.push(true);
+    }   
+
+    function appender00() public { 
+        container.push(true);
+        results0[0] = 1;
+    }  
+
+    function appender01() public { 
+        container.push(true);
+        results0[0] = 1;
+    }  
+
+    function worker1() public { //9e c6 69 25
+        Multiprocess mp2 = new Multiprocess(2); 
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender10()"));
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender11()"));
+        mp2.run();   
+        mp2.rollback();
+        container.push(true);
+    }   
+
+    function appender10() public { 
+        container.push(true);
+        uint256 a = results1[0];
+    }  
+
+    function appender11() public { 
+        container.push(true);
+        results1[0] = 1;
+    }  
+}
+
 
 contract MixedRecursiveMultiprocessTest {
     Bool container = new Bool();
