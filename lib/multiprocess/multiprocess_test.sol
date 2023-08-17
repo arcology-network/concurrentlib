@@ -437,9 +437,51 @@ contract ParaSubbranchConflictTest {
 
     function appender11() public { 
         container.push(true);
-        results1[0] = 1;
+        uint256 a = results1[0];
     }  
 }
+
+
+
+
+contract ParentChildBranchConflictTest {
+    Bool container = new Bool();
+    uint256[2] results0;
+    uint256[2] results1;
+    function call() public {
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker0()")); // Only one will go through
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker1()")); // Only one will go through
+        mp.run();
+        require(container.length() == 1);
+    } 
+
+    function worker0() public { //9e c6 69 25
+        results0[0] = 1;
+        Multiprocess mp2 = new Multiprocess(2); 
+        mp2.run();   
+        mp2.rollback();
+        container.push(true);
+    }   
+
+    function worker1() public { //9e c6 69 25
+        Multiprocess mp2 = new Multiprocess(2); 
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender10()"));
+        mp2.run();   
+        mp2.rollback();
+        container.push(true);
+    }   
+
+    function appender10() public { 
+        container.push(true);
+        uint256 a = results0[0];
+        // results0[0] = 1;
+    }  
+}
+
+
+
+
 
 
 contract MixedRecursiveMultiprocessTest {
