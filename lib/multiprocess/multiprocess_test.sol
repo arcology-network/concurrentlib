@@ -432,7 +432,7 @@ contract ParaSubbranchConflictTest {
 
     function appender10() public { 
         container.push(true);
-        uint256 a = results1[0];
+        results1[0] = 1;
     }  
 
     function appender11() public { 
