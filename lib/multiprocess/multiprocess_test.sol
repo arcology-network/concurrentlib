@@ -441,9 +441,6 @@ contract ParaSubbranchConflictTest {
     }  
 }
 
-
-
-
 contract ParentChildBranchConflictTest {
     Bool container = new Bool();
     uint256[2] results0;
@@ -478,11 +475,6 @@ contract ParentChildBranchConflictTest {
         // results0[0] = 1;
     }  
 }
-
-
-
-
-
 
 contract MixedRecursiveMultiprocessTest {
     Bool container = new Bool();
