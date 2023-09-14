@@ -1,17 +1,19 @@
-# <img src="./img/arcology-logo-dark-removebg-preview.png" alt="OpenZeppelin" height="100px">
+<div align="center">
+  <img src="./img/arcology-logo-dark.png" alt="Your Image Alt Text" height="120px" align="center" />
+</div>
 
-[![NPM Package](https://img.shields.io/badge/npm-%F0%9F%93%84-grey)](https://www.npmjs.org/package/arcologynetwork)
+<!-- [![NPM Package](https://img.shields.io/badge/npm-%F0%9F%93%84-grey)](https://www.npmjs.org/package/arcologynetwork)
 [![Docs](https://img.shields.io/badge/docs-%F0%9F%93%84-grey)](https://doc.arcology.network/arcology-concurrent-programming-guide/)
-[![Docs](https://img.shields.io/badge/solidity-%F0%9F%93%84-grey)](https://www.arcology.network)
+[![Docs](https://img.shields.io/badge/solidity-%F0%9F%93%84-grey)](https://www.arcology.network) -->
+
+# Concurrent APIs
 
 Solidity, the programming language used to develop smart contracts on the Ethereum platform, was not initially designed for concurrent use, so it does not include the features and capabilities necessary for efficient concurrent programming. 
 
-## Concurrent APIs
-
-Arcology offers a suite of Solidity APIs customized for concurrent programming tasks. This package includes Solidity APIs for Solidity smart contract developers to fully utilize the power of Arcology's parallel execution capabilities. **Please be aware that all the libraries in the package are specifically designed for Arcology only.**
+[Arcology Network](https://arcology.network) offers a suite of Solidity APIs customized for concurrent programming tasks. This package includes the Solidity APIs for  smart contract developers to fully utilize the power of **Arcology's parallel execution** capabilities. Please be aware that all the libraries in the package are specifically designed for Arcology Network only.
 
   
-## 1. Installation
+## Installation
 
 ```shell
 $ npm install @arcologynetwork/concurrentlib
