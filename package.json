@@ -1,12 +1,28 @@
 {
-    "keywords": [
-      "parallel execution", 
-      "solidity",
-      "evm",
-      "ethereum",
-      "smart contracts",
-      "arcology network"
-      "rollup",
-      "l2"
-    ]
+  "name": "concurrentlib",
+  "description": "concurrent Smart Contract library for Solidity",
+  "version": "1.0.0",
+  "files": [
+    "/lib/**/*.sol"
+  ],
+  "scripts": {
+    
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arcology-network/concurrentlib.git"
+  },
+  "keywords": [
+    "parallel execution", 
+    "solidity",
+    "evm",
+    "ethereum",
+    "smart contracts",
+    "arcology network",
+    "rollup",
+    "l2"
+  ],
+  "author": "Arcology network Community",
+  "license": "MIT",
+  "homepage": "https://arcology.network/"
 }
