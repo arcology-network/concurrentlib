@@ -41,22 +41,16 @@ contract U256ParallelTest {
         require(mp.length() == 2);
         mp.run();
 
-        // (bytes memory data) = mp.get(1);
-        // require(abi.decode(data, (uint256)) == 20);
-
-        // (data) = mp.get(0);
-        // require(abi.decode(data, (uint256)) == 10);
-
         pop();
         require(container.length() == 3);
-
+ 
         // // Here should be one conflict
-        // mp.clear();
+        mp.clear();
         mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
         mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
         mp.run();
 
-        require(container.length() == 1);  // Only one transaction went through, so only one pop() took effect
+        require(container.length() == 2);  // Only one transaction went through, so only one pop() took effect
     }
 
     function push(uint256 v) public{

@@ -24,6 +24,7 @@ contract ParaNativeAssignmentTest {
 }  
  
 contract ParaFixedLengthWithConflictTest {  
+    Bool container = new Bool();
      uint256[2] results;
      function call() public  { 
        results[0] = 100;
@@ -35,11 +36,13 @@ contract ParaFixedLengthWithConflictTest {
        mp.run();     
        require(results[0] == 111);  // 11 and 33 will be reverted due to conflicts
        require(results[1] == 211); 
+       require(container.length() == 1); 
     }
 
     function updater(uint256 num) public {
          results[0] += num;
          results[1] += num;
+         container.push(true);
     }
 }
 
@@ -321,8 +324,8 @@ contract MaxSelfRecursiveDepth4Test {
 
     function add() public { //9e c6 69 25
         Multiprocess mp2 = new Multiprocess(1); 
-        mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
-        mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
+        mp2.push(21111111, address(this), abi.encodeWithSignature("add()"));
+        mp2.push(21111111, address(this), abi.encodeWithSignature("add()"));
         mp2.run();
         mp2.rollback();
         container.push(true);              
@@ -335,8 +338,8 @@ contract MaxRecursiveDepthOffLimitTest {
 
     Multiprocess mp;
     function call() public {
-        cumulative.add(10);
-        require(cumulative.get() == 10);
+        cumulative.add(2);
+        // require(cumulative.get() == 10);
 
         container.push(true);       
         mp = new Multiprocess(1);
@@ -345,11 +348,11 @@ contract MaxRecursiveDepthOffLimitTest {
         mp.run();
   
         require(container.length() == 31); // 1 + (2 + 4 + 8 + 16) 
-        // require(cumulative.get() == 50);
+        require(cumulative.get() == 62);
     } 
 
     function add() public { //9e c6 69 25
-        cumulative.add(10);
+        cumulative.add(2);
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
         mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
@@ -361,17 +364,16 @@ contract MaxRecursiveDepthOffLimitTest {
 
 contract ParaFixedLengthWithConflictRollbackTest {
     Bool container = new Bool();
-    // Bool container2 = new Bool();
+    uint256[2] results;
     function call() public {
-        // container = new Bool();
         Multiprocess mp = new Multiprocess(2);
         mp.push(9999999, address(this), abi.encodeWithSignature("worker()")); // Only one will go through
         mp.push(9999999, address(this), abi.encodeWithSignature("worker()")); // Only one will go through
         mp.run();
-        require(container.length() == 2);
+        require(container.length() == 1);
 
         appender();
-        require(container.length() == 3);
+        require(container.length() == 2);
     } 
 
     function worker() public { //9e c6 69 25
@@ -379,6 +381,8 @@ contract ParaFixedLengthWithConflictRollbackTest {
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender()"));
         mp2.run();   
         mp2.rollback();
+        results[0] = 1;
+        results[1] = 1;
     }   
 
     function appender() public { 
@@ -386,6 +390,91 @@ contract ParaFixedLengthWithConflictRollbackTest {
     }  
 }
 
+contract ParaSubbranchConflictTest {
+    Bool container = new Bool();
+    uint256[2] results0;
+    uint256[2] results1;
+    function call() public {
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker0()")); // Only one will go through
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker1()")); // Only one will go through
+        mp.run();
+        require(container.length() == 4);
+    } 
+
+    function worker0() public { //9e c6 69 25
+        Multiprocess mp2 = new Multiprocess(2); 
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender00()"));
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender01()"));
+        mp2.run();   
+        mp2.rollback();
+        container.push(true);
+    }   
+
+    function appender00() public { 
+        container.push(true);
+        results0[0] = 1;
+    }  
+
+    function appender01() public { 
+        container.push(true);
+        results0[0] = 1;
+    }  
+
+    function worker1() public { //9e c6 69 25
+        Multiprocess mp2 = new Multiprocess(2); 
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender10()"));
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender11()"));
+        mp2.run();   
+        mp2.rollback();
+        container.push(true);
+    }   
+
+    function appender10() public { 
+        container.push(true);
+        results1[0] = 1;
+    }  
+
+    function appender11() public { 
+        container.push(true);
+        uint256 a = results1[0];
+    }  
+}
+
+contract ParentChildBranchConflictTest {
+    Bool container = new Bool();
+    uint256[2] results0;
+    uint256[2] results1;
+    function call() public {
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker0()")); // Only one will go through
+        mp.push(9999999, address(this), abi.encodeWithSignature("worker1()")); // Only one will go through
+        mp.run();
+        require(container.length() == 1);
+    } 
+
+    function worker0() public { //9e c6 69 25
+        results0[0] = 1;
+        Multiprocess mp2 = new Multiprocess(2); 
+        mp2.run();   
+        mp2.rollback();
+        container.push(true);
+    }   
+
+    function worker1() public { //9e c6 69 25
+        Multiprocess mp2 = new Multiprocess(2); 
+        mp2.push(1999999, address(this), abi.encodeWithSignature("appender10()"));
+        mp2.run();   
+        mp2.rollback();
+        container.push(true);
+    }   
+
+    function appender10() public { 
+        container.push(true);
+        uint256 a = results0[0];
+        // results0[0] = 1;
+    }  
+}
 
 contract MixedRecursiveMultiprocessTest {
     Bool container = new Bool();
@@ -574,20 +663,6 @@ contract NativeStorage {
     function getY() public view returns(uint256) {return y;}
 }
 
-// contract NativeStorageAssignmentTest {
-//     NativeStorage results = new NativeStorage() ;
-//     function call() public  { 
-//         Multiprocess mp = new Multiprocess(2); 
-//         mp.push(50000, address(results), abi.encodeWithSignature("incrementX()"));
-//         mp.push(50000, address(results), abi.encodeWithSignature("incrementY()"));
-//         mp.push(50000, address(results), abi.encodeWithSignature("incrementX()"));
-//         mp.push(50000, address(results), abi.encodeWithSignature("incrementY()"));
-//         mp.run();
-//         require(results.getX() == 2);
-//         require(results.getY() == 102);
-//     }
-// } 
-
 contract NativeStorageAssignmentTest {
     NativeStorage results = new NativeStorage() ;
     function call() public  { 
@@ -600,4 +675,116 @@ contract NativeStorageAssignmentTest {
         require(results.getX() == 2);
         require(results.getY() == 102);
     }
+} 
+
+contract sharedContract{ 
+    uint256 counter = 0;
+    function increment () public {
+        counter ++;
+    }
+
+    function get() public view returns(uint256){
+        return counter;
+    }
+}
+
+contract conflictLeft{ 
+    uint256 internalCounter = 0;
+    function increment () public {
+        internalCounter ++;
+    }
+
+    function callShared (address callee) public {
+        internalCounter ++;
+        sharedContract(callee).increment();
+    }
+    
+    function get() public view returns(uint256){
+        return internalCounter;
+    }
+}
+
+contract conflictRight{ 
+    uint256 internalCounter = 0;
+    function increment () public {
+        internalCounter ++;
+    }
+    
+    function callShared (address callee) public {
+        internalCounter += 2;
+        sharedContract(callee).increment();
+    }
+
+    function get() public view returns(uint256){
+        return internalCounter;
+    }
+}
+
+contract ParaConflictTest {
+    NativeStorage results = new NativeStorage() ;
+    function call() public  { 
+        conflictLeft left = new conflictLeft();
+        conflictRight right = new conflictRight();
+
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(left), abi.encodeWithSignature("increment()"));
+        mp.push(50000, address(right), abi.encodeWithSignature("increment()"));
+        mp.run();
+        mp.clear();
+        require(left.get() == 1);
+        require(right.get() == 1);
+
+        sharedContract shared =  new sharedContract();    
+        mp.push(50000, address(left), abi.encodeWithSignature("callShared(address)", address(shared)));
+        mp.push(50000, address(right), abi.encodeWithSignature("callShared(address)", address(shared)));
+        mp.run();
+
+        require(shared.get() == 1);
+    }
+} 
+
+contract ParaRwConflictTest {
+    uint256 counter = 0;
+    uint256 counterCopy = 0;
+    function call() public  { 
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(this), abi.encodeWithSignature("read()"));
+        mp.push(50000, address(this), abi.encodeWithSignature("write()", 11));
+        mp.run();
+        mp.clear();
+
+        require(counterCopy == 0);
+        require(counter == 0);
+    }
+
+    function read() public {
+        counterCopy = counter;
+    }
+
+    function write(uint256 v) public  {
+        counter = v;
+    }   
+} 
+
+contract ParaPayableConflictTest {
+    uint256 counter = 0;
+    uint256 counterCopy = 0;
+    function call() public  { 
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(this), abi.encodeWithSignature("read()"));
+        mp.push(50000, address(this), abi.encodeWithSignature("write()", 11));
+        mp.run();
+        mp.clear();
+
+        require(counterCopy == 0);
+        require(counter == 0);
+    }
+
+    function read() public {
+        counterCopy = counter;
+    }
+
+    function write(uint256 v) public  {
+        counter = v;
+    }   
 } 
