@@ -35,7 +35,7 @@ contract ParallizedContract{
     }
 }
 ```
-*Please keep the library as it is when using it; don't try to modify it.*
+*Please keep the library as it is when using it; don't try to modify.*
 
 ## Learn More
 
