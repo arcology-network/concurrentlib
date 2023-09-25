@@ -1,5 +1,5 @@
-<div align="center">
-  <img src="./img/arcology-logo-dark.png" alt="Your Image Alt Text" height="120px" align="center" />
+<div align="left">
+  <img src="./img/arcology-logo-text-dark-transparent.svg" alt="Your Image Alt Text" height="120px" align="center"/>
 </div>
 
 <!-- [![NPM Package](https://img.shields.io/badge/npm-%F0%9F%93%84-grey)](https://www.npmjs.org/package/arcologynetwork)
