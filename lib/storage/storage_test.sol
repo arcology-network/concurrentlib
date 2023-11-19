@@ -14,16 +14,27 @@ contract ResettableDeployer {
     }
     
     // This is invalid and will not compile
-    function afterCheck () public {
+    function call () public {
         resettable.afterCheck();
     }
 }
 
 contract TestResettable is Storage {
+    uint256[] arr;
     uint256 [2] public array; 
+    mapping (uint256 => bool) hashmap;
+
     constructor () {
+        arr = new uint256[](0);
+        arr.push(99);
+        arr.push(127);
+
         array[0] = 10;
         array[1] = 11;     
+
+        hashmap[123] = true;
+        hashmap[456] = false;
+        hashmap[890] = true;
     }
 
     function set() public {

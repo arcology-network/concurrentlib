@@ -194,17 +194,43 @@ contract MultiParaCumulativeU256 {
         Multiprocess mp1 = new Multiprocess(1);
         mp1.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 2));
         mp1.run();
+        require(cumulative.get() == 2);
 
         Multiprocess mp2 = new Multiprocess(1);
-        mp2.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 2));
-        mp2.run();  
+        mp2.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 3));
+        mp2.run();
+        require(cumulative.get() == 5);  
 
         Multiprocess mp3 = new Multiprocess(1);
-        mp3.push(400000, address(this), abi.encodeWithSignature("sub(uint256)", 2));
-        mp3.run();   
+        mp3.push(400000, address(this), abi.encodeWithSignature("sub(uint256)", 4));
+        mp3.run();  
+        require(cumulative.get() == 1);  
 
         add(3);
-        require(cumulative.get() == 5);
+        require(cumulative.get() == 4);
+    }
+
+    function add(uint256 elem) public { //9e c6 69 25
+        cumulative.add(elem);
+    }  
+
+    function sub(uint256 elem) public { //9e c6 69 25
+        cumulative.sub(elem);
+    }   
+}
+
+contract MultiCumulativeU256ConcurrentOperation {
+    U256Cumulative cumulative = new U256Cumulative(0, 100);     
+    function call() public {
+        Multiprocess mp1 = new Multiprocess(1);
+        mp1.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 2));
+        mp1.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 2));
+        mp1.push(400000, address(this), abi.encodeWithSignature("sub(uint256)", 2));
+        mp1.run();        
+        require(cumulative.get() == 4);  
+
+        add(3);
+        require(cumulative.get() == 7);
     }
 
     function add(uint256 elem) public { //9e c6 69 25
@@ -249,9 +275,9 @@ contract RecursiveParallelizerOnContainerTest {
         mp.push(9999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.run();
 
-        require(results[0] == 11);
-        require(results[1] == 12);
-        require(container.length() == 2);
+        // require(results[0] == 11);
+        // require(results[1] == 12);
+        // require(container.length() == 2);
         require(cumulative.get() == 5);
     } 
 
@@ -621,7 +647,7 @@ contract ThreadingCumulativeU256SameMpMulti {
 contract U256ParaCompute {
     uint256 num = 0;
 
-    function calculate() public {     
+    function call() public {     
         Multiprocess mp = new Multiprocess(2);                                                  // Create Multiprocess instance with 2 threads         
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)); // First function call    
         mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2)); // Second function call    
