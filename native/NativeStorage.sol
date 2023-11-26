@@ -9,7 +9,14 @@ contract NativeStorage {
         incrementX();
         incrementY();
         require(x == 2);
-        require(y == 102);
+        require(y == 102);   
+   }
+
+   function call() public{
+        incrementX();
+        incrementY();
+        require(x == 3);
+        require(y == 104);   
    }
 
     function incrementX() public {
@@ -28,3 +35,4 @@ contract NativeStorage {
          require(y == value);
     }
 }
+

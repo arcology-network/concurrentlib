@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import "../../lib/multiprocess/Multiprocess.sol";
+// import "../../lib/multiprocess/Multiprocess.sol";
 
-contract ParaTransfer {
+contract Transfer {
     uint counter;
     event BalanceEvent(uint256 bal);
     event Balance2Event(uint256 senderbalance);
@@ -35,14 +35,13 @@ contract ParaTransfer {
     receive() external payable {}
 }
 
-
-contract ParaTransferTestCaller {
-	function call(address addr) public {
-		Multiprocess mp = new Multiprocess(2); 
-        mp.push(50000, addr, abi.encodeWithSignature("getBalance()"));
-        mp.push(50000, addr, abi.encodeWithSignature("getBalance()"));
-        mp.run();
-        mp.clear();
-		// require(false);
-    }    
-}
+// contract ParaTransferTestCaller {
+// 	function call(address addr) public {
+// 		Multiprocess mp = new Multiprocess(2); 
+//         mp.push(150000, addr, abi.encodeWithSignature("getBalance()"));
+//         mp.push(150000, addr, abi.encodeWithSignature("getBalance()"));
+//         mp.run();
+//         mp.clear();
+// 		// require(false);
+//     }    
+// }
