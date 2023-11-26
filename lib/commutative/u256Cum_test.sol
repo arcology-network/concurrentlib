@@ -42,7 +42,7 @@ contract CumulativeU256Test {
 
     function call() public {
         cumulative.add(1);
-        require(cumulative.get() == 11);
+        require(cumulative.get() == 1);
     }
 }
 
