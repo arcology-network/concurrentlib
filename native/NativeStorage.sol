@@ -36,3 +36,13 @@ contract NativeStorage {
     }
 }
 
+contract TestFailed {   
+     uint256 x = 1;
+     uint256 y = 100;
+
+     constructor() {}
+
+     function call() public {
+          require(x == 1);
+     }
+}
