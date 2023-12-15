@@ -10,12 +10,14 @@
 
 Solidity, the programming language used to develop smart contracts on the Ethereum platform, was not initially designed for concurrent use, so it does not include the features and capabilities necessary for efficient concurrent programming. 
 
-[Arcology Network](https://arcology.network) offers a suite of Solidity APIs customized for concurrent programming tasks. This package includes the Solidity APIs for  smart contract developers to fully utilize the power of **Arcology's parallel execution** capabilities. Please be aware that all the libraries in the package are specifically designed for Arcology Network only.
+[Arcology Network](https://arcology.network) offers a suite of Solidity APIs customized for concurrent programming tasks. This package includes the Solidity APIs for  smart contract developers to fully utilize the power of **Arcology's parallel execution** capabilities. 
+
+>>Please be aware that all the libraries in the package are specifically designed for Arcology Network only.
 
   
 ## Installation
 
-```shell
+``` shell
 $ npm install @arcologynetwork/concurrentlib
 ```
 
@@ -24,18 +26,35 @@ $ npm install @arcologynetwork/concurrentlib
 Once installed, you can use the contracts in the library by importing them:
 
 ```solidity
-pragma solidity ^0.8.19;
+pragma solidity >=0.8.0 < 0.8.19;
 
-import "arcologynetwork/contracts/concurrentlib/Bool.sol";
+import "arcologynetwork/contracts/concurrentlib/multiprocess/Multiprocess.sol";
+import "arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol";
+import "arcologynetwork/contracts/concurrentlib/array/Bool.sol";
 
-contract ParallizedContract{
-    Bool container = new Bool(); // A concurrent container
-    paraCallee() public { // Can be processed in full parallel.
-        container.push(true);
+contract Coin {
+    address public minter;
+    mapping (address => uint) public balances;
+
+    constructor() {
+        minter = msg.sender;
+    }
+
+    function mint(address receiver, uint amount) public {
+        require(msg.sender == minter);
+        require(amount < 1e60);
+        balances[receiver] += amount;
+    }
+
+    function parallelMint(address[] receivers, uint[] amounts) public {
+        Multiprocess jobs = new Multiprocess(8); // Initialize of a job queue that has threads.
+        for (uint i = 0; i < receivers.length; i++) {
+            jobs.push(100000, address(this), abi.encodeWithSignature("mint(address,uint256)", receivers[i], amounts[i]));
+        }
+        jobs.run() // Run the jobs in parallel with 8 theads.
     }
 }
 ```
-*Please keep the library as it is when using it; don't try to modify.*
 
 ## Learn More
 
