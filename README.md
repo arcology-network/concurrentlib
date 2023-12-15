@@ -47,7 +47,7 @@ contract Coin {
     }
 
     function parallelMint(address[] receivers, uint[] amounts) public {
-        Multiprocess jobs = new Multiprocess(8); // Initialize of a job queue that has threads.
+        Multiprocess jobs = new Multiprocess(8); // Initialize a job queue of of 8 threads.
         for (uint i = 0; i < receivers.length; i++) {
             jobs.push(100000, address(this), abi.encodeWithSignature("mint(address,uint256)", receivers[i], amounts[i]));
         }
