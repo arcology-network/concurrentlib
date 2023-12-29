@@ -2,11 +2,16 @@
   <img src="./img/arcology-logo-text-dark-transparent.svg" alt="Your Image Alt Text" height="120px" align="center"/>
 </div>
 
+
+<!-- <h1> Concurrent APIs  <img align="center" height="30" src="./img/arcology-logo-text-dark-transparent.svg">  </h1> -->
+
 <!-- [![NPM Package](https://img.shields.io/badge/npm-%F0%9F%93%84-grey)](https://www.npmjs.org/package/arcologynetwork)
 [![Docs](https://img.shields.io/badge/docs-%F0%9F%93%84-grey)](https://doc.arcology.network/arcology-concurrent-programming-guide/)
 [![Docs](https://img.shields.io/badge/solidity-%F0%9F%93%84-grey)](https://www.arcology.network) -->
 
-# Concurrent APIs
+<h1> Concurrent APIs <img align="center" height="32" src="./img/code-file.svg">  </h1>
+
+<!-- # Concurrent APIs -->
 
 Solidity, the programming language used to develop smart contracts on the Ethereum platform, was not initially designed for concurrent use, so it does not include the features and capabilities necessary for efficient concurrent programming. 
 
@@ -14,14 +19,13 @@ Solidity, the programming language used to develop smart contracts on the Ethere
 
 >>Please be aware that all the libraries in the package are specifically designed for Arcology Network only.
 
-  
-## Installation
+<h2> Installation <img align="center" height="32" src="./img/cloud-download.svg">  </h2>
 
 ``` shell
 $ npm install @arcologynetwork/concurrentlib
 ```
 
-## Usage
+<h2> Usage <img align="center" height="32" src="./img/ruler-cross-pen.svg">  </h2>
 
 Once installed, you can use the contracts in the library by importing them:
 
@@ -56,14 +60,16 @@ contract Coin {
 }
 ```
 
-## Learn More
+<h2> Learn More  <img align="center" height="32" src="./img/info.svg">  </h2>
 
 You can find more examples in the [developer's guide](https://doc.arcology.network/arcology-concurrent-programming-guide/).
 
-## License
+<h2> License  <img align="center" height="32" src="./img/warning.svg">  </h2>
 
 Arcology's concurrent lib is released under the MIT License.
 
-## Disclaimer
+<h2> Disclaimer  <img align="center" height="32" src="./img/copyright.svg">  </h2>
+
+<!-- ## Disclaimer  -->
 
 Arcology's concurrent lib is made available under the MIT License, which disclaims all warranties in relation to the project and which limits the liability of those that contribute and maintain the project. You acknowledge that you are solely responsible for any use of the Contracts and you assume all risks associated with any such use.
