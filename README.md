@@ -64,11 +64,11 @@ contract Coin {
 
 You can find more examples in the [developer's guide](https://doc.arcology.network/arcology-concurrent-programming-guide/).
 
-<h2> License  <img align="center" height="32" src="./img/warning.svg">  </h2>
+<h2> License  <img align="center" height="32" src="./img/copyright.svg">  </h2>
 
 Arcology's concurrent lib is released under the MIT License.
 
-<h2> Disclaimer  <img align="center" height="32" src="./img/copyright.svg">  </h2>
+<h2> Disclaimer  <img align="center" height="32" src="./img/warning.svg">  </h2>
 
 <!-- ## Disclaimer  -->
 
