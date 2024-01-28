@@ -1,9 +1,10 @@
-import "../../lib/commutative/U256Cum.sol";
-
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
+
+import "../../lib/commutative/U256Cum.sol";
+
 /// @title Voting with delegation.
-contract ParaBallot {
+contract Ballot {
     // This declares a new complex type which will
     // be used for variables later.
     // It will represent a single voter.

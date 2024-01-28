@@ -2,9 +2,9 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "../../lib/multiprocess/Multiprocess.sol";
-import "./VoteParallelizedMp.sol";
+import "./Vote_para.sol";
 
-contract ParaBallotCaller {
+contract BallotTest {
     constructor() {                
         bytes32[] memory proposalNames = new bytes32[](2); 
         proposalNames[0] = keccak256("Alice");
@@ -16,7 +16,7 @@ contract ParaBallotCaller {
         address addr4 = 0x4444444890123456789012345678901234567890;
         address addr5 = 0x5555555550123456789012345678901234567890;
 
-        ParaBallot ballot = new ParaBallot(msg.sender, proposalNames);   
+        Ballot ballot = new Ballot(msg.sender, proposalNames);   
 
         Multiprocess mp = new Multiprocess(5);
 
