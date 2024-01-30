@@ -10,7 +10,9 @@ contract Ballot {
     // It will represent a single voter.
     struct Voter {
         uint weight; // weight is accumulated by delegation
+        U256Cumulative weightCum;
         bool voted;  // if true, that person already voted
+        bool canDelegata; // If true, the voter can delegate others to vote on their behalf.
         address delegate; // person delegated to
         uint vote;   // index of the voted proposal
     }
@@ -34,7 +36,9 @@ contract Ballot {
     constructor(address owner, bytes32[] memory proposalNames) {
         chairperson = owner; // msg.sender;
         voters[chairperson].weight = 1;
-
+        voters[chairperson].weightCum = new U256Cumulative(1, type(uint256).max);
+        voters[chairperson].canDelegata = true;
+        
         // For each of the provided proposal names,
         // create a new proposal object and add it
         // to the end of the array.
@@ -52,6 +56,7 @@ contract Ballot {
     // Give `voter` the right to vote on this ballot.
     // May only be called by `chairperson`.
     function giveRightToVote(address voter) external {
+        // new U256Cumulative(1, type(uint256).max);
         // If the first argument of `require` evaluates
         // to `false`, execution terminates and all
         // changes to the state and to Ether balances
@@ -72,6 +77,10 @@ contract Ballot {
         );
         require(voters[voter].weight == 0);
         voters[voter].weight = 1;
+        voters[voter].weight = 1;
+        // U256Cumulative weightCum = new U256Cumulative(0, type(uint256).max);
+        // voters[voter].weightCum.add(1);
+        // new U256Cumulative(1, type(uint256).max);
     }
 
     /// Delegate your vote to the voter `to`.
@@ -101,7 +110,8 @@ contract Ballot {
         Voter storage delegate_ = voters[to];
 
         // Voters cannot delegate to accounts that cannot vote.
-        require(delegate_.weight >= 1);
+        // require(delegate_.weight >= 1);
+        require(delegate_.canDelegata);
 
         // Since `sender` is a reference, this
         // modifies `voters[msg.sender]`.
@@ -112,6 +122,8 @@ contract Ballot {
             // If the delegate already voted,
             // directly add to the number of votes
             proposals[delegate_.vote].voteCount.add(sender.weight);
+
+
 
         } else {
             // If the delegate did not vote yet,
@@ -128,7 +140,7 @@ contract Ballot {
         require(!sender.voted, "Already voted.");
         sender.voted = true;
         sender.vote = proposal;
-        // address(0x60).call(abi.encodePacked(proposal));
+ 
         // If `proposal` is out of the range of the array,
         // this will throw automatically and revert all
         // changes.

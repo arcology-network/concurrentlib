@@ -17,7 +17,6 @@ contract CumulativeU256Test {
         cumulative.sub(99); // This won't succeed, so still 99
         require(cumulative.get() == 99);
 
-
         cumulative.add(1);
         require(cumulative.get() == 100);
 
@@ -38,6 +37,10 @@ contract CumulativeU256Test {
 
         require(cumulative.min() == 0);
         require(cumulative.max() == 100);
+
+        U256Cumulative cumulative2 = new U256Cumulative(0, 100);
+        cumulative2.add(1);
+        require(cumulative2.get() == 1);
     }
 
     function call() public {
