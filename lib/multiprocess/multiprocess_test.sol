@@ -5,6 +5,45 @@ import "./Multiprocess.sol";
 import "../commutative/U256Cum.sol";
 import "../array/Bool.sol";
 import "../array/U256.sol";
+import "../commutative/U256Cum.sol";
+
+contract U256CumulativeParallelGetTest {
+    U256Cumulative[] containers = new U256Cumulative[](2);
+
+    function call() public {  
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 0)); // Will require about 1.5M gas
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
+        mp.run();
+
+        require(containers[0].get() == 0);
+        require(containers[1].get() == 0);
+    }
+
+    function init(uint256 idx) public  { 
+        containers[idx] = new U256Cumulative(1, 100);
+        // containers[idx].add(idx + 11);       
+    }
+}
+
+contract U256CumulativeParallelInitTest {
+    U256Cumulative[] containers = new U256Cumulative[](2);
+
+    function call() public {  
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 0)); // Will require about 1.5M gas
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
+        mp.run();
+
+        require(containers[0].get() == 11);
+        require(containers[1].get() == 12);
+    }
+
+    function init(uint256 idx) public  { 
+        containers[idx] = new U256Cumulative(1, 100);
+        containers[idx].add(idx + 11);       
+    }
+}
 
 contract U256ParallelInitTest {
     U256[] containers = new U256[](2);
@@ -16,6 +55,7 @@ contract U256ParallelInitTest {
         mp.run();
 
         require(containers[0].length() == 1);
+        require(containers[1].length() == 1);
     }
 
     function init(uint256 idx) public  { 

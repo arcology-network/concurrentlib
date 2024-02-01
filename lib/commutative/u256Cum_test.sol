@@ -4,6 +4,25 @@ pragma solidity ^0.8.19;
 import "./U256Cum.sol";
 import "../multiprocess/Multiprocess.sol";
 
+contract EmptyCumulativeU256Test {
+    U256Cumulative[2] values;
+    mapping(uint256 => U256Cumulative) map;
+    constructor() {  
+        require(address(values[0]) == address(0));
+        require(address(values[1]) == address(0));
+
+        values[0] = new U256Cumulative(0, 100);
+        require(address(values[0]) != address(0));
+        require(address(values[1]) == address(0));
+
+        map[0] = new U256Cumulative(0, 100);
+        U256Cumulative empty = map[1];
+
+        require(address(map[0]) != address(0));
+        require(address(empty) == address(0));
+    }
+}
+
 contract CumulativeU256Test {
     U256Cumulative cumulative ;
 

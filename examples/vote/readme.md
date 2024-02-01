@@ -85,9 +85,6 @@ The following table shows the performance comparison of the original contract an
 
 | Function Name          | Original Contract   | Parallelized Contract | Speedup |
 |------------------------|---------------------|-----------------------|---------|
-| `constructor()`        | 0.000000            | 0.000000              | 0.00    |
 | `giveRightToVote()`    | 0.000000            | 0.000000              | 0.00    |
-| `winnerName()`         | 0.000000            | 0.000000              | 0.00    |
-| `winningProposal()`    | 0.000000            | 0.000000              | 0.00    |
 | `vote()`               | 0.000000            | 0.000000              | 0.00    |
 | `delegate()`           | 0.000000            | 0.000000              | 0.00    |
