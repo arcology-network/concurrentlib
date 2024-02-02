@@ -18,7 +18,7 @@ contract AddressBooleanMap is Base {
      * @param k The address key to check for existence.
      * @return true if the key exists, false otherwise.
      */
-    function exist(address k) public virtual returns(bool) { // 9e c6 69 25
+    function exist(address k) public virtual returns(bool) { 
         return Base.exist(abi.encodePacked(k));
     }
 
@@ -27,7 +27,7 @@ contract AddressBooleanMap is Base {
      * @param k The address key to set.
      * @param value The boolean value associated with the key.
      */
-    function set(address k, bool value) public { // 80 26 32 97
+    function set(address k, bool value) public { 
         Base.setByKey((abi.encodePacked(k)), abi.encode(value));       
     }
 
@@ -62,7 +62,7 @@ contract AddressBooleanMap is Base {
      * @notice Delete a key-value pair from the map.
      * @param k The address key to delete.
      */
-    function del(address k) public { // 80 26 32 97
+    function del(address k) public { 
         Base.delByKey((abi.encodePacked(k)));  
     }
 }

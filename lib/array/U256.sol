@@ -16,7 +16,7 @@ contract U256 is Base {
      * @notice Add a uint256 data element to the concurrent array.
      * @param elem The uint256 data element to add to the array.
      */
-    function push(uint256 elem) public virtual{ //9e c6 69 25
+    function push(uint256 elem) public virtual{ 
        Base.setByKey(uuid(), abi.encodePacked(elem));
     }    
 
@@ -24,7 +24,7 @@ contract U256 is Base {
      * @notice Remove and return the last uint256 data element from the concurrent array.
      * @return The last uint256 data element from the array.
      */
-    function pop() public virtual returns(uint256) { // 80 26 32 97      
+    function pop() public virtual returns(uint256) {       
         return uint256(bytes32(Base.popBack()));  
     }
 
@@ -33,7 +33,7 @@ contract U256 is Base {
      * @param idx The index of the uint256 data element to retrieve.
      * @return The uint256 data element stored at the given index.
      */
-    function get(uint256 idx) public virtual returns(uint256)  { // 31 fe 88 d0
+    function get(uint256 idx) public virtual returns(uint256)  {
         return uint256(bytes32(Base.getByIndex(idx)));
     }
 
@@ -42,7 +42,23 @@ contract U256 is Base {
      * @param idx The index where the uint256 data element should be stored.
      * @param elem The uint256 data element to be stored at the specified index.
      */
-    function set(uint256 idx, uint256 elem) public { // 7a fa 62 38
+    function set(uint256 idx, uint256 elem) public { 
         Base.setByIndex(idx, abi.encodePacked(elem));
+    }
+
+    /**
+     * @notice Retrieve the min element in the concurrent array.
+     * @return The minimum element in the array by numerical comparison.
+     */
+    function min() public returns(uint256, uint256) { 
+        return abi.decode(Base.minNumerical(), (uint256, uint256));
+    }
+
+    /**
+     * @notice Retrieve the max element in the concurrent array.
+     * @return The maximum value in the array by numerical comparison.
+     */
+    function max() public returns(uint256, uint256) { 
+        return abi.decode(Base.maxNumerical(), (uint256, uint256));
     }
 }

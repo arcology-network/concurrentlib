@@ -17,6 +17,12 @@ contract U256Test {
         container.push(uint256(40));
         require(container.length() == 4); 
 
+        (uint256 i, uint256 v) = container.min();
+        require(i == 0 && v == 10); 
+
+        (i, v) = container.max();
+        require(i == 3 && v == 40); 
+
         require(container.get(0) == uint256(10));
         require(container.get(1) == uint256(20));
         require(container.get(2) == uint256(30));

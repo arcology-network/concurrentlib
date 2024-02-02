@@ -15,6 +15,7 @@ contract AddressTest {
 
         container.push(addr1);
         container.push(addr2);
+
         require(container.length() == 2); 
 
         require(container.get(0) == addr1);

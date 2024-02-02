@@ -11,7 +11,6 @@
 
 Here we domonstrate how to use Arcology's concurrentlib to make an [Ethereum example](https://docs.soliditylang.org/en/v0.8.21/solidity-by-example.html#voting) contract concurrently executable.
 
-
 ## 1. Parallization Strategy
 
 The key to make this contract concurrent concurrently executable is to make sure that the contract's shared state is not modified by concurrent transactions. We need to identify the shared state of the contract and how they are modified by the contract's functions. Once this is done, we can use Arcology's concurrentlib to replace the shared state with [concurrent data structures or variables]().
@@ -36,7 +35,7 @@ The votes for each proposal are stored in a mapping, and in Solidity, entries in
 
 ### 2.2. Voter
 
-It is possible that a voter delegating other voters to vote on they. When multiple voters are delegating their votes to the same voter simultaneously by calling the `delegate()` function, the `weight` of the voter will be modified concurrently. This is another contention point that needs to be addressed.
+It is possible that a voter delegating other voters to vote on their behalf. When multiple voters are delegating their votes to the same voter simultaneously by calling the `delegate()` function, the `weight` of the voter will be modified concurrently. This is another contention point that needs to be addressed.
 
 ```solidity
    struct Voter {

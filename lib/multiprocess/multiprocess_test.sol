@@ -434,11 +434,11 @@ contract MultiParaCumulativeU256 {
         require(cumulative.get() == 4);
     }
 
-    function add(uint256 elem) public { //9e c6 69 25
+    function add(uint256 elem) public { 
         cumulative.add(elem);
     }  
 
-    function sub(uint256 elem) public { //9e c6 69 25
+    function sub(uint256 elem) public { 
         cumulative.sub(elem);
     }   
 }
@@ -457,11 +457,11 @@ contract MultiCumulativeU256ConcurrentOperation {
         require(cumulative.get() == 7);
     }
 
-    function add(uint256 elem) public { //9e c6 69 25
+    function add(uint256 elem) public { 
         cumulative.add(elem);
     }  
 
-    function sub(uint256 elem) public { //9e c6 69 25
+    function sub(uint256 elem) public { 
         cumulative.sub(elem);
     }   
 }
@@ -477,7 +477,7 @@ contract RecursiveParallelizerOnNativeArrayTest {
         require(results[1] == 12);
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(11111111, address(this), abi.encodeWithSignature("add2()"));
         mp2.run();              
@@ -505,7 +505,7 @@ contract RecursiveParallelizerOnContainerTest {
         require(cumulative.get() == 5);
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         container.push(true);
         cumulative.add(10);
         Multiprocess mp2 = new Multiprocess(1); 
@@ -535,7 +535,7 @@ contract MaxRecursiveDepth4Test {
         require(container.length() == 14);       
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(41111111, address(this), abi.encodeWithSignature("add2()"));
         mp2.push(41111111, address(this), abi.encodeWithSignature("add2()"));
@@ -545,7 +545,7 @@ contract MaxRecursiveDepth4Test {
         container.push(true);              
     } 
 
-    function add2() public { //9e c6 69 25
+    function add2() public { 
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(21111111, address(this), abi.encodeWithSignature("add3()"));
         mp2.push(21111111, address(this), abi.encodeWithSignature("add3()"));
@@ -554,7 +554,7 @@ contract MaxRecursiveDepth4Test {
         container.push(true);              
     } 
 
-    function add3() public { //9e c6 69 25
+    function add3() public { 
         container.push(true);              
     } 
 }
@@ -572,7 +572,7 @@ contract MaxSelfRecursiveDepth4Test {
         require(container.length() == 30); // 2 + 4 + 8 + 16
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(21111111, address(this), abi.encodeWithSignature("add()"));
         mp2.push(21111111, address(this), abi.encodeWithSignature("add()"));
@@ -601,7 +601,7 @@ contract MaxRecursiveDepthOffLimitTest {
         require(cumulative.get() == 62);
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         cumulative.add(2);
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
@@ -626,7 +626,7 @@ contract ParaFixedLengthWithConflictRollbackTest {
         require(container.length() == 2);
     } 
 
-    function worker() public { //9e c6 69 25
+    function worker() public { 
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender()"));
         mp2.run();   
@@ -652,7 +652,7 @@ contract ParaSubbranchConflictTest {
         require(container.length() == 4);
     } 
 
-    function worker0() public { //9e c6 69 25
+    function worker0() public { 
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender00()"));
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender01()"));
@@ -671,7 +671,7 @@ contract ParaSubbranchConflictTest {
         results0[0] = 1;
     }  
 
-    function worker1() public { //9e c6 69 25
+    function worker1() public { 
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender10()"));
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender11()"));
@@ -703,7 +703,7 @@ contract ParentChildBranchConflictTest {
         require(container.length() == 1);
     } 
 
-    function worker0() public { //9e c6 69 25
+    function worker0() public { 
         results0[0] = 1;
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.run();   
@@ -711,7 +711,7 @@ contract ParentChildBranchConflictTest {
         container.push(true);
     }   
 
-    function worker1() public { //9e c6 69 25
+    function worker1() public { 
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender10()"));
         mp2.run();   
@@ -749,7 +749,7 @@ contract MixedRecursiveMultiprocessTest {
         require(cumulative2.get() == 70);
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         cumulative.add(10);
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(11111111, address(this), abi.encodeWithSignature("add2()"));
@@ -829,11 +829,11 @@ contract ParallelCumulativeU256 {
 		require(cumulative.get() == 1);
 	}
 
-	function add(uint256 elem) public { //9e c6 69 25
+	function add(uint256 elem) public { 
 		cumulative.add(elem);
 	}  
 
-	function sub(uint256 elem) public { //9e c6 69 25
+	function sub(uint256 elem) public { 
 		cumulative.sub(elem);
 	}  
 }
@@ -857,11 +857,11 @@ contract ThreadingCumulativeU256SameMpMulti {
 		require(cumulative.get() == 4);
 	}
 
-	function add(uint256 elem) public { //9e c6 69 25
+	function add(uint256 elem) public { 
 		cumulative.add(elem);
 	}  
 
-	function sub(uint256 elem) public { //9e c6 69 25
+	function sub(uint256 elem) public { 
 		cumulative.sub(elem);
 	}  
 }

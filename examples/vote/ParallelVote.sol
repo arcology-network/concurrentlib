@@ -1,4 +1,4 @@
-// The is a parallelized of the Ballot contract. You can find the original contract here: https://docs.soliditylang.org/en/latest/solidity-by-example.html
+// The is a parallelized of the Ballot contract. You can find the original contract here: https://docs.soliditylang.org/en/latest/solidity-by-example.html#voting
 
 // It is designed to demonstrate how a standard Ethereum contract can be parallelized using the Arcology Network's concurrent libraries.
 // for more information on the Arcology Network, please visit: https://doc.arcology.network/

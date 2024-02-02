@@ -55,7 +55,7 @@ contract Multiprocess is Base, Storage {
      * @notice Pop an executable message from the container.
      * @return The popped executable message.
      */
-    function pop() public virtual returns(bytes memory) { // 80 26 32 97
+    function pop() public virtual returns(bytes memory) { 
         return abi.decode(Base.popBack(), (bytes));  
     }
 
@@ -64,7 +64,7 @@ contract Multiprocess is Base, Storage {
      * @param idx The index of the executable message to retrieve.
      * @return The executable message at the specified index.
      */
-    function get(uint256 idx) public virtual returns(bytes memory) { // 31 fe 88 d0
+    function get(uint256 idx) public virtual returns(bytes memory) {
         return abi.decode(Base.getByIndex(idx), (bytes));  
     }
 
@@ -73,7 +73,7 @@ contract Multiprocess is Base, Storage {
      * @param idx The index where the executable message should be stored.
      * @param elem The executable message data to be stored at the specified index.
      */
-    function set(uint256 idx, bytes memory elem) public { // 7a fa 62 38
+    function set(uint256 idx, bytes memory elem) public { 
         Base.setByIndex(idx, abi.encode(elem));   
     }
 
