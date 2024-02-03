@@ -2,15 +2,10 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "../../lib/multiprocess/Multiprocess.sol";
-import "./ParalllelSimpleAuctionMp.sol";
+import "./ParallelSimpleAuctionMp.sol";
 
-contract ParalllelSimpleAuctionTest {
+contract ParallelSimpleAuctionTest {
     constructor() {                
-        // Create 2 proposals.
-        bytes32[] memory proposalNames = new bytes32[](2); 
-        proposalNames[0] = keccak256("Alice");
-        proposalNames[1] = keccak256("Bob");
-
         // Create 5 random addresses.
         address addr1 = 0x1111111110123456789012345678901234567890;
         address addr2 = 0x2222222220123456789012345678901234567890;

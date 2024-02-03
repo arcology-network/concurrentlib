@@ -17,7 +17,7 @@ contract U256Map is Base {
      * @notice Check if a given key exists in the map.
      * @param k The uint256 key to check for existence.
      * @return true if the key exists, false otherwise.
-     */
+     */    
     function exist(uint256 k) public virtual returns(bool) { 
         return Base.exist(abi.encodePacked(k)); 
     }
@@ -64,5 +64,23 @@ contract U256Map is Base {
      */
     function del(uint256 key) public { 
         Base.delByKey((abi.encodePacked(key)));  
+    }
+
+    /**
+     * @notice Retrieve the min value in the concurrent map.
+     * @return The minimum element by numerical comparison.
+     */
+    function min() public returns(uint256, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base.minNumerical(), (uint256, uint256));
+        return (keyAt(idx), idx, v);
+    }
+
+    /**
+     * @notice Retrieve the max value in the concurrent map.
+     * @return The maximum value by numerical comparison.
+     */
+    function max() public returns(uint256, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base.maxNumerical(), (uint256, uint256));
+        return (keyAt(idx), idx, v);
     }
 }

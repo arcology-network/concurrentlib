@@ -47,6 +47,18 @@ contract Int256 is Base {
         Base.setByIndex(idx, abi.encodePacked(elem));  
     }
 
+    /**
+     * @notice Find the index of the address element in the concurrent array.
+     * @param elem The element to be searched for.
+     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
+     */
+    function find(int256 elem, uint256 offset) public returns(uint256) { 
+        for (uint256 i = offset; i < length(); i++)
+            if (elem == get(i))
+                return i;     
+        return type(uint256).max;
+    }
+
     // /**
     //  * @notice Retrieve the min element in the concurrent array.
     //  * @return The minimum element in the array by numerical comparison.

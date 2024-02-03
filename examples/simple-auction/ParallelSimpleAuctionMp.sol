@@ -1,13 +1,19 @@
-// The is a parallelized of the Ballot contract. You can find the original 
-// contract here: https://docs.soliditylang.org/en/latest/solidity-by-example.html#simple-auction
-// The follow changes have been made to the original contract:
-
-// 1. Added concurrent arrays for biders and bids.
+// The is a parallelized of the Ballot contract. This contract is specifically designed 
+// to be used by the multiprocess for testing.
+// The following changes have been made to the original contract:
 // 
-// 2. Stopped finding the highest bidder and the highest bid in the auctionEnd function, but stored 
-// the all the bidders and the bids in concurrent arrays and then find the highest bidder and
+// 1. Added concurrent arrays for bidders and bids.
+// 
+// 2. Stopped finding the highest bidder and the highest bid in the auctionEnd function, but 
+//  stored the all the bidder and the bids in concurrent arrays and then find the highest bidder and
 //  the highest bid in the auctionEnd function.
-//
+// 
+// 3. Removed the auctionEndTime variable. This is because the this is no block.timestamp when using
+//   the multiprocessor. 
+
+// 4. Added an extra return value to the auctionEnd function to allow the highest bid to be returned. This
+
+// 5. Stopped transferring the highest bid to the beneficiary in the auctionEnd function.
 // The original contract can be found here: https://docs.soliditylang.org/en/latest/solidity-by-example.html#simple-auction
 
 // SPDX-License-Identifier: GPL-3.0
@@ -15,21 +21,24 @@ pragma solidity ^0.8.4;
 
 import "../../lib/array/U256.sol";
 import "../../lib/array/Address.sol";
+import "../../lib/map/AddressUint256.sol";
 
 contract SimpleAuction {
     // Parameters of the auction. Times are either
     // absolute unix timestamps (seconds since 1970-01-01)
     // or time periods in seconds.
     address payable public beneficiary;
-    uint public auctionEndTime;
+    // uint public auctionEndTime;
 
     // Current state of the auction.
     address public highestBidder;
     uint public highestBid;
 
-    // Concurrent data structures for bidders and bids.
-    Address public biders;
+    // Concurrent data structures.
+    // Address public bidders;
     U256 public bids;
+
+    AddressUint256Map public bidders;
 
     // Allowed withdrawals of previous bids
     mapping(address => uint) pendingReturns;
@@ -62,21 +71,22 @@ contract SimpleAuction {
     /// seconds bidding time on behalf of the
     /// beneficiary address `beneficiaryAddress`.
     constructor(
-        uint biddingTime,
+        // uint biddingTime,
         address payable beneficiaryAddress
     ) {
         beneficiary = beneficiaryAddress;
-        auctionEndTime = block.timestamp + biddingTime;
+        // auctionEndTime = block.timestamp + biddingTime;
 
-        biders = new Address();
-        bids = new U256();
+        bidders = new AddressUint256Map();
+        // bidders = new Address();
+        // bids = new U256();
     }
 
     /// Bid on the auction with the value sent
     /// together with this transaction.
     /// The value will only be refunded if the
     /// auction is not won.
-    function bid(address bider, uint256 bidValue) external payable {
+    function bid(address bidder, uint256 bidValue) external payable {
         // No arguments are necessary, all
         // information is already part of
         // the transaction. The keyword payable
@@ -85,15 +95,15 @@ contract SimpleAuction {
 
         // Revert the call if the bidding
         // period is over.
-        if (block.timestamp > auctionEndTime)
-            revert AuctionAlreadyEnded();
+        // if (block.timestamp > auctionEndTime)
+        //     revert AuctionAlreadyEnded();
 
         // 
-        // biders.push(msg.sender);
+        // bidders.push(msg.sender);
         // bids.push(msg.value);
-
-        biders.push(bider);
-        bids.push(bidValue);
+        bidders.set(bidder, bidValue);
+        // bidders.push(bidder);
+        // bids.push(bidValue);
 
         // If the bid is not higher, send the
         // Ether back (the revert statement
@@ -113,15 +123,15 @@ contract SimpleAuction {
         // }
         // highestBidder = msg.sender;
         // highestBid = msg.value;
-
-        biders.push(msg.sender);
-        bids.push(msg.value);
-
         // emit HighestBidIncreased(msg.sender, msg.value);
     }
 
     /// Withdraw a bid that was overbid.
     function withdraw() external returns (bool) {
+        if (!ended) {
+            revert AuctionNotYetEnded();
+        }
+
         uint amount = pendingReturns[msg.sender];
         if (amount > 0) {
             // It is important to set this to zero because the recipient
@@ -143,7 +153,7 @@ contract SimpleAuction {
 
     /// End the auction and send the highest bid
     /// to the beneficiary.
-    function auctionEnd() external {
+    function auctionEnd() external returns(uint256){
         // It is a good guideline to structure functions that interact
         // with other contracts (i.e. they call functions or send Ether)
         // into three phases:
@@ -158,22 +168,21 @@ contract SimpleAuction {
         // external contracts.
 
         // 1. Conditions
-        if (block.timestamp < auctionEndTime)
-            revert AuctionNotYetEnded();
-        if (ended)
-            revert AuctionEndAlreadyCalled();
+        // if (block.timestamp < auctionEndTime)
+        //     revert AuctionNotYetEnded();
+        // if (ended)
+        //     revert AuctionEndAlreadyCalled();
 
 
         // We need to find the highest bidder and the highest bid.
-        (uint256 idx, uint256 winningBid) = bids.max();
-        highestBidder = biders.get(idx);
-        highestBid = winningBid;
+        (highestBidder,, highestBid) = bidders.max();
 
-        // 2. Effects
+        // // 2. Effects
         ended = true;
         emit AuctionEnded(highestBidder, highestBid);
     
-        // 3. Interaction
-        beneficiary.transfer(highestBid);
+        // // 3. Interaction
+        // beneficiary.transfer(highestBid);
+        return highestBid;
     }
 }

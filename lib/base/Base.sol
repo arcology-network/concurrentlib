@@ -154,7 +154,7 @@ contract Base is Runtime {
 
     /**
      * @notice Retrieve the minimum entry stored in the container sorted by value numerically.
-     * @return The minimum valu and the index.
+     * @return encoded The minimum valu and the index.
      */
     function minNumerical() public returns(bytes memory)  {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("minNumerical()"));
@@ -163,7 +163,7 @@ contract Base is Runtime {
 
     /**
      * @notice Retrieve the maximum entry stored in the container sorted by value numerically.
-     * @return The maximum value and the index.
+     * @return The encoded maximum value and the index.
      */
     function maxNumerical() public returns(bytes memory)  {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("maxNumerical()"));
@@ -172,7 +172,7 @@ contract Base is Runtime {
 
     /**
      * @notice Retrieve the minimum entry stored in the container sorted by string representation.
-     * @return The minimum value and the index.
+     * @return The encoded minimum value and the index.
      */
     function minString() public returns(bytes memory)  {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("minString()"));
@@ -181,7 +181,7 @@ contract Base is Runtime {
 
     /**
      * @notice Retrieve the maximum entry stored in the container sorted as a string
-     * @return The maximum value and the index.
+     * @return The encoded maximum value and the index.
      */
     function maxString() public returns(bytes memory)  {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("maxString()"));

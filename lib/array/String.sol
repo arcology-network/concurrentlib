@@ -45,4 +45,16 @@ contract String is Base {
     function set(uint256 idx, string memory elem) public { 
         Base.setByIndex(idx, bytes(elem));
     }
+    
+    /**
+     * @notice Find the index of the address element in the concurrent array.
+     * @param elem The element to be searched for.
+     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
+     */
+    function find(string memory elem, uint256 offset) public returns(uint256) { 
+        for (uint256 i = offset; i < length(); i++)
+            if ((bytes(elem).length != bytes(get(i)).length) && keccak256(abi.encodePacked(elem)) == keccak256(abi.encodePacked(get(i))))
+                return i;     
+        return type(uint256).max;
+    }
 }

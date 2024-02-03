@@ -2,7 +2,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "../../lib/multiprocess/Multiprocess.sol";
-import "./VoteMp.sol";
+import "./ParallelVoteMp.sol";
 
 contract BallotTest {
     constructor() {                

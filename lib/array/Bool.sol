@@ -45,4 +45,16 @@ contract Bool is Base {
     function set(uint256 idx, bool elem) public { 
         Base.setByIndex(idx, abi.encode(elem));    
     }
+
+    /**
+     * @notice Find the index of the address element in the concurrent array.
+     * @param elem The element to be searched for.
+     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
+     */
+    function find(bool elem, uint256 offset) public returns(uint256) { 
+        for (uint256 i = offset; i < length(); i++)
+            if (elem == get(i))
+                return i;     
+        return type(uint256).max;    
+     }
 }

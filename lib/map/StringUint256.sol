@@ -65,4 +65,22 @@ contract StringUint256Map is Base {
     function del(string memory k) public { 
         Base.delByKey(bytes(k));  
     }
+
+    /**
+     * @notice Retrieve the min value in the concurrent map.
+     * @return The minimum element by numerical comparison.
+     */
+    function min() public returns(string memory, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base.minNumerical(), (uint256, uint256));
+        return (keyAt(idx), idx, v);
+    }
+
+    /**
+     * @notice Retrieve the max value in the concurrent map.
+     * @return The maximum value by numerical comparison.
+     */
+    function max() public returns(string memory, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base.maxNumerical(), (uint256, uint256));
+        return (keyAt(idx), idx, v);
+    }
 }
