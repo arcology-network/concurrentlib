@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "../../lib/multiprocess/Multiprocess.sol";
-import "./Lotto.sol";
+import "./likes.sol";
 
 contract LottoCaller {
     function call(address coin) public{        
