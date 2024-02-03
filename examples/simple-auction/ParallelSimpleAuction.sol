@@ -6,7 +6,7 @@
 // The contract has been parallelized using the Arcology Network's concurrent libraries. It is a demonstration of how a standard Ethereum contract 
 // can be parallelized using the Arcology Network's concurrent libraries.
 //
-// The original contract here: https://docs.soliditylang.org/en/latest/solidity-by-example.html#simple-auction
+// The original contract is here: https://docs.soliditylang.org/en/latest/solidity-by-example.html#simple-auction
 //
 // The following changes have been made to the original contract:
 //

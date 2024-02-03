@@ -35,28 +35,41 @@ pragma solidity >=0.8.0 < 0.8.19;
 import "arcologynetwork/contracts/concurrentlib/multiprocess/Multiprocess.sol";
 import "arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol";
 import "arcologynetwork/contracts/concurrentlib/array/Bool.sol";
+```
 
-contract Coin {
-    address public minter;
-    mapping (address => uint) public balances;
+### Example
 
-    constructor() {
-        minter = msg.sender;
-    }
+The following example demonstrates how to use the concurrentlib to parallelize a simple smart contract. Arcology has a set of concurrent data structures and variables that allow concurrent manipulations. Below is an example of that. 
 
-    function mint(address receiver, uint amount) public {
-        require(msg.sender == minter);
-        require(amount < 1e60);
-        balances[receiver] += amount;
-    }
+#### Simple Contract
 
-    function parallelMint(address[] receivers, uint[] amounts) public {
-        Multiprocess jobs = new Multiprocess(8); // Initialize a job queue of of 8 threads.
-        for (uint i = 0; i < receivers.length; i++) {
-            jobs.push(100000, address(this), abi.encodeWithSignature("mint(address,uint256)", receivers[i], amounts[i]));
-        }
-        jobs.run() // Run the jobs in parallel with 8 theads.
-    }
+The following example of a simple smart contract that allows users to like a post. A simplest version of the contract is shown below. When a calls the `like()` function, the `likes` of the receiver is incremented by 1.
+
+This implementation doesn't support concurrent execution. If multiple users call the `like()` function concurrently, the `likes` of the receiver will be incremented concurrently. This is not allowed in Solidity.
+
+```solidity
+contract Like {
+    uint public likes;
+
+    function like(address receiver, uint amount) public {
+        likes += 1;
+    }    
+}
+```
+
+#### Parallelized Version
+
+In the parallelized version, the `likes` is replaced with a `U256Cumulative` variable from the `arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol` library. The variable allows concurrent increment and decrement operations. Now, the `like()` function can be called concurrently by multiple users.
+
+```solidity
+import "arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol";
+
+contract Like {
+    U256Cumulative public likes;
+
+    function like(address receiver, uint amount) public {
+        likes += 1;
+    }    
 }
 ```
 
