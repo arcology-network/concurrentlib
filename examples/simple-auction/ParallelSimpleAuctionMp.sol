@@ -1,5 +1,8 @@
 // The is a parallelized of the Ballot contract. This contract is specifically designed 
 // to be used by the multiprocess for testing.
+// 
+// DO NOT USE THIS CONTRACT IN A PRODUCTION ENVIRONMENT !!!!
+//
 // The following changes have been made to the original contract:
 // 
 // 1. Added concurrent arrays for bidders and bids.
@@ -127,24 +130,30 @@ contract SimpleAuction {
     }
 
     /// Withdraw a bid that was overbid.
-    function withdraw() external returns (bool) {
-        if (!ended) {
-            revert AuctionNotYetEnded();
+    function withdraw(address addr) external returns (bool) {
+        // if (!ended) {
+        //     revert AuctionNotYetEnded();
+        // }
+
+        if(addr == highestBidder) {
+            return false;
         }
 
-        uint amount = pendingReturns[msg.sender];
+        uint amount = bidders.get(addr);
         if (amount > 0) {
             // It is important to set this to zero because the recipient
             // can call this function again as part of the receiving call
             // before `send` returns.
-            pendingReturns[msg.sender] = 0;
+            // pendingReturns[msg.sender] = 0;
+            bidders.set(addr, 0);
 
             // msg.sender is not of type `address payable` and must be
             // explicitly converted using `payable(msg.sender)` in order
             // use the member function `send()`.
-            if (!payable(msg.sender).send(amount)) {
+            if (!payable(addr).send(amount)) {
                 // No need to call throw here, just reset the amount owing
-                pendingReturns[msg.sender] = amount;
+                // pendingReturns[msg.sender] = amount;
+                bidders.set(addr, amount);
                 return false;
             }
         }

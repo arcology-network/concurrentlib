@@ -1,5 +1,7 @@
 //This is a simple auction contract that allows bids to be made and withdrawn. The contract is designed to be used by a single beneficiary, who will 
 // receive the highest bid at the end of the auction.
+// 
+// DO NOT USE THIS CONTRACT IN A PRODUCTION ENVIRONMENT !!!!
 //
 // The contract has been parallelized using the Arcology Network's concurrent libraries. It is a demonstration of how a standard Ethereum contract 
 // can be parallelized using the Arcology Network's concurrent libraries.
@@ -15,12 +17,12 @@
 
 // 3. The highest bidder and the highest bid are determined in the auctionEnd function.
 
+// 4. Merged the pendingReturns mapping into the bidders.
+
 
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
 
-import "../../lib/array/U256.sol";
-import "../../lib/array/Address.sol";
 import "../../lib/map/AddressUint256.sol";
 
 contract SimpleAuction {
@@ -35,15 +37,10 @@ contract SimpleAuction {
     uint public highestBid;
 
     // Concurrent data structures for bidders and bids.
-    // Address public bidders;
-    // U256 public bids;
-
-    // mapping(address => U256) bidders;
-
     AddressUint256Map public bidders;
 
     // Allowed withdrawals of previous bids
-    mapping(address => uint) pendingReturns;
+    // mapping(address => uint) pendingReturns;
 
     // Set to true at the end, disallows any change.
     // By default initialized to `false`.
@@ -134,19 +131,24 @@ contract SimpleAuction {
             revert AuctionNotYetEnded();
         }
 
+        if(msg.sender == highestBidder) {
+            return false;
+        }
+
         uint amount = bidders.get(msg.sender);
         if (amount > 0) {
             // It is important to set this to zero because the recipient
             // can call this function again as part of the receiving call
             // before `send` returns.
-            pendingReturns[msg.sender] = 0;
+            // pendingReturns[msg.sender] = 0;
+            bidders.set(msg.sender, 0);
 
             // msg.sender is not of type `address payable` and must be
             // explicitly converted using `payable(msg.sender)` in order
             // use the member function `send()`.
             if (!payable(msg.sender).send(amount)) {
                 // No need to call throw here, just reset the amount owing
-                pendingReturns[msg.sender] = amount;
+                bidders.set(msg.sender, amount);
                 return false;
             }
         }

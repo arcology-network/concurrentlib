@@ -19,5 +19,13 @@ contract ParallelSimpleAuctionTest {
         auction.bid(addr4, 141);
         auction.bid(addr5, 101);
         require(auction.auctionEnd() == 141);
+
+        // The followings aren't going to work because the all the addresses are empty.abi
+        // They have no funds to withdraw.
+        require(auction.withdraw(addr1)); // addr1 didn't bid, so it should have a zero amount.
+        require(!auction.withdraw(addr2));
+        require(!auction.withdraw(addr3));
+        require(!auction.withdraw(addr4));
+        require(!auction.withdraw(addr5));
     }
 }
