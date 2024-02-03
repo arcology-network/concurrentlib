@@ -1,3 +1,5 @@
+// This is an original example from Solidity documentation. You can find the original contract here: https://docs.soliditylang.org/en/latest/solidity-by-example.html
+
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 /// @title Voting with delegation.

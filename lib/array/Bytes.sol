@@ -16,7 +16,7 @@ contract Bytes is Base {
      * @notice Add a bytes data element to the concurrent array.
      * @param elem The bytes data element to add to the array.
      */
-    function push(bytes memory elem) public virtual { //9e c6 69 25
+    function push(bytes memory elem) public virtual { 
         Base.setByKey(uuid(), (elem));
     }    
 
@@ -24,7 +24,7 @@ contract Bytes is Base {
      * @notice Remove and return the last bytes data element from the concurrent array.
      * @return The last bytes data element from the array.
      */
-    function pop() public virtual returns(bytes memory) { // 80 26 32 97
+    function pop() public virtual returns(bytes memory) { 
         return Base.popBack();  
     }
 
@@ -33,7 +33,7 @@ contract Bytes is Base {
      * @param idx The index of the bytes data element to retrieve.
      * @return The bytes data element stored at the given index.
      */
-    function get(uint256 idx) public virtual returns(bytes memory)  { // 31 fe 88 d0
+    function get(uint256 idx) public virtual returns(bytes memory)  { 
         return Base.getByIndex(idx);  
     }
 
@@ -42,7 +42,19 @@ contract Bytes is Base {
      * @param idx The index where the bytes data element should be stored.
      * @param elem The bytes data element to be stored at the specified index.
      */
-    function set(uint256 idx, bytes memory elem) public { // 7a fa 62 38
+    function set(uint256 idx, bytes memory elem) public { 
         Base.setByIndex(idx, (elem));
     }
+    
+    /**
+     * @notice Find the index of the address element in the concurrent array.
+     * @param elem The element to be searched for.
+     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
+     */
+    function find(bytes memory elem, uint256 offset) public returns(uint256) { 
+        for (uint256 i = offset; i < length(); i++)
+            if (keccak256(elem) == keccak256(get(i)))
+                return i;     
+        return type(uint256).max;   
+     }
 }

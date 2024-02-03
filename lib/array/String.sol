@@ -16,7 +16,7 @@ contract String is Base {
      * @notice Add a string data element to the concurrent array.
      * @param elem The string data element to add to the array.
      */
-    function push(string memory elem) public virtual{ //9e c6 69 25
+    function push(string memory elem) public virtual{
          Base.setByKey(uuid(), bytes(elem));
     }    
 
@@ -24,7 +24,7 @@ contract String is Base {
      * @notice Remove and return the last string data element from the concurrent array.
      * @return The last string data element from the array.
      */
-    function pop() public virtual returns(string memory) { // 80 26 32 97
+    function pop() public virtual returns(string memory) {
         return string(Base.popBack());
     }
 
@@ -33,7 +33,7 @@ contract String is Base {
      * @param idx The index of the string data element to retrieve.
      * @return The string data element stored at the given index.
      */
-    function get(uint256 idx) public virtual returns(string memory)  { // 31 fe 88 d0
+    function get(uint256 idx) public virtual returns(string memory)  {
         return string(Base.getByIndex(idx));
     }
 
@@ -42,7 +42,19 @@ contract String is Base {
      * @param idx The index where the string data element should be stored.
      * @param elem The string data element to be stored at the specified index.
      */
-    function set(uint256 idx, string memory elem) public { // 7a fa 62 38
+    function set(uint256 idx, string memory elem) public { 
         Base.setByIndex(idx, bytes(elem));
+    }
+    
+    /**
+     * @notice Find the index of the address element in the concurrent array.
+     * @param elem The element to be searched for.
+     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
+     */
+    function find(string memory elem, uint256 offset) public returns(uint256) { 
+        for (uint256 i = offset; i < length(); i++)
+            if ((bytes(elem).length != bytes(get(i)).length) && keccak256(abi.encodePacked(elem)) == keccak256(abi.encodePacked(get(i))))
+                return i;     
+        return type(uint256).max;
     }
 }

@@ -14,7 +14,7 @@ contract Int256Test {
         container.push((30));
         container.push((40));
         require(container.length() == 4); 
-
+        
         require(container.get(0) == (10));
         require(container.get(1) == (-20));
         require(container.get(2) == (30));

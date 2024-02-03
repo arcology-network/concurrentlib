@@ -1,15 +1,30 @@
-import "../../lib/commutative/U256Cum.sol";
+// The is a parallelized version of the Ballot contract specifically for multi-process testing.
+// The original contract is  from the Solidity documentation. You can find the original contract here: https://docs.soliditylang.org/en/latest/solidity-by-example.html
+
+// It is designed to demonstrate how a standard Ethereum contract can be parallelized using the Arcology Network's concurrent libraries.
+// for more information on the Arcology Network, please visit: https://doc.arcology.network/
+
+// The follow changes have been made to the original contract:
+// 1. Replaced the weight variable in the Voter struct with a U256Cumulative variable for concurrent operations.
+// 2. Replaced the voteCount variable in the Proposal struct with a U256Cumulative variable for concurrent operations.
+// 3. Added a canDelegate variable to the Voter struct to allow voters to delegate their votes to others. This is necessary to work around some constraints.
+// 4. Added an extra parameter to the constructor to allow the owner of the contract to be set. This is for multi-processor testing.
+// 5. Added an extrac parameter to the vote function to allow the voter's address to be passed in. This is for multi-processor testing.
 
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
+
+import "../../lib/commutative/U256Cum.sol";
+
 /// @title Voting with delegation.
-contract ParaBallot {
+contract Ballot {
     // This declares a new complex type which will
     // be used for variables later.
     // It will represent a single voter.
     struct Voter {
-        uint weight; // weight is accumulated by delegation
+        U256Cumulative weight; // weight is accumulated by delegation
         bool voted;  // if true, that person already voted
+        bool canDelegata; // If true, the voter can delegate others to vote on their behalf.
         address delegate; // person delegated to
         uint vote;   // index of the voted proposal
     }
@@ -32,8 +47,10 @@ contract ParaBallot {
     /// Create a new ballot to choose one of `proposalNames`.
     constructor(address owner, bytes32[] memory proposalNames) {
         chairperson = owner; // msg.sender;
-        voters[chairperson].weight = 1;
+        voters[chairperson].weight = new U256Cumulative(1, type(uint256).max);
+        voters[chairperson].weight.add(1);
 
+        voters[chairperson].canDelegata = true;
         // For each of the provided proposal names,
         // create a new proposal object and add it
         // to the end of the array.
@@ -51,6 +68,7 @@ contract ParaBallot {
     // Give `voter` the right to vote on this ballot.
     // May only be called by `chairperson`.
     function giveRightToVote(address voter) external {
+        // new U256Cumulative(1, type(uint256).max);
         // If the first argument of `require` evaluates
         // to `false`, execution terminates and all
         // changes to the state and to Ether balances
@@ -69,15 +87,19 @@ contract ParaBallot {
             !voters[voter].voted,
             "The voter already voted."
         );
-        require(voters[voter].weight == 0);
-        voters[voter].weight = 1;
+        // require(voters[voter].weight == 0);
+        // voters[voter].weight = 1;
+
+        require(address(voters[voter].weight) == address(0));
+        voters[voter].weight = new U256Cumulative(0, type(uint256).max);
+        voters[voter].weight.add(1);
     }
 
     /// Delegate your vote to the voter `to`.
     function delegate(address to) external {
         // assigns reference
         Voter storage sender = voters[msg.sender];
-        require(sender.weight != 0, "You have no right to vote");
+        require(sender.weight.get() != 0, "You have no right to vote");
         require(!sender.voted, "You already voted.");
 
         require(to != msg.sender, "Self-delegation is disallowed.");
@@ -100,7 +122,8 @@ contract ParaBallot {
         Voter storage delegate_ = voters[to];
 
         // Voters cannot delegate to accounts that cannot vote.
-        require(delegate_.weight >= 1);
+        // require(delegate_.weight >= 1);
+        require(delegate_.canDelegata);
 
         // Since `sender` is a reference, this
         // modifies `voters[msg.sender]`.
@@ -110,12 +133,16 @@ contract ParaBallot {
         if (delegate_.voted) {
             // If the delegate already voted,
             // directly add to the number of votes
-            proposals[delegate_.vote].voteCount.add(sender.weight);
+            // proposals[delegate_.vote].voteCount.add(sender.weight);
+
+            proposals[delegate_.vote].voteCount.add(sender.weight.get());
 
         } else {
             // If the delegate did not vote yet,
             // add to her weight.
-            delegate_.weight += sender.weight;
+            // delegate_.weight += sender.weight;
+
+            delegate_.weight.add(sender.weight.get());
         }
     }
 
@@ -123,15 +150,15 @@ contract ParaBallot {
     /// to proposal `proposals[proposal].name`.
     function vote(address voterAddr, uint proposal) external {
         Voter storage sender = voters[voterAddr];
-        require(sender.weight != 0, "Has no right to vote");
+        require(sender.weight.get() != 0, "Has no right to vote");
         require(!sender.voted, "Already voted.");
         sender.voted = true;
         sender.vote = proposal;
-        // address(0x60).call(abi.encodePacked(proposal));
+ 
         // If `proposal` is out of the range of the array,
         // this will throw automatically and revert all
         // changes.
-        proposals[proposal].voteCount.add(sender.weight);
+        proposals[proposal].voteCount.add(sender.weight.get());
     }
 
     /// @dev Computes the winning proposal taking all

@@ -153,6 +153,42 @@ contract Base is Runtime {
     }
 
     /**
+     * @notice Retrieve the minimum entry stored in the container sorted by value numerically.
+     * @return encoded The minimum valu and the index.
+     */
+    function minNumerical() public returns(bytes memory)  {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("minNumerical()"));
+        return data;
+    }
+
+    /**
+     * @notice Retrieve the maximum entry stored in the container sorted by value numerically.
+     * @return The encoded maximum value and the index.
+     */
+    function maxNumerical() public returns(bytes memory)  {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("maxNumerical()"));
+        return data;
+    }
+
+    /**
+     * @notice Retrieve the minimum entry stored in the container sorted by string representation.
+     * @return The encoded minimum value and the index.
+     */
+    function minString() public returns(bytes memory)  {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("minString()"));
+        return data;
+    }
+
+    /**
+     * @notice Retrieve the maximum entry stored in the container sorted as a string
+     * @return The encoded maximum value and the index.
+     */
+    function maxString() public returns(bytes memory)  {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("maxString()"));
+        return data;
+    }
+
+    /**
      * @notice Clear all data stored.
      * @return success true if the all the data was successfully deleted, false otherwise.
      */

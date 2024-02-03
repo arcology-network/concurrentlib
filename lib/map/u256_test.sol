@@ -2,6 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "./U256.sol";
+import "../commutative/U256Cum.sol";
 import "../multiprocess/Multiprocess.sol";
 
 contract U256MapTest {

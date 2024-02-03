@@ -91,7 +91,7 @@ contract BaseTest is Runtime{
         return  abi.decode(data, (uint256));
     }
 
-    function popBack() public virtual returns(bytes memory) { // 80 26 32 97
+    function popBack() public virtual returns(bytes memory) { 
         bytes memory v = getByIndex(length() - 1);
         delByIndex(length() - 1);
         return v;
@@ -101,7 +101,7 @@ contract BaseTest is Runtime{
         setByKey(uuid(), (elem));
     }   
     
-    function setByIndex(uint256 idx, bytes memory encoded) public { // 7a fa 62 38
+    function setByIndex(uint256 idx, bytes memory encoded) public { 
         address(API).call(abi.encodeWithSignature("setIndex(uint256,bytes)", idx, encoded));     
     }
 
@@ -109,7 +109,7 @@ contract BaseTest is Runtime{
         address(API).call(abi.encodeWithSignature("setKey(bytes,bytes)", key, elem));
     }
 
-    function delByIndex(uint256 idx) public { // 7a fa 62 38
+    function delByIndex(uint256 idx) public { 
         address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));     
     }
 
@@ -117,7 +117,7 @@ contract BaseTest is Runtime{
         address(API).call(abi.encodeWithSignature("delIndex(bytes)", key));
     }
 
-    function getByIndex(uint256 idx) public virtual returns(bytes memory) { // 31 fe 88 d0
+    function getByIndex(uint256 idx) public virtual returns(bytes memory) {
         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
         if (success) {
             return data;  

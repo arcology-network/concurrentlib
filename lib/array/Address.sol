@@ -16,7 +16,7 @@ contract Address is Base {
      * @notice Add an address element to the concurrent array.
      * @param elem The address element to add to the array.
      */
-    function push(address elem) public virtual{ //9e c6 69 25
+    function push(address elem) public virtual{ 
         Base.setByKey(uuid(), abi.encodePacked(elem));
     }    
 
@@ -24,7 +24,7 @@ contract Address is Base {
      * @notice Remove and return the last address element from the concurrent array.
      * @return The last address element from the array.
      */
-    function pop() public virtual returns(address) { // 80 26 32 97
+    function pop() public virtual returns(address) { 
         return address(uint160(bytes20(Base.popBack())));
     }
 
@@ -42,8 +42,20 @@ contract Address is Base {
      * @param idx The index where the address element should be stored.
      * @param elem The address element to be stored at the specified index.
      */
-    function set(uint256 idx, address elem) public { // 7a fa 62 38
+    function set(uint256 idx, address elem) public { 
         Base.setByIndex(idx, abi.encodePacked(elem));
+    }
+
+    /**
+     * @notice Find the index of the address element in the concurrent array.
+     * @param elem The element to be searched for.
+     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
+     */
+    function find(address elem, uint256 offset) public returns(uint256) { 
+        for (uint256 i = offset; i < length(); i++)
+            if (elem == get(i))
+                return i;     
+        return type(uint256).max;    
     }
 }
 

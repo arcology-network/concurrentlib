@@ -4,6 +4,230 @@ pragma solidity ^0.8.19;
 import "./Multiprocess.sol";
 import "../commutative/U256Cum.sol";
 import "../array/Bool.sol";
+import "../array/U256.sol";
+import "../commutative/U256Cum.sol";
+
+contract U256CumulativeParallelGetTest {
+    U256Cumulative[] containers = new U256Cumulative[](2);
+
+    function call() public {  
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 0)); // Will require about 1.5M gas
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
+        mp.run();
+
+        require(containers[0].get() == 0);
+        require(containers[1].get() == 0);
+    }
+
+    function init(uint256 idx) public  { 
+        containers[idx] = new U256Cumulative(1, 100);
+        // containers[idx].add(idx + 11);       
+    }
+}
+
+contract U256CumulativeParallelInitTest {
+    U256Cumulative[] containers = new U256Cumulative[](2);
+
+    function call() public {  
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 0)); // Will require about 1.5M gas
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
+        mp.run();
+
+        require(containers[0].get() == 11);
+        require(containers[1].get() == 12);
+    }
+
+    function init(uint256 idx) public  { 
+        containers[idx] = new U256Cumulative(1, 100);
+        containers[idx].add(idx + 11);       
+    }
+}
+
+contract U256ParallelInitTest {
+    U256[] containers = new U256[](2);
+
+    function call() public {  
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(2000000, address(this), abi.encodeWithSignature("init(uint256)", 0)); // Will require about 1.5M gas
+        mp.push(2000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
+        mp.run();
+
+        require(containers[0].length() == 1);
+        require(containers[1].length() == 1);
+    }
+
+    function init(uint256 idx) public  { 
+        containers[idx] = new U256();
+        containers[idx].push(idx);        
+    }
+}
+
+contract U256ParallelPopTest {
+    U256 container = new U256();
+
+    function call() public {
+        container.push(1);
+        container.push(2);
+
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(1000000, address(this), abi.encodeWithSignature("pop()"));
+        mp.push(1000000, address(this), abi.encodeWithSignature("pop()"));
+        mp.run();
+
+        require(container.length() == 1);
+    }
+
+    function pop() public  { 
+        container.pop();
+    }
+}
+
+contract U256ParallelConflictTest {
+    U256 container = new U256();
+
+    function call() public  { 
+        container.push(uint256(10));
+        container.push(uint256(20));
+        container.push(uint256(30));
+        require(container.length() == 3);
+    
+        Multiprocess mp = new Multiprocess(1);
+        mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
+        mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
+        mp.run();
+    
+        require(container.length() == 2); 
+    }
+
+    function get(uint256 idx) public returns(uint256){
+        return container.get(idx);  
+    }
+
+    function pop() public {
+        container.get(2); 
+        container.pop();   
+    }
+}
+
+
+contract U256ParallelTest {
+    U256 container = new U256();
+
+    function call() public  { 
+        require(container.length() == 0); 
+    
+        container.push(uint256(10));
+        container.push(uint256(20));
+        container.push(uint256(30));
+        require(container.length() == 3);
+
+        Multiprocess mp = new Multiprocess(1);
+        mp.push(1000000, address(this), abi.encodeWithSignature("push(uint256)", 41));
+        mp.push(1000000, address(this), abi.encodeWithSignature("push(uint256)", 51));
+        require(mp.length() == 2);
+        require(container.length() == 3);
+
+        mp.run();
+        mp.clear();
+
+        require(container.length() == 5);
+
+        require(container.get(0) == uint256(10));
+        require(container.get(1) == uint256(20));
+        require(container.get(2) == uint256(30));
+        require(container.get(3) == uint256(41));   
+        require(container.get(4) == uint256(51));  
+ 
+        require(container.pop() == uint256(51));  
+        require(container.length() == 4);
+
+        mp.push(1000000, address(this), abi.encodeWithSignature("get(uint256)", 0));
+        mp.push(1000000, address(this), abi.encodeWithSignature("get(uint256)", 1));
+        mp.run();
+        mp.clear();
+
+        pop();
+        require(container.length() == 3);
+ 
+        // Here should be one conflict. So only one pop() will take effect.
+        mp.clear();
+        mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
+        mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
+        mp.run();
+
+        require(container.length() == 2); 
+    }
+
+    function push(uint256 v) public{
+        container.push(v);
+    }
+
+    function get(uint256 idx) public returns(uint256){
+        return container.get(idx);  
+    }
+
+    function set(uint256 idx, uint256 v) public {
+        return container.set(idx, v);  
+    }
+
+    function pop() public {
+        container.pop();   
+    }
+}
+
+
+contract ArrayOfU256ParallelTest {
+    U256[] array; 
+
+    constructor() {
+        array = new U256[](2);
+        array[0] = new U256();
+        array[1] = new U256();
+    }
+
+    function call() public  {
+        Multiprocess mp = new Multiprocess(1);
+        push(0, 11);
+        push(0, 12);
+
+         mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 0, 13));
+         mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 0, 14));
+         mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 1, 51));
+         mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 1, 52));
+        require(mp.length() == 4);
+        mp.run();
+
+        require(array[0].length() == 4);
+        require(array[1].length() == 2);
+
+        require(array[0].get(0) == 11);
+        require(array[0].get(1) == 12);
+        require(array[0].get(2) == 13);
+        require(array[0].get(3) == 14);
+
+        require(array[1].get(0) == 51);
+        require(array[1].get(1) == 52);
+    }
+
+    function push(uint256 id, uint256 v) public{
+        array[id].push(v);
+    }
+
+    function get(uint256 id, uint256 idx) public returns(uint256){
+        return array[id].get(idx);  
+    }
+
+    function set(uint256 id, uint256 idx, uint256 v) public {
+        return array[id].set(idx, v);  
+    }
+
+    function pop(uint256 id) public {
+        array[id].pop();  
+    }
+}
+
 
 contract ParaNativeAssignmentTest {
     uint256[2] results;
@@ -210,11 +434,11 @@ contract MultiParaCumulativeU256 {
         require(cumulative.get() == 4);
     }
 
-    function add(uint256 elem) public { //9e c6 69 25
+    function add(uint256 elem) public { 
         cumulative.add(elem);
     }  
 
-    function sub(uint256 elem) public { //9e c6 69 25
+    function sub(uint256 elem) public { 
         cumulative.sub(elem);
     }   
 }
@@ -233,11 +457,11 @@ contract MultiCumulativeU256ConcurrentOperation {
         require(cumulative.get() == 7);
     }
 
-    function add(uint256 elem) public { //9e c6 69 25
+    function add(uint256 elem) public { 
         cumulative.add(elem);
     }  
 
-    function sub(uint256 elem) public { //9e c6 69 25
+    function sub(uint256 elem) public { 
         cumulative.sub(elem);
     }   
 }
@@ -253,7 +477,7 @@ contract RecursiveParallelizerOnNativeArrayTest {
         require(results[1] == 12);
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(11111111, address(this), abi.encodeWithSignature("add2()"));
         mp2.run();              
@@ -281,7 +505,7 @@ contract RecursiveParallelizerOnContainerTest {
         require(cumulative.get() == 5);
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         container.push(true);
         cumulative.add(10);
         Multiprocess mp2 = new Multiprocess(1); 
@@ -311,7 +535,7 @@ contract MaxRecursiveDepth4Test {
         require(container.length() == 14);       
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(41111111, address(this), abi.encodeWithSignature("add2()"));
         mp2.push(41111111, address(this), abi.encodeWithSignature("add2()"));
@@ -321,7 +545,7 @@ contract MaxRecursiveDepth4Test {
         container.push(true);              
     } 
 
-    function add2() public { //9e c6 69 25
+    function add2() public { 
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(21111111, address(this), abi.encodeWithSignature("add3()"));
         mp2.push(21111111, address(this), abi.encodeWithSignature("add3()"));
@@ -330,7 +554,7 @@ contract MaxRecursiveDepth4Test {
         container.push(true);              
     } 
 
-    function add3() public { //9e c6 69 25
+    function add3() public { 
         container.push(true);              
     } 
 }
@@ -348,7 +572,7 @@ contract MaxSelfRecursiveDepth4Test {
         require(container.length() == 30); // 2 + 4 + 8 + 16
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(21111111, address(this), abi.encodeWithSignature("add()"));
         mp2.push(21111111, address(this), abi.encodeWithSignature("add()"));
@@ -377,7 +601,7 @@ contract MaxRecursiveDepthOffLimitTest {
         require(cumulative.get() == 62);
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         cumulative.add(2);
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(41111111, address(this), abi.encodeWithSignature("add()"));
@@ -402,7 +626,7 @@ contract ParaFixedLengthWithConflictRollbackTest {
         require(container.length() == 2);
     } 
 
-    function worker() public { //9e c6 69 25
+    function worker() public { 
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender()"));
         mp2.run();   
@@ -428,7 +652,7 @@ contract ParaSubbranchConflictTest {
         require(container.length() == 4);
     } 
 
-    function worker0() public { //9e c6 69 25
+    function worker0() public { 
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender00()"));
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender01()"));
@@ -447,7 +671,7 @@ contract ParaSubbranchConflictTest {
         results0[0] = 1;
     }  
 
-    function worker1() public { //9e c6 69 25
+    function worker1() public { 
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender10()"));
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender11()"));
@@ -479,7 +703,7 @@ contract ParentChildBranchConflictTest {
         require(container.length() == 1);
     } 
 
-    function worker0() public { //9e c6 69 25
+    function worker0() public { 
         results0[0] = 1;
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.run();   
@@ -487,7 +711,7 @@ contract ParentChildBranchConflictTest {
         container.push(true);
     }   
 
-    function worker1() public { //9e c6 69 25
+    function worker1() public { 
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.push(1999999, address(this), abi.encodeWithSignature("appender10()"));
         mp2.run();   
@@ -525,7 +749,7 @@ contract MixedRecursiveMultiprocessTest {
         require(cumulative2.get() == 70);
     } 
 
-    function add() public { //9e c6 69 25
+    function add() public { 
         cumulative.add(10);
         Multiprocess mp2 = new Multiprocess(1); 
         mp2.push(11111111, address(this), abi.encodeWithSignature("add2()"));
@@ -605,11 +829,11 @@ contract ParallelCumulativeU256 {
 		require(cumulative.get() == 1);
 	}
 
-	function add(uint256 elem) public { //9e c6 69 25
+	function add(uint256 elem) public { 
 		cumulative.add(elem);
 	}  
 
-	function sub(uint256 elem) public { //9e c6 69 25
+	function sub(uint256 elem) public { 
 		cumulative.sub(elem);
 	}  
 }
@@ -633,11 +857,11 @@ contract ThreadingCumulativeU256SameMpMulti {
 		require(cumulative.get() == 4);
 	}
 
-	function add(uint256 elem) public { //9e c6 69 25
+	function add(uint256 elem) public { 
 		cumulative.add(elem);
 	}  
 
-	function sub(uint256 elem) public { //9e c6 69 25
+	function sub(uint256 elem) public { 
 		cumulative.sub(elem);
 	}  
 }
