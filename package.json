@@ -1,7 +1,7 @@
 {
   "name": "concurrentlib",
   "description": "concurrent Smart Contract library for Solidity",
-  "version": "1.8.0",
+  "version": "2.0.0",
   "files": [
     "/lib/**/*.sol"
   ],
@@ -22,7 +22,7 @@
     "rollup",
     "l2"
   ],
-  "author": "Arcology network Community",
+  "author": "Arcology Network",
   "license": "MIT",
   "homepage": "https://arcology.network/"
 }
