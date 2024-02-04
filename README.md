@@ -51,7 +51,7 @@ This implementation doesn't support concurrent execution. If multiple users call
 contract Like {
     uint public likes;
 
-    function like(address receiver, uint amount) public {
+    function like() public {
         likes += 1;
     }    
 }
@@ -67,8 +67,8 @@ import "arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol";
 contract Like {
     U256Cumulative public likes;
 
-    function like(address receiver, uint amount) public {
-        likes += 1;
+    function like() public {
+        likes.add(1);
     }    
 }
 ```
