@@ -2,16 +2,7 @@
   <img src="./img/arcology-logo-text-dark-transparent.svg" alt="Your Image Alt Text" height="120px" align="center"/>
 </div>
 
-
-<!-- <h1> Concurrent APIs  <img align="center" height="30" src="./img/arcology-logo-text-dark-transparent.svg">  </h1> -->
-
-<!-- [![NPM Package](https://img.shields.io/badge/npm-%F0%9F%93%84-grey)](https://www.npmjs.org/package/arcologynetwork)
-[![Docs](https://img.shields.io/badge/docs-%F0%9F%93%84-grey)](https://doc.arcology.network/arcology-concurrent-programming-guide/)
-[![Docs](https://img.shields.io/badge/solidity-%F0%9F%93%84-grey)](https://www.arcology.network) -->
-
 <h1> Concurrent APIs <img align="center" height="32" src="./img/code-file.svg">  </h1>
-
-<!-- # Concurrent APIs -->
 
 Solidity, the programming language used to develop smart contracts on the Ethereum platform, was not initially designed for concurrent use, so it does not include the features and capabilities necessary for efficient concurrent programming. 
 
