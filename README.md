@@ -22,7 +22,7 @@ Solidity, the programming language used to develop smart contracts on the Ethere
 <h2> Installation <img align="center" height="32" src="./img/cloud-download.svg">  </h2>
 
 ``` shell
-$ npm install @arcologynetwork/concurrentlib
+$ npm install arcologynetwork/concurrentlib
 ```
 
 <h2> Usage <img align="center" height="32" src="./img/ruler-cross-pen.svg">  </h2>
@@ -74,7 +74,5 @@ You can find more examples in the [developer's guide](https://doc.arcology.netwo
 Arcology's concurrent lib is released under the MIT License.
 
 <h2> Disclaimer  <img align="center" height="32" src="./img/warning.svg">  </h2>
-
-<!-- ## Disclaimer  -->
 
 Arcology's concurrent lib is made available under the MIT License, which disclaims all warranties in relation to the project and which limits the liability of those that contribute and maintain the project. You acknowledge that you are solely responsible for any use of the Contracts and you assume all risks associated with any such use.
