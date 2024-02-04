@@ -59,6 +59,8 @@ contract BaseTest is Runtime{
         require(keccak256(arr2) == keccak256(byIdx));
         require(peek() == 0);  
         require(length() == 1); 
+
+        nonexists();
     }
 
     function call() public{ 
@@ -66,6 +68,12 @@ contract BaseTest is Runtime{
         popBack();
         require(peek() == 1); 
     }
+
+    function nonexists() public returns(bytes memory) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("nonexists()"));   
+        return data;     
+    }
+
 
     function keyByIndex(uint256 idx) public returns(bytes memory) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   

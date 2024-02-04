@@ -1,14 +1,15 @@
-// This is a simple subcurrency example from the Solidity documentation. 
-// The original contract can be found here: https://docs.soliditylang.org/en/latest/introduction-to-smart-contracts.html#subcurrency-example
-//
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.4;
+pragma solidity >=0.8.0 < 0.8.19;
+
+import "../../lib/commutative/U256Cum.sol";
 
 contract Coin {
     // The keyword "public" makes variables
     // accessible from other contracts
     address public minter;
-    mapping(address => uint) public balances;
+     mapping(address => U256Cum) public balances;
+
+    // AddressUint256Map public balances;
 
     // Events allow clients to react to specific
     // contract changes you declare
@@ -24,7 +25,8 @@ contract Coin {
     // Can only be called by the contract creator
     function mint(address receiver, uint amount) public {
         require(msg.sender == minter);
-        balances[receiver] += amount;
+        // balances[receiver] += amount;
+        balances.get(receiver).add(amount);
     }
 
     // Errors allow you to provide information about
@@ -41,8 +43,10 @@ contract Coin {
                 available: balances[msg.sender]
             });
 
-        balances[msg.sender] -= amount;
-        balances[receiver] += amount;
+        balances.get(msg.sender).sub(amount);    
+        balances.get(receiver).add(amount);    
+        // balances[msg.sender] -= amount;
+        // balances[receiver] += amount;
         emit Sent(msg.sender, receiver, amount);
     }
 }

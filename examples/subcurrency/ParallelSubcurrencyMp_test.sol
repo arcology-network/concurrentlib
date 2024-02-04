@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "../../lib/multiprocess/Multiprocess.sol";
-import "./Subcurrency.sol";
+import "./ParallelSubcurrencyMp.sol";
 
 contract SubcurrencyCaller {
     function call(address coin) public{     
