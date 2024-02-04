@@ -1,6 +1,6 @@
 {
   "name": "@arcologynetwork/concurrentlib",
-  "description": "concurrent Smart Contract library for Solidity",
+  "description": "This API is designed to facilitate concurrent smart contracts on the Arcology Network.",
   "version": "2.0.0",
   "files": [
     "/lib/**/*.sol"
