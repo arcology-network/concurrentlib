@@ -27,15 +27,7 @@ $ npm install @arcologynetwork/concurrentlib
 
 <h2> Usage <img align="center" height="32" src="./img/ruler-cross-pen.svg">  </h2>
 
-Once installed, you can use the contracts in the library by importing them:
-
-```solidity
-pragma solidity >=0.8.0 < 0.8.19;
-
-import "arcologynetwork/contracts/concurrentlib/multiprocess/Multiprocess.sol";
-import "arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol";
-import "arcologynetwork/contracts/concurrentlib/array/Bool.sol";
-```
+Once installed, you can use the contracts in the library by importing them.
 
 ### Example
 

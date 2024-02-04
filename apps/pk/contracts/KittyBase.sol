@@ -354,7 +354,6 @@ contract KittyBase is KittyAccessControl {
             emit BalanceOf(address(siringAuction), balanceOfSiringAuction);
         }
         
-
         length = darray.length("totalBalanceChanges");
         for (uint256 i = 0; i < length; i++) {
             darray.popFrontUint256("totalBalanceChanges");
