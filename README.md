@@ -13,7 +13,7 @@ Solidity, the programming language used to develop smart contracts on the Ethere
 <h2> Installation <img align="center" height="32" src="./img/cloud-download.svg">  </h2>
 
 ``` shell
-$ npm install arcologynetwork/concurrentlib
+$ npm install @arcologynetwork/concurrentlib
 ```
 
 <h2> Usage <img align="center" height="32" src="./img/ruler-cross-pen.svg">  </h2>
