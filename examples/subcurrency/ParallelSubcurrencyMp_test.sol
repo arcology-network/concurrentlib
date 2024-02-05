@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.19;
+pragma solidity >= 0.8.0 < 0.9.0;
 
 import "../../lib/multiprocess/Multiprocess.sol";
 import "./ParallelSubcurrencyMp.sol";
 
-contract SubcurrencyCaller {
-    function call(address coin) public{     
+contract ParallelSubcurrencyTest {
+    constructor () {
+        Coin coin = new Coin();
+
         address Alice = 0x1111111110123456789012345678901234567890;
         address Bob = 0x2222222220123456789012345678901234567890;
         address Carol = 0x4444444890123456789012345678901234567890;
@@ -19,10 +21,9 @@ contract SubcurrencyCaller {
         require(mp.length() == 4);
         mp.run();
 
-        require(Coin(coin).getter(Alice) == 1111);
-        require(Coin(coin).getter(Bob) == 2222);
-        require(Coin(coin).getter(Carol) == 3333);
-        require(Coin(coin).getter(Dave) == 4444);
-       
+        require(coin.getter(Alice) == 1111);
+        require(coin.getter(Bob) == 2222);
+        require(coin.getter(Carol) == 3333);
+        require(coin.getter(Dave) == 4444);
     }
 }
