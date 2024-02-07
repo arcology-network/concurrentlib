@@ -9,7 +9,7 @@
 // 3. Added a canDelegate variable to the Voter struct to allow voters to delegate their votes to others. This is necessary to work around some constraints.
 
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >= 0.8.0 < 0.9.0;
 
 import "@arcologynetwork/concurrentlib/lib/commutative/U256Cum.sol";
 

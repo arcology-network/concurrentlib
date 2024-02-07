@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.19;
+pragma solidity >= 0.8.0 < 0.9.0;
 
 import "../storage/Storage.sol";
 import "../base/Base.sol";
@@ -85,10 +85,4 @@ contract Multiprocess is Base, Storage {
     function run() public {       
         foreach(abi.encodePacked(numProcesses));
     }
-}
-
-struct ExecutionResult {   
-    uint256 error;
-    uint256 gasUsed;
-    bytes retData;
 }

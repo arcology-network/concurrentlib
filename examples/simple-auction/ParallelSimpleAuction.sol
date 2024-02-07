@@ -21,7 +21,7 @@
 
 
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.4;
+pragma solidity >= 0.8.0 < 0.9.0;
 
 import "@arcologynetwork/concurrentlib/lib/map/AddressUint256.sol";
 
