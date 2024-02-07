@@ -96,13 +96,13 @@ contract Ballot {
     }
 
     /// Delegate your vote to the voter `to`.
-    function delegate(address to) external {
+    function delegate(address from, address to) external {
         // assigns reference
-        Voter storage sender = voters[msg.sender];
+        Voter storage sender = voters[from];
         require(sender.weight.get() != 0, "You have no right to vote");
         require(!sender.voted, "You already voted.");
 
-        require(to != msg.sender, "Self-delegation is disallowed.");
+        require(to != from, "Self-delegation is disallowed.");
 
         // Forward the delegation as long as
         // `to` also delegated.
@@ -116,7 +116,7 @@ contract Ballot {
             to = voters[to].delegate;
 
             // We found a loop in the delegation, not allowed.
-            require(to != msg.sender, "Found loop in delegation.");
+            require(to != from, "Found loop in delegation.");
         }
 
         Voter storage delegate_ = voters[to];

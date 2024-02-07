@@ -49,5 +49,37 @@ contract BallotTest {
         // // Check the ballot count for each proposal.
         require(ballot.checkBallot(0) == 3);
         require(ballot.checkBallot(1) == 2);
+
+        // Delgate from addr2 to addr1.
+        ballot = new Ballot(msg.sender, proposalNames);   
+        
+        mp = new Multiprocess(5); 
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr1));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr2));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr3));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr4));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr5));
+        mp.run(); // Run the jobs in parallel.
+        mp.clear(); // Clear the job queue.
+
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("delegate(address,address)", addr2, addr1));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("delegate(address,address)", addr4, addr1));
+        mp.run(); // Run the jobs in parallel.
+        mp.clear(); // Clear the job queue.
+
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr1, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr3, 1));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr5, 1));
+        mp.run(); // Run the jobs in parallel.
+        mp.rollback(); // Clear the job queue.
+
+        require(ballot.winningProposal() == 0);
+        require(ballot.winnerName() == keccak256("Alice"));
+
+        // Check the ballot count for each proposal.
+        require(ballot.checkBallot(0) == 3);
+        require(ballot.checkBallot(1) == 2);
     }
 }
