@@ -8,7 +8,7 @@ Solidity, the programming language used to develop smart contracts on the Ethere
 
 [Arcology Network](https://arcology.network) offers a suite of Solidity APIs customized for concurrent programming tasks. This package includes the Solidity APIs for  smart contract developers to fully utilize the power of **Arcology's parallel execution** capabilities. 
 
->>Please be aware that all the libraries in the package are specifically designed for Arcology Network only.
+>>Please be aware that all the libraries in the package are specifically designed for Arcology Network only. They are not going to bring any benefits to Ethereum or other blockchain platforms.
 
 <h2> Installation <img align="center" height="32" src="./img/cloud-download.svg">  </h2>
 
