@@ -45,10 +45,14 @@ contract Like {
 In the parallelized version, the `likes` is replaced with a `U256Cumulative` variable from the `arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol` library. The variable allows concurrent increment and decrement operations. Now, the `like()` function can be called concurrently by multiple users.
 
 ```solidity
-import "arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol";
+import "@arcologynetwork/concurrentlib/lib/commutative/U256Cum.sol";
 
 contract Like {
     U256Cumulative public likes;
+
+    constructor() {
+        likes = new U256Cumulative(0, type(uint256).max);
+    }
 
     function like() public {
         likes.add(1);

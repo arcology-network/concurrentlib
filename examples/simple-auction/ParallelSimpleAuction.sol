@@ -23,7 +23,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
 
-import "../../lib/map/AddressUint256.sol";
+import "@arcologynetwork/concurrentlib/lib/map/AddressUint256.sol";
 
 contract SimpleAuction {
     // Parameters of the auction. Times are either

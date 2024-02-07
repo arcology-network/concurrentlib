@@ -228,6 +228,22 @@ contract ArrayOfU256ParallelTest {
     }
 }
 
+contract Deployer {
+    U256 array; 
+
+    constructor() { 
+       Multiprocess mp = new Multiprocess(1); 
+       mp.push(2500000, address(this), abi.encodeWithSignature("init()"));
+       require(mp.length() == 1);
+       mp.run();
+    }
+
+    function init() public {
+        array = new U256();
+    }
+}  
+ 
+
 
 contract ParaNativeAssignmentTest {
     uint256[2] results;
@@ -415,17 +431,17 @@ contract ParallelizerArrayTest {
 contract MultiParaCumulativeU256 {
     U256Cumulative cumulative = new U256Cumulative(0, 100);     
     function call() public {
-        Multiprocess mp1 = new Multiprocess(1);
+        Multiprocess mp1 = new Multiprocess(1); // MultiParaCumulativeU256:nonce + 1
         mp1.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 2));
         mp1.run();
         require(cumulative.get() == 2);
 
-        Multiprocess mp2 = new Multiprocess(1);
+        Multiprocess mp2 = new Multiprocess(1); // MultiParaCumulativeU256:nonce + 2
         mp2.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 3));
         mp2.run();
         require(cumulative.get() == 5);  
 
-        Multiprocess mp3 = new Multiprocess(1);
+        Multiprocess mp3 = new Multiprocess(1); // MultiParaCumulativeU256:nonce + 3
         mp3.push(400000, address(this), abi.encodeWithSignature("sub(uint256)", 4));
         mp3.run();  
         require(cumulative.get() == 1);  

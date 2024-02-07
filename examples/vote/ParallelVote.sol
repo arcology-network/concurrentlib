@@ -11,7 +11,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-import "../../lib/commutative/U256Cum.sol";
+import "@arcologynetwork/concurrentlib/lib/commutative/U256Cum.sol";
 
 /// @title Voting with delegation.
 contract Ballot {
