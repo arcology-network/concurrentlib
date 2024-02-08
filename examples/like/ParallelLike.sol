@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >= 0.8.0 < 0.9.0;
 
-import "../../lib/commutative/U256Cum.sol";
+import "@arcologynetwork/concurrentlib/lib/commutative/U256Cum.sol";
 
 contract Like {
     U256Cumulative public likes;
