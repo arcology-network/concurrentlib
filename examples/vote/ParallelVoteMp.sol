@@ -93,6 +93,8 @@ contract Ballot {
         require(address(voters[voter].weight) == address(0));
         voters[voter].weight = new U256Cumulative(0, type(uint256).max);
         voters[voter].weight.add(1);
+
+        voters[chairperson].canDelegata = true;
     }
 
     /// Delegate your vote to the voter `to`.
