@@ -94,7 +94,7 @@ contract Ballot {
         voters[voter].weight = new U256Cumulative(0, type(uint256).max);
         voters[voter].weight.add(1);
 
-        voters[chairperson].canDelegata = true;
+        voters[voter].canDelegata = true;
     }
 
     /// Delegate your vote to the voter `to`.
