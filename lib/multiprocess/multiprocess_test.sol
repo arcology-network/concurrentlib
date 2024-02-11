@@ -50,8 +50,8 @@ contract U256ParallelInitTest {
 
     function call() public {  
         Multiprocess mp = new Multiprocess(2);
-        mp.push(2000000, address(this), abi.encodeWithSignature("init(uint256)", 0)); // Will require about 1.5M gas
-        mp.push(2000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 0)); // Will require about 1.5M gas
+        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
         mp.run();
 
         require(containers[0].length() == 1);
@@ -505,6 +505,33 @@ contract RecursiveParallelizerOnNativeArrayTest {
     }  
 }
 
+contract RecursiveAssignerTest {
+    uint256[4] array; 
+
+    function call() public { 
+       Multiprocess mp = new Multiprocess(2); 
+       mp.push(5000000, address(this), abi.encodeWithSignature("proxy(uint256)", 0));
+       mp.push(5000000, address(this), abi.encodeWithSignature("proxy(uint256)", 1));
+       mp.run();
+
+       require(array[0] == 10);
+       require(array[1] == 21);   
+       require(array[2] == 12);
+       require(array[3] == 23); 
+    }
+
+    function proxy(uint256 idx) public {
+       Multiprocess mp = new Multiprocess(2); 
+       mp.push(2500000, address(this), abi.encodeWithSignature("assign(uint256,uint256,uint256)", idx, 0, 10));
+       mp.push(2500000, address(this), abi.encodeWithSignature("assign(uint256,uint256,uint256)", idx, 1, 20));
+       mp.run();        
+    }
+
+    function assign(uint256 idx, uint256 i, uint256 v) public {
+        array[idx*2 + i] = v + idx*2 + i;
+    }   
+} 
+
 contract RecursiveParallelizerOnContainerTest {
     uint256[2] results;
     Bool container = new Bool();
@@ -707,6 +734,21 @@ contract ParaSubbranchConflictTest {
     }  
 }
 
+contract SimpleConflictTest {
+    uint256 data;
+    function call() public {
+        Multiprocess mp = new Multiprocess(2);
+        mp.push(100000, address(this), abi.encodeWithSignature("assign(uint256)", 1)); // Only one will go through
+        mp.push(100000, address(this), abi.encodeWithSignature("assign(uint256)", 2)); // Only one will go through
+        mp.run();
+        require(data == 1);
+    }
+
+    function assign(uint256 v) public { 
+        data = v;
+    } 
+}
+
 contract ParentChildBranchConflictTest {
     Bool container = new Bool();
     uint256[2] results0;
@@ -717,10 +759,11 @@ contract ParentChildBranchConflictTest {
         mp.push(9999999, address(this), abi.encodeWithSignature("worker1()")); // Only one will go through
         mp.run();
         require(container.length() == 1);
+        require(results0[0] == 2);
     } 
 
     function worker0() public { 
-        results0[0] = 1;
+        results0[0] = 2;
         Multiprocess mp2 = new Multiprocess(2); 
         mp2.run();   
         mp2.rollback();
@@ -737,8 +780,7 @@ contract ParentChildBranchConflictTest {
 
     function appender10() public { 
         container.push(true);
-        uint256 a = results0[0];
-        // results0[0] = 1;
+        results0[0] = 1;
     }  
 }
 

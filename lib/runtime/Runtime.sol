@@ -33,4 +33,20 @@ contract Runtime {
         (,id) = address(0xa0).call(abi.encodeWithSignature("uuid()"));     
         return id;
     }
+  
+    /**
+     * @notice Call a custom operation.
+     * @return The result of the custom operation.
+     */
+    function eval(string memory func, bytes memory data) public virtual returns(bool, bytes memory) {
+        return address(0xa0).call(abi.encodeWithSignature(func, data)); 
+    }
+
+    /**
+     * @notice Call a custom operation.
+     * @return The result of the custom operation.
+     */
+    function eval(string memory func, uint256 data) public virtual returns(bool, bytes memory) {
+        return address(0xa0).call(abi.encodeWithSignature(func, data)); 
+    }
 }

@@ -31,6 +31,7 @@ The following example of a simple smart contract that allows users to like a pos
 This implementation doesn't support concurrent execution. If multiple users call the `like()` function concurrently, the `likes` of the receiver will be incremented concurrently. This is not allowed in Solidity.
 
 ```solidity
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity >= 0.8.0 < 0.9.0;
 
 contract Like {
@@ -44,9 +45,10 @@ contract Like {
 
 #### Parallelized Version
 
-In the parallelized version, the `likes` is replaced with a `U256Cumulative` variable from the `arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol` library. The variable allows concurrent increment and decrement operations. Now, the `like()` function can be called concurrently by multiple users.
+In the parallelized version, the `likes` is replaced with a `U256Cumulative` variable from the `arcologynetwork/contracts/concurrentlib/commutative/U256Cum.sol` library. The variable allows concurrent increment and decrement operations. Now, the `like()` function can be called concurrently by multiple transactions.
 
 ```solidity
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity >= 0.8.0 < 0.9.0;
 import "@arcologynetwork/concurrentlib/lib/commutative/U256Cum.sol";
 
@@ -54,7 +56,7 @@ contract Like {
     U256Cumulative public likes;
 
     constructor() {
-        likes = new U256Cumulative(0, type(uint256).max);
+        likes = new U256Cumulative(0, type(uint256).max); // The total number must be between 0 and 2^256 - 1
     }
 
     function like() public {
