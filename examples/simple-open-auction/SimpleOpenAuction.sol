@@ -1,5 +1,5 @@
 // This is a simple auction contract from the Solidity documentation. 
-// It can be found here: https://docs.soliditylang.org/en/latest/solidity-by-example.html#simple-auction
+// It can be found here: https://docs.soliditylang.org/en/latest/solidity-by-example.html#simple-open-auction
 
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
