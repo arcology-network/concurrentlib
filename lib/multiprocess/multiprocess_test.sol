@@ -1096,3 +1096,30 @@ contract ParaPayableConflictTest {
         counter = v;
     }   
 } 
+
+contract ParaCumU256SubTest{
+    U256Cumulative counter = new U256Cumulative(0, 100);
+
+    constructor()  {
+        counter.add(100);
+    }
+
+    function call() public  { 
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(this), abi.encodeWithSignature("sub(uint256)", 40));
+        mp.push(50000, address(this), abi.encodeWithSignature("sub(uint256)", 40));
+        mp.run();
+        mp.clear();
+        require(counter.get() == 20);
+
+        counter.add(80);
+        mp.push(50000, address(this), abi.encodeWithSignature("sub(uint256)", 60));
+        mp.push(50000, address(this), abi.encodeWithSignature("sub(uint256)", 60));
+        mp.run();
+        require(counter.get() == 40);
+    }
+
+    function sub(uint256 v) public {
+        counter.sub(v);
+    }  
+} 
