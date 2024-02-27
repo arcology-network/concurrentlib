@@ -66,8 +66,8 @@ contract Runtime {
      * @notice Get the number of concurrent instances of the specified function.
      * @return The number of concurrent instances.
      */
-    function instances(address addr, string memory func) public returns(uint256) {
-        (,bytes memory data) = address(0xa0).call(abi.encodeWithSignature("instances(address,string)", addr, func));
+    function instances(address addr, bytes4 func) public returns(uint256) {
+        (,bytes memory data) = address(0xa0).call(abi.encodeWithSignature("instances(address,bytes4)", addr, func));
         return abi.decode(data, (uint256));  
     }
 }
