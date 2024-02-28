@@ -32,7 +32,7 @@ This implementation doesn't support concurrent execution. If multiple users call
 
 ```solidity
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 contract Like {
     uint public likes;
@@ -49,15 +49,11 @@ In the parallelized version, the `likes` is replaced with a `U256Cumulative` var
 
 ```solidity
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 import "@arcologynetwork/concurrentlib/lib/commutative/U256Cum.sol";
 
 contract Like {
-    U256Cumulative public likes;
-
-    constructor() {
-        likes = new U256Cumulative(0, type(uint256).max); // The total number must be between 0 and 2^256 - 1
-    }
+    U256Cumulative likes = new U256Cumulative(0, type(uint256).max);
 
     function like() public {
         likes.add(1);
