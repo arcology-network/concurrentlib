@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 import "../runtime/Runtime.sol";
 
-contract BaseTest is Runtime{    
+contract BaseTest {    
     address constant public API = address(0x84); 
 
     uint[] public arr2 = [1, 2, 3];
@@ -106,7 +106,7 @@ contract BaseTest is Runtime{
     }
 
     function push(bytes memory elem) public {
-        setByKey(uuid(), (elem));
+        setByKey(Runtime.uuid(), (elem));
     }   
     
     function setByIndex(uint256 idx, bytes memory encoded) public { 

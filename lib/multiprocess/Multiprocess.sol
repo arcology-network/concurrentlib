@@ -11,7 +11,7 @@ import "../base/Base.sol";
  *      It serves as a container for executable messages, enabling parallel processing
  *      similar to Python's `multiprocessing` library.
  */
-contract Multiprocess is Base, Storage {
+contract Multiprocess is Base {
     enum Status{ 
         SUCCESSFUL, 
         EXECUTION_FAILED, 
@@ -84,5 +84,13 @@ contract Multiprocess is Base, Storage {
      */
     function run() public {       
         foreach(abi.encodePacked(numProcesses));
+    }
+
+    /**
+     * @notice Roll back all state changes made in the current block and reset the contract to the previous state.
+     * @dev Caution: Using this function, especially in the constructor, may cause the contract deployment to fail.
+     */
+    function rollback() public {
+        address(0xa0).call(abi.encodeWithSignature("Reset()"));     
     }
 }
