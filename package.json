@@ -1,7 +1,7 @@
 {
   "name": "@arcologynetwork/concurrentlib",
   "description": "This API is designed to facilitate concurrent smart contracts on the Arcology Network.",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "files": [
     "/lib/**/*.sol"
   ],
