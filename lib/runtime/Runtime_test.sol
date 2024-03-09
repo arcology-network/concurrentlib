@@ -22,3 +22,17 @@ contract NumConcurrentInstanceTest  {
         }
     }
 }
+
+contract DeferredTest  {
+    U256Cumulative value = new U256Cumulative(1, 100);
+
+    constructor () {
+        Runtime.deferred("");
+    }
+
+    function init(uint256 v) public {
+        if (Runtime.instances(address(this),"init(uint256)") == 0) {
+            value.add(v);    
+        }
+    }
+}

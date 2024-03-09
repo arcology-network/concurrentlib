@@ -111,7 +111,6 @@ contract U256ParallelConflictTest {
     }
 }
 
-
 contract U256ParallelTest {
     U256 container = new U256();
 
@@ -148,8 +147,11 @@ contract U256ParallelTest {
         mp.run();
         mp.clear();
 
-        pop();
+        pop(); // idx == 4
         require(container.length() == 3);
+
+        pop(); // idx == 3
+        require(container.length() == 2);
  
         // Here should be one conflict. So only one pop() will take effect.
         mp.clear();
@@ -157,7 +159,7 @@ contract U256ParallelTest {
         mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
         mp.run();
 
-        require(container.length() == 2); 
+        require(container.length() == 1); 
     }
 
     function push(uint256 v) public{
@@ -804,7 +806,7 @@ contract MixedRecursiveMultiprocessTest {
         require(results[1] == 12);
         require(container.length() == 3);
         require(cumulative.get() == 55);
-        require(cumulative2.get() == 70);
+        require(cumulative2.get() == 70); 
     } 
 
     function add() public { 
@@ -827,14 +829,14 @@ contract MixedRecursiveMultiprocessTest {
 contract ParallelCumulativeU256 {
 	U256Cumulative cumulative = new U256Cumulative(0, 100); 
 	constructor() {
-		require(cumulative.peek() == 0);
+		require(cumulative.committedLength() == 0);
 		cumulative.add(1);
 		cumulative.sub(1);
-		require(cumulative.peek() == 0);
+		require(cumulative.committedLength() == 0);
 	}
 
 	function call() public {
-		require(cumulative.peek() == 0);
+		require(cumulative.committedLength() == 0);
 
 		Multiprocess mp = new Multiprocess(1);
 		mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));
@@ -860,7 +862,7 @@ contract ParallelCumulativeU256 {
 		mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 2));
 		mp.run();
 		require(cumulative.get() == 7);      
-		require(cumulative.peek() == 0);
+		require(cumulative.committedLength() == 0);
 
 		mp.clear();
 		mp.push(200000, address(this), abi.encodeWithSignature("add(uint256)", 50)); // 7 + 50 < 100 => 57
@@ -1056,21 +1058,22 @@ contract ParaRwConflictTest {
     uint256 counterCopy = 0;
     function call() public  { 
         Multiprocess mp = new Multiprocess(2); 
-        mp.push(50000, address(this), abi.encodeWithSignature("read()"));
-        mp.push(50000, address(this), abi.encodeWithSignature("write()", 11));
+        mp.push(500000, address(this), abi.encodeWithSignature("read()"));
+        mp.push(500000, address(this), abi.encodeWithSignature("write(uint256)", 11));
         mp.run();
         mp.clear();
-
-        require(counterCopy == 0);
+  
+        // The conflict detection will detect the conflict and revert one of the transactions    
+        require(counterCopy == 0); 
         require(counter == 0);
     }
 
     function read() public {
-        counterCopy = counter;
+        counterCopy = counter; // Counter read
     }
 
     function write(uint256 v) public  {
-        counter = v;
+        counter = v; // Counter write 
     }   
 } 
 

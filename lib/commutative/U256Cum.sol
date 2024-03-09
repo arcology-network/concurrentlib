@@ -26,7 +26,7 @@ contract U256Cumulative {
      * @notice Get the latest committed value of the cumulative variable.
      * @return The latest committed value of the cumulative variable.
      */
-    function peek() public returns(uint256) {  
+    function committedLength() public returns(uint256) {  
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
         return abi.decode(data, (uint256));
     }

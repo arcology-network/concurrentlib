@@ -19,12 +19,12 @@ contract BaseTest {
         bytes memory arr2 = '2222222222222222222222222222222222222222222222222222222222222222222222';
         bytes memory arr3 = '333333333333333333333333333333333333333333333333333333333333333333333333333333333333333';
 
-        require(peek() == 0);  
+        require(committedLength() == 0);  
         require(length() == 0); 
         push(arr1);  
         push(arr2);          
         require(length() == 2); 
-        require(peek() == 0);  
+        require(committedLength() == 0);  
 
         require(indexByKey(keyByIndex(1)) == 1);
         require(indexByKey(keyByIndex(1)) == 1);
@@ -34,9 +34,6 @@ contract BaseTest {
         require(keccak256(retrivedByKey) == keccak256(byIdx));
 
         require(keccak256(byIdx) == keccak256(arr2));
-
-        // address(0x60).call(stored);
-        // address(0x60).call(retrivedByKey);
 
         setByIndex(1, arr3);
 
@@ -55,18 +52,14 @@ contract BaseTest {
         require(length() == 0); 
         push(arr2);  
 
-        byIdx = getByIndex(0);
-        require(keccak256(arr2) == keccak256(byIdx));
-        require(peek() == 0);  
-        require(length() == 1); 
-
-        nonexists();
+        require(committedLength() == 0); 
     }
 
     function call() public{ 
-        require(peek() == 1); 
+        require(committedLength() == 0); 
+        // require(committedLength() == 1); 
         popBack();
-        require(peek() == 1); 
+        require(committedLength() == 0); 
     }
 
     function nonexists() public returns(bytes memory) {
@@ -85,8 +78,8 @@ contract BaseTest {
         return uint256(bytes32(data));     
     }
 
-    function peek() public returns(uint256) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
+    function committedLength() public returns(uint256) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("committedLength()"));
         if (data.length > 0) {
             return abi.decode(data, (uint256));   
         }

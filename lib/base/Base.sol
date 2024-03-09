@@ -43,7 +43,7 @@ contract Base {
      * @notice Retrieve the committed length of the container. This usually is the length at the previous block height.
      * @return The latest committed length of the container. This is function is thread-safe.
      */
-    function peek() public returns(uint256) {
+    function committedLength() public returns(uint256) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
         if (data.length > 0) {
             return abi.decode(data, (uint256));   
@@ -71,7 +71,7 @@ contract Base {
     }
 
     /**
-     * @notice Set the data at the given index in the container.
+     * @notice Set the data at the given index in the container. It equals to append if the index is the length of the container.
      * @param idx The index where the data should be stored.
      * @param encoded The data to be stored.
      * @return success true if the data was successfully updated, false otherwise.
