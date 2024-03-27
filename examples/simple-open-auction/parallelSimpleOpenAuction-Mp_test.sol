@@ -27,5 +27,8 @@ contract ParallelSimpleAuctionTest {
         require(!auction.withdraw(addr3));
         require(!auction.withdraw(addr4));
         require(!auction.withdraw(addr5));
+
+        (uint256 highestBid)=auction.auctionEnd(); 
+        require(highestBid == 141);
     }
 }
