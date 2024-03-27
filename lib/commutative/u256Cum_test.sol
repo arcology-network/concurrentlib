@@ -4,7 +4,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "./U256Cum.sol";
 import "../multiprocess/Multiprocess.sol";
 
-contract EmptyCumulativeU256Test {
+contract CumulativeU256InMappingTest {
     U256Cumulative[2] values;
     mapping(uint256 => U256Cumulative) map;
     constructor() {  

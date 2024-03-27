@@ -68,9 +68,9 @@ contract BallotTest {
         mp.clear(); // Clear the job queue.
 
         mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr1, 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0)); // This should fail because addr2 has delegated to addr1.
         mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr3, 1));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0)); // This should fail because addr4 has delegated to addr1.
         mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr5, 1));
         mp.run(); // Run the jobs in parallel.
         mp.rollback(); // Clear the job queue.

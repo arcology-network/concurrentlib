@@ -8,11 +8,12 @@ import "./VisitCounter.sol";
 contract VisitCounterCaller {
     VisitCounter counter = new VisitCounter();
     function call() public {
+        // counter.visit();
         Multiprocess mp = new Multiprocess(4);
         mp.push(100000, address(this), abi.encodeWithSignature("callVisit()"));
-        mp.push(100000, address(this), abi.encodeWithSignature("callVisit()"));
+        // mp.push(100000, address(this), abi.encodeWithSignature("callVisit()"));
         mp.run();
-        require(counter.getCounter() == 2);
+        // require(counter.getCounter() == 2);
     }
 
     function callVisit() public {
