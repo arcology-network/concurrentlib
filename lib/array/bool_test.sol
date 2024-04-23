@@ -35,5 +35,11 @@ contract BoolTest {
         require(boolContainer.pop());
         require(!boolContainer.pop());
         require(boolContainer.length() == 0);  
+        boolContainer.push(true);
+        boolContainer.push(true);
+    }
+
+    function check() public{
+        require(boolContainer.length() == 2);  
     }
 }

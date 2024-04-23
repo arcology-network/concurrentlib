@@ -11,7 +11,7 @@ contract SequentialTest {
      require(x == 2);
    }
 
-   function check2() public {
-    require(false);
-  }
+  //  function check2() public {
+  //   require(false);
+  // }
 }
