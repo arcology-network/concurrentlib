@@ -64,10 +64,15 @@ contract Base {
      * @notice Removes and returns the last element of the container.
      * @return The data of the removed element.
      */
+    // function popBack() public virtual returns(bytes memory) {
+    //     bytes memory v = getByIndex(length() - 1);
+    //     delByIndex(length() - 1);
+    //     return v;
+    // }
+
     function popBack() public virtual returns(bytes memory) {
-        bytes memory v = getByIndex(length() - 1);
-        delByIndex(length() - 1);
-        return v;
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("pop()"));
+        return data;
     }
 
     /**
