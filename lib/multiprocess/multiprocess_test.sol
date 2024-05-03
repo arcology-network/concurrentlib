@@ -465,6 +465,42 @@ contract MultiParaCumulativeU256 {
     }   
 }
 
+
+contract MultiParaCumulativeU256WithParent {
+    U256Cumulative cumulative = new U256Cumulative(0, 100);     
+    function call() public {
+        cumulative.add(1);
+
+        Multiprocess mp1 = new Multiprocess(1); // MultiParaCumulativeU256:nonce + 1
+        mp1.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 2));
+        mp1.run();
+        require(cumulative.get() == 3);
+
+        Multiprocess mp2 = new Multiprocess(1); // MultiParaCumulativeU256:nonce + 2
+        mp2.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 3));
+        mp2.run();
+        require(cumulative.get() == 6);  
+
+        Multiprocess mp3 = new Multiprocess(1); // MultiParaCumulativeU256:nonce + 3
+        mp3.push(400000, address(this), abi.encodeWithSignature("sub(uint256)", 2));
+        mp3.push(400000, address(this), abi.encodeWithSignature("sub(uint256)", 2));
+        mp3.push(400000, address(this), abi.encodeWithSignature("add(uint256)", 1));
+        mp3.run();  
+        require(cumulative.get() == 3);  
+
+        add(3);
+        require(cumulative.get() == 6);
+    }
+
+    function add(uint256 elem) public { 
+        cumulative.add(elem);
+    }  
+
+    function sub(uint256 elem) public { 
+        cumulative.sub(elem);
+    }   
+}
+
 contract MultiCumulativeU256ConcurrentOperation {
     U256Cumulative cumulative = new U256Cumulative(0, 100);     
     function call() public {
