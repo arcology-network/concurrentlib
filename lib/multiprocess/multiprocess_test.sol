@@ -6,6 +6,7 @@ import "../commutative/U256Cum.sol";
 import "../array/Bool.sol";
 import "../array/U256.sol";
 import "../commutative/U256Cum.sol";
+import "../map/StringUint256.sol";
 
 contract U256CumulativeParallelGetTest {
     U256Cumulative[] containers = new U256Cumulative[](2);
@@ -1161,5 +1162,62 @@ contract ParaCumU256SubTest{
 
     function sub(uint256 v) public {
         counter.sub(v);
+    }  
+} 
+
+contract ParaDeletions{
+    StringUint256Map addBoolLookup = new StringUint256Map();
+
+    constructor()  {
+        addBoolLookup.set("key 0", 100);
+        addBoolLookup.set("key 1", 200);
+        addBoolLookup.set("key 2", 300);
+    }
+
+    function call() public  { 
+        // require(addBoolLookup.valueAt(0) == 100);
+        // require(addBoolLookup.valueAt(1) == 200);
+        // require(addBoolLookup.valueAt(2) == 300);
+
+        del("key 0");
+        require(addBoolLookup.valueAt(0) == 0);
+        require(addBoolLookup.valueAt(1) == 200);
+        require(addBoolLookup.valueAt(2) == 300);
+
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(50000, address(this), abi.encodeWithSignature("del(string)", "key 0"));
+        mp.push(50000, address(this), abi.encodeWithSignature("del(string)", "key 2"));
+        mp.run();
+        mp.clear();
+        require(addBoolLookup.length() == 1);
+
+        mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 10", 21));
+        mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 23", 31));
+        mp.run();
+        mp.clear();
+        require(addBoolLookup.length() == 3);
+        require(addBoolLookup.get("key 10") == 21);
+        require(addBoolLookup.get("key 23") == 31);
+
+        // Insert a new key value pair and delete another, this should not cause any conflicts.
+        mp.push(50000, address(this), abi.encodeWithSignature("del(string)", "key 10"));
+        mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 23", 41));
+        mp.run();
+        mp.clear();      
+        require(addBoolLookup.length() == 2);
+
+        mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 10", 21)); // Added it back
+        mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 23", 41));
+        mp.run();
+        require(addBoolLookup.length() == 3);      
+        // require(addBoolLookup.valueAt(1) == 200);
+    }
+
+    function add(string memory key, uint256 v) public {
+        addBoolLookup.set(key,  v);
+    } 
+
+    function del(string memory key) public {
+        addBoolLookup.del(key);
     }  
 } 

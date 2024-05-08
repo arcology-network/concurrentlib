@@ -28,17 +28,25 @@ contract Base {
         (bool success,) = address(API).call(abi.encodeWithSignature("new()", true));
         require(success);
     }
+    
+    /**
+     * @notice Retrieve the length of the container, including nil values.
+     * @return The length of the container.
+     */
+    function fullLength() public returns(uint256) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("fullLength()"));
+        return abi.decode(data, (uint256));
+    }  
 
     /**
-     * @notice Retrieve the length of the container.
+     * @notice Retrieve the length of the container, excluding nil values.
      * @return The length of the container.
      */
     function length() public returns(uint256) {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("length()"));
-        require(success);
+        (, bytes memory data) = address(API).call(abi.encodeWithSignature("length()"));
         return abi.decode(data, (uint256));
     }
-
+    
     /**
      * @notice Retrieve the committed length of the container. This usually is the length at the previous block height.
      * @return The latest committed length of the container. This is function is thread-safe.
@@ -55,21 +63,26 @@ contract Base {
      * @notice Checks if a key exists in the the data structure. *
      * @param key The key to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
-     */
-    function exist(bytes memory key) public virtual returns(bool) {
-        return getByKey(key).length > 0;
+    */
+    function keyExists(bytes memory key) public  returns(bool) {
+        (bool success,) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
+        return success;
+    }
+
+    /**
+     * @notice Checks if the index exists in the the data structure.
+     * @param idx The index to check for existence.
+     * @return A boolean indicating whether the key exists in it or not.
+    */
+    function indexExists(uint256 idx) public returns(bool) {
+        (bool success,) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
+        return success;
     }
 
     /**
      * @notice Removes and returns the last element of the container.
      * @return The data of the removed element.
      */
-    // function popBack() public virtual returns(bytes memory) {
-    //     bytes memory v = getByIndex(length() - 1);
-    //     delByIndex(length() - 1);
-    //     return v;
-    // }
-
     function popBack() public virtual returns(bytes memory) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("pop()"));
         return data;

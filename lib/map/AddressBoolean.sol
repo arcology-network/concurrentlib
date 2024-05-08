@@ -18,8 +18,8 @@ contract AddressBooleanMap is Base {
      * @param k The address key to check for existence.
      * @return true if the key exists, false otherwise.
      */
-    function exist(address k) public virtual returns(bool) { 
-        return Base.exist(abi.encodePacked(k));
+    function exist(address k) public  returns(bool) { 
+        return Base.keyExists(abi.encodePacked(k));
     }
 
     /**

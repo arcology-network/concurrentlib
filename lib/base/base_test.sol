@@ -48,7 +48,8 @@ contract BaseTest {
         require(length() == 1); 
 
         // stored = getByIndex(length() - 1);
-        delByIndex(length() - 1);
+        // delByIndex(length() - 1);
+        popBack();
         require(length() == 0); 
         push(arr2);  
 
@@ -93,9 +94,8 @@ contract BaseTest {
     }
 
     function popBack() public virtual returns(bytes memory) { 
-        bytes memory v = getByIndex(length() - 1);
-        delByIndex(length() - 1);
-        return v;
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("pop()"));
+        return data;
     }
 
     function push(bytes memory elem) public {
@@ -110,13 +110,13 @@ contract BaseTest {
         address(API).call(abi.encodeWithSignature("setKey(bytes,bytes)", key, elem));
     }
 
-    function delByIndex(uint256 idx) public { 
-        address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));     
-    }
+    // function delByIndex(uint256 idx) public { 
+    //     address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));     
+    // }
 
-    function delByIndex(bytes memory key) public {
-        address(API).call(abi.encodeWithSignature("delIndex(bytes)", key));
-    }
+    // function delByIndex(bytes memory key) public {
+    //     address(API).call(abi.encodeWithSignature("delIndex(bytes)", key));
+    // }
 
     function getByIndex(uint256 idx) public virtual returns(bytes memory) {
         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));

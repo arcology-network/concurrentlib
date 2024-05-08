@@ -37,6 +37,8 @@ contract BoolTest {
         require(boolContainer.length() == 0);  
         boolContainer.push(true);
         boolContainer.push(true);
+
+        require(boolContainer.fullLength() == 6);  
     }
 
     function check() public{
