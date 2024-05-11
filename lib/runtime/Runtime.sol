@@ -44,13 +44,31 @@ library Runtime {
         return address(0xa0).call(abi.encodeWithSignature(func, data)); 
     }
 
+       /**
+     * @notice The funtion instructs the scheduler to avoid executing the specified functions with itself in parallel.
+     * @param funcs The list of function signatures to avoid executing in parallel.
+     */
+    function sequentialize(bytes4[] memory funcs) internal returns(bool) {
+        (bool success,) = address(0xa0).call(abi.encodeWithSignature("sequentialize(bytes4[])", funcs));
+        return success;
+    }
+
     /**
      * @notice The funtion instructs the scheduler to avoid executing the specified functions with itself in parallel.
-     * @param funcs The list of function signatures and their contract addresses to avoid executing in parallel.
+     * @param others The list of function signatures and their contract address to avoid executing in parallel.
      */
-    // function avoid(string[] memory funcs) internal {
-    //     address(0xa0).call(abi.encodeWithSignature("avoid(string[])", funcs));
-    // }
+    function sequentialize(bytes4 func, address addr, bytes4[] memory others) internal returns(bool) {
+        (bool success,) =  address(0xa0).call(abi.encodeWithSignature("sequentialize(bytes4,address,bytes4[])", func, addr, others));
+        return success;
+    }
+
+    /**
+     * @notice All the functions in the contract will be executed sequentially except the functions in the list.
+     *  @param others The list of function signatures and their contract address that can be executed in parallel.
+    */
+    function parallelize(bytes4 func, address addr, bytes4[] memory others) internal returns(bool, bytes memory) {
+        return address(0xa0).call(abi.encodeWithSignature("parallelize(bytes4,address,bytes4[])", func, addr, others));
+    }
 
     /**
      * @notice Get the number of concurrent instances of the specified function.

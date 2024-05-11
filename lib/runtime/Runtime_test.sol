@@ -36,3 +36,35 @@ contract DeferredTest  {
         }
     }
 }
+
+contract SequentializeAllTest  {
+    address addr1 = 0x1111111110123456789012345678901234567890;
+    address addr2 = 0x2222222220123456789012345678901234567890;
+    address addr3 = 0x3333337890123456789012345678901234567890;
+    address addr4 = 0x4444444890123456789012345678901234567890;
+
+    constructor () {
+        bytes4[] memory funcs = new bytes4[](2);
+        funcs[0] = bytes4(keccak256("init()"));
+        funcs[1] = bytes4(keccak256("func1()"));
+        require(Runtime.sequentialize(funcs));
+    }
+}
+
+contract SequentializeTest  {
+    address addr1 = 0x1111111110123456789012345678901234567890;
+    address addr2 = 0x2222222220123456789012345678901234567890;
+    address addr3 = 0x3333337890123456789012345678901234567890;
+    address addr4 = 0x4444444890123456789012345678901234567890;
+
+    constructor () {
+        bytes4[] memory otherFuncs = new bytes4[](3);
+        otherFuncs[0] = 0x01010101;
+        otherFuncs[1] = 0x02020202;   
+        otherFuncs[2] = 0x03030303;       
+        require(Runtime.sequentialize(bytes4(keccak256("init()")), addr1, otherFuncs));
+    }
+
+    function init() public {}
+    function func1() public {}
+}
