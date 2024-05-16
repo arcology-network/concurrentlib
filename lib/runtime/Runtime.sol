@@ -44,15 +44,6 @@ library Runtime {
         return address(0xa0).call(abi.encodeWithSignature(func, data)); 
     }
 
-       /**
-     * @notice The funtion instructs the scheduler to avoid executing the specified functions with itself in parallel.
-     * @param funcs The list of function signatures to avoid executing in parallel.
-     */
-    function sequentialize(bytes4[] memory funcs) internal returns(bool) {
-        (bool success,) = address(0xa0).call(abi.encodeWithSignature("sequentialize(bytes4[])", funcs));
-        return success;
-    }
-
     /**
      * @notice The funtion instructs the scheduler to avoid executing the specified functions with itself in parallel.
      * @param others The list of function signatures and their contract address to avoid executing in parallel.
@@ -66,16 +57,16 @@ library Runtime {
      * @notice All the functions in the contract will be executed sequentially except the functions in the list.
      *  @param others The list of function signatures and their contract address that can be executed in parallel.
     */
-    function parallelize(bytes4 func, address addr, bytes4[] memory others) internal returns(bool, bytes memory) {
-        return address(0xa0).call(abi.encodeWithSignature("parallelize(bytes4,address,bytes4[])", func, addr, others));
+    function parallelize(bytes4 func, address addr, bytes4[] memory others) internal returns(bool) {
+        (bool success,) = address(0xa0).call(abi.encodeWithSignature("parallelize(bytes4,address,bytes4[])", func, addr, others));
+        return success;
     }
 
     /**
      * @notice Get the number of concurrent instances of the specified function.
      * @return The number of concurrent instances.
      */
-    function instances(address addr, string memory func) internal returns(uint256) {
-        bytes4 funSign = bytes4(keccak256(bytes(func)));
+    function instances(address addr, bytes4 funSign) internal returns(uint256) {
         (,bytes memory data) = address(0xa0).call(abi.encodeWithSignature("instances(address,bytes4)", addr, funSign));
         return abi.decode(data, (uint256));  
     }
@@ -84,8 +75,7 @@ library Runtime {
      * @notice Inform the scheduler that a function needs to schedule a deferred call. This function can only be called once in the constructor.
      * @return The number of concurrent instances.
      */
-    function deferred(string memory func) internal returns(bool) {
-        bytes4 funSign = bytes4(keccak256(bytes(func)));
+    function deferred(bytes4 funSign) internal returns(bool) {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("deferred(bytes4)", funSign));
         return successful;  
     }
