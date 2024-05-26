@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 import "./Bool.sol";
 
@@ -35,5 +35,13 @@ contract BoolTest {
         require(boolContainer.pop());
         require(!boolContainer.pop());
         require(boolContainer.length() == 0);  
+        boolContainer.push(true);
+        boolContainer.push(true);
+
+        require(boolContainer.fullLength() == 6);  
+    }
+
+    function check() public{
+        require(boolContainer.length() == 2);  
     }
 }

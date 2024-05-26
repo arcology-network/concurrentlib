@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 import "../../lib/multiprocess/Multiprocess.sol";
 import "./ParallelVote-Mp.sol";
@@ -46,7 +46,7 @@ contract BallotTest {
         require(ballot.winningProposal() == 0);
         require(ballot.winnerName() == keccak256("Alice"));
 
-        // // Check the ballot count for each proposal.
+        // Check the ballot count for each proposal.
         require(ballot.checkBallot(0) == 3);
         require(ballot.checkBallot(1) == 2);
 
@@ -68,9 +68,9 @@ contract BallotTest {
         mp.clear(); // Clear the job queue.
 
         mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr1, 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0)); // This should FAIL because addr2 has delegated to addr1.
         mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr3, 1));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0));
+        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0)); // This should fail because addr4 has delegated to addr1.
         mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr5, 1));
         mp.run(); // Run the jobs in parallel.
         mp.rollback(); // Clear the job queue.
