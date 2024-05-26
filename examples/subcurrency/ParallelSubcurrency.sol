@@ -4,7 +4,7 @@
 // NO changes were made to the original contract. This is natually a parallel contract.
 
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 contract Coin {
     // The keyword "public" makes variables

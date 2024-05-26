@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 import "./Storage.sol";
 import "../array/Bool.sol";
@@ -19,7 +19,7 @@ contract ResettableDeployer {
     }
 }
 
-contract TestResettable is Storage {
+contract TestResettable {
     uint256[] arr;
     uint256 [2] public array; 
     mapping (uint256 => bool) hashmap;
@@ -45,7 +45,7 @@ contract TestResettable is Storage {
     function afterCheck() public {
         require(array[0] == 10);
         require(array[1] == 11);   
-        rollback();  
+        Storage.rollback();  
 
         require(array[0] == 10);
         require(array[1] == 11);   
@@ -55,7 +55,7 @@ contract TestResettable is Storage {
    
         require(array[0] == 100);
         require(array[1] == 111);
-        rollback();  
+        Storage.rollback();  
 
         require(array[0] == 10);
         require(array[1] == 11);  

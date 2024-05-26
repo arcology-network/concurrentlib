@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 import "./AddressBoolean.sol";
 import "../multiprocess/Multiprocess.sol";
@@ -22,12 +22,16 @@ contract AddressBooleanMapTest {
         require(map.exist(addr1)); 
         require(map.exist(addr2)); 
         require(map.exist(addr3)); 
-        require(!map.exist(addr4)); 
+        require(!map.exist(addr4));
 
         require(map.get(addr1) == true); 
         require(map.get(addr2) == true); 
         require(map.get(addr3) == true); 
-        require(!map.exist(addr4)); 
+        require(map.indexExists(2));
+        require(!map.indexExists(3));
+
+        // require(!map.indexExists(addr4));
+        // require(!map.indexExists(addr4));  
 
         require(map.keyAt(0) == addr1);
         require(map.keyAt(1) == addr2);

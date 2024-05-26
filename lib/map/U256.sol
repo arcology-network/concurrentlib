@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 import "../base/Base.sol";
 
@@ -18,8 +18,8 @@ contract U256Map is Base {
      * @param k The uint256 key to check for existence.
      * @return true if the key exists, false otherwise.
      */    
-    function exist(uint256 k) public virtual returns(bool) { 
-        return Base.exist(abi.encodePacked(k)); 
+    function exist(uint256 k) public returns(bool) { 
+        return Base.keyExists(abi.encodePacked(k)); 
     }
 
     /**

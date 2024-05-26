@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 import "../../lib/multiprocess/Multiprocess.sol";
 import "./ParallelSimpleOpenAuction-Mp.sol";
@@ -27,5 +27,8 @@ contract ParallelSimpleAuctionTest {
         require(!auction.withdraw(addr3));
         require(!auction.withdraw(addr4));
         require(!auction.withdraw(addr5));
+
+        (uint256 highestBid)=auction.auctionEnd(); 
+        require(highestBid == 141);
     }
 }

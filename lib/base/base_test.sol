@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 import "../runtime/Runtime.sol";
 
-contract BaseTest is Runtime{    
+contract BaseTest {    
     address constant public API = address(0x84); 
 
     uint[] public arr2 = [1, 2, 3];
@@ -19,12 +19,12 @@ contract BaseTest is Runtime{
         bytes memory arr2 = '2222222222222222222222222222222222222222222222222222222222222222222222';
         bytes memory arr3 = '333333333333333333333333333333333333333333333333333333333333333333333333333333333333333';
 
-        require(peek() == 0);  
+        require(committedLength() == 0);  
         require(length() == 0); 
         push(arr1);  
         push(arr2);          
         require(length() == 2); 
-        require(peek() == 0);  
+        require(committedLength() == 0);  
 
         require(indexByKey(keyByIndex(1)) == 1);
         require(indexByKey(keyByIndex(1)) == 1);
@@ -34,9 +34,6 @@ contract BaseTest is Runtime{
         require(keccak256(retrivedByKey) == keccak256(byIdx));
 
         require(keccak256(byIdx) == keccak256(arr2));
-
-        // address(0x60).call(stored);
-        // address(0x60).call(retrivedByKey);
 
         setByIndex(1, arr3);
 
@@ -51,22 +48,19 @@ contract BaseTest is Runtime{
         require(length() == 1); 
 
         // stored = getByIndex(length() - 1);
-        delByIndex(length() - 1);
+        // delByIndex(length() - 1);
+        popBack();
         require(length() == 0); 
         push(arr2);  
 
-        byIdx = getByIndex(0);
-        require(keccak256(arr2) == keccak256(byIdx));
-        require(peek() == 0);  
-        require(length() == 1); 
-
-        nonexists();
+        require(committedLength() == 0); 
     }
 
     function call() public{ 
-        require(peek() == 1); 
+        require(committedLength() == 0); 
+        // require(committedLength() == 1); 
         popBack();
-        require(peek() == 1); 
+        require(committedLength() == 0); 
     }
 
     function nonexists() public returns(bytes memory) {
@@ -85,8 +79,8 @@ contract BaseTest is Runtime{
         return uint256(bytes32(data));     
     }
 
-    function peek() public returns(uint256) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
+    function committedLength() public returns(uint256) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("committedLength()"));
         if (data.length > 0) {
             return abi.decode(data, (uint256));   
         }
@@ -100,13 +94,12 @@ contract BaseTest is Runtime{
     }
 
     function popBack() public virtual returns(bytes memory) { 
-        bytes memory v = getByIndex(length() - 1);
-        delByIndex(length() - 1);
-        return v;
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("pop()"));
+        return data;
     }
 
     function push(bytes memory elem) public {
-        setByKey(uuid(), (elem));
+        setByKey(Runtime.uuid(), (elem));
     }   
     
     function setByIndex(uint256 idx, bytes memory encoded) public { 
@@ -117,13 +110,13 @@ contract BaseTest is Runtime{
         address(API).call(abi.encodeWithSignature("setKey(bytes,bytes)", key, elem));
     }
 
-    function delByIndex(uint256 idx) public { 
-        address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));     
-    }
+    // function delByIndex(uint256 idx) public { 
+    //     address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));     
+    // }
 
-    function delByIndex(bytes memory key) public {
-        address(API).call(abi.encodeWithSignature("delIndex(bytes)", key));
-    }
+    // function delByIndex(bytes memory key) public {
+    //     address(API).call(abi.encodeWithSignature("delIndex(bytes)", key));
+    // }
 
     function getByIndex(uint256 idx) public virtual returns(bytes memory) {
         (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));

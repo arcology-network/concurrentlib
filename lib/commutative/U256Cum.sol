@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 /**
  * @author Arcology Network
@@ -22,15 +22,6 @@ contract U256Cumulative {
         assert(success);
     }
 
-    /**
-     * @notice Get the latest committed value of the cumulative variable.
-     * @return The latest committed value of the cumulative variable.
-     */
-    function peek() public returns(uint256) {  
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
-        return abi.decode(data, (uint256));
-    }
-    
     /**
      * @notice Get the current value of the cumulative variable.
      * @return The current value of the cumulative variable.

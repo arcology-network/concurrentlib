@@ -12,7 +12,7 @@
 // 5. Added an extrac parameter to the vote function to allow the voter's address to be passed in. This is for multi-processor testing.
 
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >= 0.8.0 < 0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
 import "../../lib/commutative/U256Cum.sol";
 
