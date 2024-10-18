@@ -48,7 +48,7 @@ contract Multiprocess is Base(Base.Type.Bytes) {
      * @param funcCall The encoded function call data.
      */
     function push(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
-        setByKey(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
+        _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
     }
  
     /**
@@ -56,7 +56,7 @@ contract Multiprocess is Base(Base.Type.Bytes) {
      * @return The popped executable message.
      */
     function pop() public virtual returns(bytes memory) { 
-        return abi.decode(Base.popBack(), (bytes));  
+        return abi.decode(Base._pop(), (bytes));  
     }
 
     /**
@@ -65,7 +65,7 @@ contract Multiprocess is Base(Base.Type.Bytes) {
      * @return The executable message at the specified index.
      */
     function get(uint256 idx) public virtual returns(bytes memory) {
-        return abi.decode(Base.getByIndex(idx), (bytes));  
+        return abi.decode(Base._get(idx), (bytes));  
     }
 
     /**
@@ -74,7 +74,7 @@ contract Multiprocess is Base(Base.Type.Bytes) {
      * @param elem The executable message data to be stored at the specified index.
      */
     function set(uint256 idx, bytes memory elem) public { 
-        Base.setByIndex(idx, abi.encode(elem));   
+        Base._set(idx, abi.encode(elem));   
     }
 
     /**

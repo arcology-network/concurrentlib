@@ -27,11 +27,11 @@ contract AddressBooleanMapTest {
         require(map.get(addr1) == true); 
         require(map.get(addr2) == true); 
         require(map.get(addr3) == true); 
-        require(map.indexExists(2));
-        require(!map.indexExists(3));
+        require(map._exists(2));
+        require(!map._exists(3));
 
-        // require(!map.indexExists(addr4));
-        // require(!map.indexExists(addr4));  
+        // require(!map._exists(addr4));
+        // require(!map._exists(addr4));  
 
         require(map.keyAt(0) == addr1);
         require(map.keyAt(1) == addr2);

@@ -19,7 +19,7 @@ contract AddressUint256Map is Base {
      * @return true if the key exists, false otherwise.
      */
     function exist(address k) public virtual returns(bool) { 
-        return Base.keyExists(abi.encodePacked(k));
+        return Base._exists(abi.encodePacked(k));
     }
 
     /**
@@ -28,7 +28,7 @@ contract AddressUint256Map is Base {
      * @param value The address value associated with the key.
      */
     function set(address k, uint256 value) public { 
-        Base.setByKey(abi.encodePacked(k), abi.encodePacked(value));       
+        Base._set(abi.encodePacked(k), abi.encodePacked(value));       
     }
 
     /**
@@ -37,7 +37,7 @@ contract AddressUint256Map is Base {
      * @return value The address value associated with the key.
      */
     function get(address k) public virtual returns(uint256 value){ 
-         return uint256(bytes32(Base.getByKey(abi.encodePacked(k))));     
+         return uint256(bytes32(Base._get(abi.encodePacked(k))));     
     }    
 
     /**
@@ -55,7 +55,7 @@ contract AddressUint256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual returns(uint256 value){ 
-        return uint256(bytes32(Base.getByIndex(idx)));  
+        return uint256(bytes32(Base._get(idx)));  
     }    
 
     /**
@@ -63,7 +63,7 @@ contract AddressUint256Map is Base {
      * @param k The address key to delete.
      */
     function del(address k) public { 
-        Base.delByKey(abi.encodePacked(k));  
+        Base._del(abi.encodePacked(k));  
     }
 
     /**

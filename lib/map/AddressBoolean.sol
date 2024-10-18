@@ -19,7 +19,7 @@ contract AddressBooleanMap is Base {
      * @return true if the key exists, false otherwise.
      */
     function exist(address k) public  returns(bool) { 
-        return Base.keyExists(abi.encodePacked(k));
+        return Base._exists(abi.encodePacked(k));
     }
 
     /**
@@ -28,7 +28,7 @@ contract AddressBooleanMap is Base {
      * @param value The boolean value associated with the key.
      */
     function set(address k, bool value) public { 
-        Base.setByKey((abi.encodePacked(k)), abi.encode(value));       
+        Base._set((abi.encodePacked(k)), abi.encode(value));       
     }
 
     /**
@@ -37,7 +37,7 @@ contract AddressBooleanMap is Base {
      * @return The boolean value associated with the key.
      */
     function get(address k) public virtual returns(bool){ 
-        return abi.decode(Base.getByKey(abi.encodePacked(k)), (bool));  
+        return abi.decode(Base._get(abi.encodePacked(k)), (bool));  
     }   
 
     /**
@@ -55,7 +55,7 @@ contract AddressBooleanMap is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual returns(bool){ 
-        return abi.decode(Base.getByIndex(idx), (bool));  
+        return abi.decode(Base._get(idx), (bool));  
     }    
 
     /**
@@ -63,6 +63,6 @@ contract AddressBooleanMap is Base {
      * @param k The address key to delete.
      */
     function del(address k) public { 
-        Base.delByKey((abi.encodePacked(k)));  
+        Base._del((abi.encodePacked(k)));  
     }
 }

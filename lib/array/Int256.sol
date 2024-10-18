@@ -18,7 +18,7 @@ contract Int256 is Base {
      * @param elem The int256 data element to add to the array.
      */
     function push(int256 elem) public virtual{ 
-        Base.setByKey(uuid(), abi.encodePacked(elem));
+        Base._set(uuid(), abi.encodePacked(elem));
     }    
 
     /**
@@ -26,7 +26,7 @@ contract Int256 is Base {
      * @return The last int256 data element from the array.
      */
     function pop() public virtual returns(int256) { 
-        return abi.decode(Base.popBack(), (int256));  
+        return abi.decode(Base._pop(), (int256));  
     }
 
     /**
@@ -35,7 +35,7 @@ contract Int256 is Base {
      * @return The int256 data element stored at the given index.
      */
     function get(uint256 idx) public virtual returns(int256)  {
-        return abi.decode(Base.getByIndex(idx), (int256));  
+        return abi.decode(Base._get(idx), (int256));  
     }
 
     /**
@@ -44,7 +44,7 @@ contract Int256 is Base {
      * @param elem The int256 data element to be stored at the specified index.
      */
     function set(uint256 idx, int256 elem) public { 
-        Base.setByIndex(idx, abi.encodePacked(elem));  
+        Base._set(idx, abi.encodePacked(elem));  
     }
 
     /**

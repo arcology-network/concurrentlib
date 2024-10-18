@@ -17,7 +17,7 @@ contract Bytes is Base {
      * @param elem The bytes data element to add to the array.
      */
     function push(bytes memory elem) public virtual { 
-        Base.setByKey(uuid(), (elem));
+        Base._set(uuid(), (elem));
     }    
 
     /**
@@ -25,7 +25,7 @@ contract Bytes is Base {
      * @return The last bytes data element from the array.
      */
     function pop() public virtual returns(bytes memory) { 
-        return Base.popBack();  
+        return Base._pop();  
     }
 
     /**
@@ -34,7 +34,7 @@ contract Bytes is Base {
      * @return The bytes data element stored at the given index.
      */
     function get(uint256 idx) public virtual returns(bytes memory)  { 
-        return Base.getByIndex(idx);  
+        return Base._get(idx);  
     }
 
     /**
@@ -43,7 +43,7 @@ contract Bytes is Base {
      * @param elem The bytes data element to be stored at the specified index.
      */
     function set(uint256 idx, bytes memory elem) public { 
-        Base.setByIndex(idx, (elem));
+        Base._set(idx, (elem));
     }
     
     /**

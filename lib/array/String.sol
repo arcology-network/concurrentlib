@@ -17,7 +17,7 @@ contract String is Base {
      * @param elem The string data element to add to the array.
      */
     function push(string memory elem) public virtual{
-         Base.setByKey(uuid(), bytes(elem));
+         Base._set(uuid(), bytes(elem));
     }    
 
     /**
@@ -25,7 +25,7 @@ contract String is Base {
      * @return The last string data element from the array.
      */
     function pop() public virtual returns(string memory) {
-        return string(Base.popBack());
+        return string(Base._pop());
     }
 
     /**
@@ -34,7 +34,7 @@ contract String is Base {
      * @return The string data element stored at the given index.
      */
     function get(uint256 idx) public virtual returns(string memory)  {
-        return string(Base.getByIndex(idx));
+        return string(Base._get(idx));
     }
 
     /**
@@ -43,7 +43,7 @@ contract String is Base {
      * @param elem The string data element to be stored at the specified index.
      */
     function set(uint256 idx, string memory elem) public { 
-        Base.setByIndex(idx, bytes(elem));
+        Base._set(idx, bytes(elem));
     }
     
     /**

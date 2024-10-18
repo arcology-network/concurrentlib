@@ -17,7 +17,7 @@ contract Address is Base {
      * @param elem The address element to add to the array.
      */
     function push(address elem) public virtual{ 
-        Base.setByKey(uuid(), abi.encodePacked(elem));
+        Base._set(uuid(), abi.encodePacked(elem));
     }    
 
    /**
@@ -25,7 +25,7 @@ contract Address is Base {
      * @return The last address element from the array.
      */
     function pop() public virtual returns(address) { 
-        return address(uint160(bytes20(Base.popBack())));
+        return address(uint160(bytes20(Base._pop())));
     }
 
     /**
@@ -34,7 +34,7 @@ contract Address is Base {
      * @return The address element stored at the given index.
      */
     function get(uint256 idx) public virtual returns(address)  {
-        return address(uint160(bytes20(Base.getByIndex(idx))));
+        return address(uint160(bytes20(Base._get(idx))));
     }
 
     /**
@@ -43,7 +43,7 @@ contract Address is Base {
      * @param elem The address element to be stored at the specified index.
      */
     function set(uint256 idx, address elem) public { 
-        Base.setByIndex(idx, abi.encodePacked(elem));
+        Base._set(idx, abi.encodePacked(elem));
     }
 
     /**

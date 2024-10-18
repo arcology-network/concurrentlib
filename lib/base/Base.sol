@@ -66,7 +66,7 @@ contract Base {
      * @param key The key to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function keyExists(bytes memory key) public  returns(bool) {
+    function _exists(bytes memory key) public  returns(bool) {
         (bool success,) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
         return success;
     }
@@ -76,7 +76,7 @@ contract Base {
      * @param idx The index to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function indexExists(uint256 idx) public returns(bool) {
+    function _exists(uint256 idx) public returns(bool) {
         (bool success,) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
         return success;
     }
@@ -85,20 +85,9 @@ contract Base {
      * @notice Removes and returns the last element of the container.
      * @return The data of the removed element.
      */
-    function popBack() public virtual returns(bytes memory) {
+    function _pop() public virtual returns(bytes memory) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("pop()"));
         return data;
-    }
-
-    /**
-     * @notice Set the data at the given index in the container. It equals to append if the index is the length of the container.
-     * @param idx The index where the data should be stored.
-     * @param encoded The data to be stored.
-     * @return success true if the data was successfully updated, false otherwise.
-     */
-    function setByIndex(uint256 idx, bytes memory encoded) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("setIndex(uint256,bytes)", idx, encoded));   
-        return success;     
     }
 
     /**
@@ -120,6 +109,17 @@ contract Base {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("indexByKey(bytes)", key));   
         return abi.decode(data,(uint256));     
     }
+    
+    /**
+     * @notice Set the data at the given index in the container. It equals to append if the index is the length of the container.
+     * @param idx The index where the data should be stored.
+     * @param encoded The data to be stored.
+     * @return success true if the data was successfully updated, false otherwise.
+     */
+    function _set(uint256 idx, bytes memory encoded) public returns(bool) {
+        (bool success,) = address(API).call(abi.encodeWithSignature("setIndex(uint256,bytes)", idx, encoded));   
+        return success;     
+    }
 
     /**
      * @notice Set the data associated with the given key in the container.
@@ -127,7 +127,7 @@ contract Base {
      * @param elem The data to be stored.
      * @return success true if the data was successfully updated, false otherwise.
      */
-    function setByKey(bytes memory key, bytes memory elem) public returns(bool) {
+    function _set(bytes memory key, bytes memory elem) public returns(bool) {
         (bool success,) = address(API).call(abi.encodeWithSignature("setKey(bytes,bytes)", key, elem));
         return success;   
     }
@@ -137,7 +137,7 @@ contract Base {
      * @param idx The index of the data to be deleted.
      * @return success true if the data was successfully deleted, false otherwise.
      */
-    function delByIndex(uint256 idx) public returns(bool) {
+    function _del(uint256 idx) public returns(bool) {
         (bool success,) = address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));  
         return success;   
     }
@@ -147,7 +147,7 @@ contract Base {
      * @param key The key associated with the data to be deleted.
      * @return success true if the data was successfully deleted, false otherwise.
      */
-    function delByKey(bytes memory key) public returns(bool) {
+    function _del(bytes memory key) public returns(bool) {
        (bool success,) = address(API).call(abi.encodeWithSignature("delKey(bytes)", key));
        return success;
     }
@@ -157,7 +157,7 @@ contract Base {
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
      */
-    function getByIndex(uint256 idx) public virtual returns(bytes memory) {
+    function _get(uint256 idx) public virtual returns(bytes memory) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
         return data;
     }
@@ -167,7 +167,7 @@ contract Base {
      * @param key The key associated with the data to retrieve.
      * @return The data stored at the specified key.
      */
-    function getByKey(bytes memory key) public returns(bytes memory)  {
+    function _get(bytes memory key) public returns(bytes memory)  {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
         return data;
     }

@@ -19,7 +19,7 @@ contract U256Map is Base {
      * @return true if the key exists, false otherwise.
      */    
     function exist(uint256 k) public returns(bool) { 
-        return Base.keyExists(abi.encodePacked(k)); 
+        return Base._exists(abi.encodePacked(k)); 
     }
 
     /**
@@ -28,7 +28,7 @@ contract U256Map is Base {
      * @param value The uint256 value associated with the key.
      */
     function set(uint256 key, uint256 value) public { 
-        Base.setByKey(abi.encodePacked(key), abi.encodePacked(value));       
+        Base._set(abi.encodePacked(key), abi.encodePacked(value));       
     }
 
     /**
@@ -37,7 +37,7 @@ contract U256Map is Base {
      * @return value The uint256 value associated with the key.
      */
     function get(uint256 key) public virtual returns(uint256 value){    
-        return uint256(bytes32(Base.getByKey(abi.encodePacked(key))));
+        return uint256(bytes32(Base._get(abi.encodePacked(key))));
     }    
 
     /**
@@ -55,7 +55,7 @@ contract U256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
      */
     function valueAt(uint256 idx) public virtual returns(uint256 value){ 
-        return  uint256(bytes32(Base.getByIndex(idx)));
+        return  uint256(bytes32(Base._get(idx)));
     }  
 
     /**
@@ -63,7 +63,7 @@ contract U256Map is Base {
      * @param key The uint256 key to delete.
      */
     function del(uint256 key) public { 
-        Base.delByKey((abi.encodePacked(key)));  
+        Base._del((abi.encodePacked(key)));  
     }
 
     /**

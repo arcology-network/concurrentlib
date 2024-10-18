@@ -17,7 +17,7 @@ contract Bool is Base {
      * @param elem The boolean element to add to the array.
      */
     function push(bool elem) public virtual { 
-        Base.setByKey(uuid(), abi.encode(elem));
+        Base._set(uuid(), abi.encode(elem));
     }    
 
     /**
@@ -25,7 +25,7 @@ contract Bool is Base {
      * @return The last boolean element from the array.
      */
     function pop() public virtual returns(bool) { 
-        return abi.decode(Base.popBack(), (bool));  
+        return abi.decode(Base._pop(), (bool));  
     }
 
     /**
@@ -34,7 +34,7 @@ contract Bool is Base {
      * @return The boolean element stored at the given index.
      */
     function get(uint256 idx) public virtual  returns(bool)  {
-        return abi.decode(Base.getByIndex(idx), (bool));  
+        return abi.decode(Base._get(idx), (bool));  
     }
 
     /**
@@ -43,7 +43,7 @@ contract Bool is Base {
      * @param elem The boolean element to be stored at the specified index.
      */
     function set(uint256 idx, bool elem) public { 
-        Base.setByIndex(idx, abi.encode(elem));    
+        Base._set(idx, abi.encode(elem));    
     }
 
     /**

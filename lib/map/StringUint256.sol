@@ -19,7 +19,7 @@ contract StringUint256Map is Base {
      * @return true if the key exists, false otherwise.
      */
     function exist(string memory k) public virtual returns(bool) { 
-        return Base.keyExists(bytes(k));
+        return Base._exists(bytes(k));
     }
 
     /**
@@ -28,7 +28,7 @@ contract StringUint256Map is Base {
      * @param value The string value associated with the key.
      */
     function set(string memory k, uint256 value) public { 
-        Base.setByKey(bytes(k), abi.encodePacked(value));       
+        Base._set(bytes(k), abi.encodePacked(value));       
     }
 
     /**
@@ -37,7 +37,7 @@ contract StringUint256Map is Base {
      * @return value The string value associated with the key.
      */
     function get(string memory k) public virtual returns(uint256 value){ 
-         return uint256(bytes32(Base.getByKey(bytes(k))));     
+         return uint256(bytes32(Base._get(bytes(k))));     
     }    
 
     /**
@@ -55,7 +55,7 @@ contract StringUint256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual returns(uint256 value){ 
-        return uint256(bytes32(Base.getByIndex(idx)));  
+        return uint256(bytes32(Base._get(idx)));  
     }    
 
     /**
@@ -63,7 +63,7 @@ contract StringUint256Map is Base {
      * @param k The string key to delete.
      */
     function del(string memory k) public { 
-        Base.delByKey(bytes(k));  
+        Base._del(bytes(k));  
     }
 
     /**

@@ -17,7 +17,7 @@ contract Bytes32 is Base {
      * @param elem The bytes32 data element to add to the array.
      */
     function push(bytes32 elem) public virtual{
-        Base.setByKey(uuid(), abi.encodePacked(elem));
+        Base._set(uuid(), abi.encodePacked(elem));
     }    
 
     /**
@@ -25,7 +25,7 @@ contract Bytes32 is Base {
      * @return The last bytes32 data element from the array.
      */
     function pop() public virtual returns(bytes32) {
-        return bytes32(Base.popBack());
+        return bytes32(Base._pop());
     }
 
     /**
@@ -34,7 +34,7 @@ contract Bytes32 is Base {
      * @return The bytes32 data element stored at the given index.
      */
     function get(uint256 idx) public virtual returns(bytes32)  {
-        return bytes32(Base.getByIndex(idx));
+        return bytes32(Base._get(idx));
     }
 
     /**
@@ -43,7 +43,7 @@ contract Bytes32 is Base {
      * @param elem The bytes32 data element to be stored at the specified index.
      */
     function set(uint256 idx, bytes32 elem) public { 
-        Base.setByIndex(idx, abi.encodePacked(elem));
+        Base._set(idx, abi.encodePacked(elem));
     }
 
     /**
