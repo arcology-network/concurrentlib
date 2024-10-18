@@ -10,7 +10,7 @@ import "../base/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for bytes storage.
  */
 contract Bytes is Base {
-    constructor() {}
+    constructor() Base(Base.Type.Bytes) {}
 
     /**
      * @notice Add a bytes data element to the concurrent array.

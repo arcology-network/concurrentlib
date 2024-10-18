@@ -20,12 +20,14 @@ import "../runtime/Runtime.sol";
  */
 contract Base {
     address internal API = address(0x84);
-
+    enum  Type { Bytes, CumulativeU256 } 
+    
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor () {
-        (bool success,) = address(API).call(abi.encodeWithSignature("new()", true));
+    constructor (Type typeID) {
+        (bool success,) = address(API).call(abi.encodeWithSignature(
+            "new(uint8,bytes,bytes)", uint8(typeID), new bytes(0), new bytes(0)));
         require(success);
     }
     

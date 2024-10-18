@@ -11,7 +11,7 @@ import "../base/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract U256Map is Base { 
-    constructor() {}
+    constructor() Base(Base.Type.Bytes) {}
 
     /**
      * @notice Check if a given key exists in the map.

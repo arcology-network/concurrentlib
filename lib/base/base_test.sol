@@ -11,7 +11,7 @@ contract BaseTest {
     // event logMsg(string message);
 
     constructor() {
-        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("new()"));       
+        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("new(uint8,bytes,bytes)"));       
         require(success, "Bytes.New() Failed");
         id = data;
  

@@ -11,7 +11,7 @@ import "../base/Base.sol";
  *      It serves as a container for executable messages, enabling parallel processing
  *      similar to Python's `multiprocessing` library.
  */
-contract Multiprocess is Base {
+contract Multiprocess is Base(Base.Type.Bytes) {
     enum Status{ 
         SUCCESSFUL, 
         EXECUTION_FAILED, 

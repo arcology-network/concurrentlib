@@ -10,7 +10,7 @@ import "../base/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for address storage.
  */
 contract Address is Base {
-    constructor() {}
+    constructor() Base(Base.Type.Bytes) {}
 
    /**
      * @notice Add an address element to the concurrent array.

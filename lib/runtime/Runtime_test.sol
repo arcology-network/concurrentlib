@@ -6,18 +6,20 @@ import "../multiprocess/Multiprocess.sol";
 import "../commutative/U256Cum.sol";
 
 contract NumConcurrentInstanceTest  {   
+        receive() external payable {}
+    // fallback() external payable {}
     U256Cumulative value = new U256Cumulative(1, 100);
 
     function call() public {
         Multiprocess mp = new Multiprocess(2); // 2 Threads
-        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 11)); // Will require about 1.5M gas
-        mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 12));
+        mp.push(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 1)); // Will require about 1.5M gas
+        mp.push(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 2));
         mp.run();
-        require(value.get() == 0);
+        require(value.get() == 3);
     }
 
-    function init(uint256 v) public {
-        if (Runtime.instances(address(this), bytes4(keccak256(bytes("init(uint256)")))) == 0) {
+    function init(uint256 v) public payable  {
+        if (Runtime.instances(address(this), bytes4(keccak256(bytes("init(uint256)")))) == 2) {
             value.add(v);    
         }
     }
