@@ -77,8 +77,11 @@ contract Base {
      * @return A boolean indicating whether the key exists in it or not.
     */
     function _exists(uint256 idx) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
-        return success;
+        bytes memory key = indToKey(idx);
+        if (key.length == 0) {
+            return false;
+        }
+        return _exists(key);
     }
 
     /**
@@ -117,8 +120,11 @@ contract Base {
      * @return success true if the data was successfully updated, false otherwise.
      */
     function _set(uint256 idx, bytes memory encoded) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("setIndex(uint256,bytes)", idx, encoded));   
-        return success;     
+        bytes memory key = indToKey(idx);
+        if (key.length == 0) {
+            return false;
+        }
+        return _set(key, encoded);
     }
 
     /**
@@ -138,8 +144,11 @@ contract Base {
      * @return success true if the data was successfully deleted, false otherwise.
      */
     function _del(uint256 idx) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("delIndex(uint256)", idx));  
-        return success;   
+        bytes memory key = indToKey(idx);
+        if (key.length == 0) {
+            return false;
+        }
+        return _del(key);
     }
 
     /**
