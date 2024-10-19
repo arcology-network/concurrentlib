@@ -26,11 +26,11 @@ contract BaseTest {
         require(length() == 2); 
         require(committedLength() == 0);  
 
-        require(indexByKey(keyByIndex(1)) == 1);
-        require(indexByKey(keyByIndex(1)) == 1);
+        require(KeyToInd(indToKey(1)) == 1);
+        require(KeyToInd(indToKey(1)) == 1);
 
         bytes memory byIdx = _get(1);
-        bytes memory retrivedByKey = _get(keyByIndex(1));
+        bytes memory retrivedByKey = _get(indToKey(1));
         require(keccak256(retrivedByKey) == keccak256(byIdx));
 
         require(keccak256(byIdx) == keccak256(arr2));
@@ -68,13 +68,12 @@ contract BaseTest {
         return data;     
     }
 
-
-    function keyByIndex(uint256 idx) public returns(bytes memory) {
+    function indToKey(uint256 idx) public returns(bytes memory) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
         return data;     
     }
 
-    function indexByKey(bytes memory key) public returns(uint256) {
+    function KeyToInd(bytes memory key) public returns(uint256) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("indexByKey(bytes)", key));   
         return uint256(bytes32(data));     
     }

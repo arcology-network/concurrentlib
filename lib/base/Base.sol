@@ -95,7 +95,7 @@ contract Base {
      * @param idx The index for which to retrieve the key.
      * @return The key associated with the given index.
      */
-    function keyByIndex(uint256 idx) public returns(bytes memory) {
+    function indToKey(uint256 idx) public returns(bytes memory) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
         return data;  
     }
@@ -105,7 +105,7 @@ contract Base {
      * @param key The key for which to retrieve the index.
      * @return The index associated with the given key.
      */
-    function indexByKey(bytes memory key) public returns(uint256) {
+    function keyToInd(bytes memory key) public returns(uint256) {
         (,bytes memory data) = address(API).call(abi.encodeWithSignature("indexByKey(bytes)", key));   
         return abi.decode(data,(uint256));     
     }

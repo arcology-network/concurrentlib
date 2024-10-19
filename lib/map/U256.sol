@@ -46,7 +46,7 @@ contract U256Map is Base {
      * @return The index key associated with the index.
      */
     function keyAt(uint256 idx) public virtual returns(uint256) {    
-        return uint256(bytes32(Base.keyByIndex(idx)));      
+        return uint256(bytes32(Base.indToKey(idx)));      
     }   
 
     /**

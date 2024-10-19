@@ -46,7 +46,7 @@ contract StringUint256Map is Base {
      * @return The key value associated with the index.
      */
     function keyAt(uint256 idx) public virtual returns(string memory) {    
-        return string(Base.keyByIndex(idx));      
+        return string(Base.indToKey(idx));      
     }   
 
     /**

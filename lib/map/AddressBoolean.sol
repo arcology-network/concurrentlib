@@ -46,7 +46,7 @@ contract AddressBooleanMap is Base {
      * @return The index key associated with the index.
      */
     function keyAt(uint256 idx) public virtual returns(address) {    
-        return address(uint160(bytes20(Base.keyByIndex(idx))));
+        return address(uint160(bytes20(Base.indToKey(idx))));
     }   
 
     /**
