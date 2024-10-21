@@ -140,7 +140,6 @@ contract Base {
         return success;   
     }
 
-
     /**
      * @notice Set the data associated with the given key in the container.
      * @param key The key associated with the data.
@@ -182,8 +181,11 @@ contract Base {
      * @return The data stored at the specified index.
      */
     function _get(uint256 idx) public virtual returns(bytes memory) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("getIndex(uint256)", idx));
-        return data;
+        bytes memory key = indToKey(idx);
+        if (key.length == 0) {
+            return new bytes(0);
+        }
+        return this._get(key);
     }
 
     /**
