@@ -10,7 +10,7 @@ import "../base/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for boolean storage.
  */
 contract Bool is Base {
-    constructor() Base(Base.Type.Bytes) {}
+    constructor() Base(Base.BYTES) {}
 
     /**
      * @notice Add a boolean element to the concurrent array.

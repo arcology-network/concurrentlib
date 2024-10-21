@@ -10,7 +10,7 @@ import "../base/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for string storage.
  */
 contract String is Base {
-    constructor() Base(Base.Type.Bytes) {}
+    constructor() Base(Base.BYTES) {}
 
     /**
      * @notice Add a string data element to the concurrent array.

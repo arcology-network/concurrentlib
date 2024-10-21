@@ -20,12 +20,14 @@ import "../runtime/Runtime.sol";
  */
 contract Base {
     address internal API = address(0x84);
-    enum  Type { Bytes, CumulativeU256 } 
+
+    uint8 public constant BYTES = 107;
+    uint8 public constant CUM_U256 = 103; // Cumulative u256
     
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor (Type typeID) {
+    constructor (uint8 typeID) {
         (bool success,) = address(API).call(abi.encodeWithSignature(
             "new(uint8,bytes,bytes)", uint8(typeID), new bytes(0), new bytes(0)));
         require(success);
@@ -135,6 +137,19 @@ contract Base {
      */
     function _set(bytes memory key, bytes memory elem) public returns(bool) {
         (bool success,) = address(API).call(abi.encodeWithSignature("setKey(bytes,bytes)", key, elem));
+        return success;   
+    }
+
+
+    /**
+     * @notice Set the data associated with the given key in the container.
+     * @param key The key associated with the data.
+     * @param min The lower bound of the data to be stored.
+     * @param max The upper bound of the data to be stored.
+     * @return success true if the data was successfully updated, false otherwise.
+     */
+    function _init(bytes memory key, bytes memory min, bytes memory max) public returns(bool) {
+        (bool success,) = address(API).call(abi.encodeWithSignature("init(bytes,bytes,bytes)", key, min, max));
         return success;   
     }
 

@@ -11,7 +11,7 @@ import "../base/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for int256 storage.
  */
 contract Int256 is Base {
-    constructor() Base(Base.Type.Bytes) {}
+    constructor() Base(Base.BYTES) {}
 
     /**
      * @notice Add an int256 data element to the concurrent array.

@@ -11,7 +11,7 @@ import "../base/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract AddressBooleanMap is Base { 
-    constructor() Base(Base.Type.Bytes) {}
+    constructor() Base(Base.BYTES) {}
 
     /**
      * @notice Check if a given key exists in the map.
