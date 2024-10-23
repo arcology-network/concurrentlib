@@ -22,7 +22,7 @@ contract Base {
     address internal API = address(0x84);
 
     uint8 public constant BYTES = 107;
-    uint8 public constant CUM_U256 = 103; // Cumulative u256
+    uint8 public constant U256_CUM = 103; // Cumulative u256
     
     /**
      * @notice Constructor to initiate communication with the external contract.
@@ -69,7 +69,7 @@ contract Base {
      * @return A boolean indicating whether the key exists in it or not.
     */
     function _exists(bytes memory key) public  returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
+        (bool success,) = address(API).call(abi.encodeWithSignature("getByKey(bytes)", key));
         return success;
     }
 

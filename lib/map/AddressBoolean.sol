@@ -28,7 +28,7 @@ contract AddressBooleanMap is Base {
      * @param value The boolean value associated with the key.
      */
     function set(address k, bool value) public { 
-        Base._set((abi.encodePacked(k)), abi.encode(value));       
+        Base._set(abi.encodePacked(k), abi.encode(value));       
     }
 
     /**

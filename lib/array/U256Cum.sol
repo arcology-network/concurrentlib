@@ -9,20 +9,23 @@ import "../base/Base.sol";
  * @title Concurrent Array for Cumulative uint256 
  * @dev The uint256 contract is a concurrent array specialized for storing uint256 data.
  *      It inherits from the Base contract to utilize container functionalities for uint256 storage.
+ *      It can only store positive integers within the lower and upper bounds. The lower bound must be less than the upper bound and they must be both positive.
  */
 contract U256Cum is Base {
-    constructor() Base(Base.CUM_U256) {}
+    constructor() Base(Base.U256_CUM) {}
 
     /**
      * @notice push an uint256 data element to the concurrent array.
      * @param value The uint256 data element to add to the array.
      */
     function push(uint256 value, uint256 lower, uint256 upper) public virtual{ 
-        require(value <= uint256(type(int256).max), "SafeConversion: overflow");
+        require(value >= lower, "SafeConversion: Underflow");
+        require(value <= upper, "SafeConversion: Overflow");
+
         if (!_init(uuid(), abi.encodePacked(lower), abi.encodePacked(upper))) {
             return ;
         }
-        update(length() - 1, int256(value));
+        set(length() - 1, int256(value));
     }    
 
     /**
@@ -54,10 +57,10 @@ contract U256Cum is Base {
     /**
      * @notice Set the uint256 data element at the given index in the concurrent array.
      * @param idx The index where the uint256 data element should be stored.
-     * @param elem The uint256 data element to be stored at the specified index.
+     * @param delta The uint256 data element to be stored at the specified index.
      */
-    function update(uint256 idx, int256 elem) public { 
-        Base._set(idx, abi.encodePacked(elem));  
+    function set(uint256 idx, int256 delta) public returns(bool) { 
+        return _set(idx, abi.encodePacked(delta));  
     }
 
     /**

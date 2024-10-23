@@ -7,6 +7,7 @@ import "../array/Bool.sol";
 import "../array/U256.sol";
 import "../commutative/U256Cum.sol";
 import "../map/StringUint256.sol";
+import "../map/AddressU256Cum.sol";
 
 contract U256CumulativeParallelGetTest {
     U256Cumulative[] containers = new U256Cumulative[](2);
@@ -250,8 +251,6 @@ contract Deployer {
     }
 }  
  
-
-
 contract ParaNativeAssignmentTest {
     uint256[2] results;
     function call() public  { 
@@ -1221,3 +1220,57 @@ contract ParaDeletions{
         addBoolLookup.del(key);
     }  
 } 
+
+contract ParaAddressUint256Test {  
+    AddressU256Map container = new AddressU256Map();
+
+    address addr1 = 0x1111111110123456789012345678901234567890;
+    address addr2 = 0x2222222220123456789012345678901234567890;
+    address addr3 = 0x3333337890123456789012345678901234567890;
+    address addr4 = 0x4444444440123456789012345678901234567890;
+    address addr5 = 0x5555555550123456789012345678901234567890;
+
+    address[] public addrs;
+
+    constructor() {
+        addrs.push(addr1);
+        addrs.push(addr2);
+        addrs.push(addr3);
+        addrs.push(addr4);
+        addrs.push(addr5);
+    }
+
+    function call() public  { 
+        container.insert(addr1, 18, 17, 111);
+        container.insert(addr2, 19, 18, 112);                
+        container.insert(addr3, 20, 19, 113);
+
+        require(container.get(addr1) == 18);
+        require(container.get(addr2) == 19);
+        require(container.get(addr3) == 20);
+
+        Multiprocess mp = new Multiprocess(2); 
+        mp.push(500000, address(this), abi.encodeWithSignature("add(uint256)", 1));
+        mp.push(500000, address(this), abi.encodeWithSignature("add(uint256)", 2));
+        mp.push(500000, address(this), abi.encodeWithSignature("pusher(uint256)", 3));
+        mp.push(500000, address(this), abi.encodeWithSignature("pusher(uint256)", 4));
+        mp.run();
+        mp.clear();
+
+        require(container.get(addr1) == 18);
+        require(container.get(addr2) == 20);
+        require(container.get(addr3) == 21);
+        require(container.get(addr4) == 33);
+        require(container.get(addr5) == 34);
+
+        require(container.length() == 5);
+    }
+
+    function add(uint256 num) public {
+        container.set(addrs[num], 1); // Set delta to 1
+    }
+
+    function pusher(uint256 num) public {
+        container.insert(addrs[num], 30 + num, 17, 111);
+    }
+}
