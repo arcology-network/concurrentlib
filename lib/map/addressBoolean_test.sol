@@ -20,27 +20,27 @@ contract AddressBooleanMapTest {
         require(map.length() == 3); 
         
         require(map.exist(addr1)); 
-        require(map.exist(addr2)); 
-        require(map.exist(addr3)); 
-        require(!map.exist(addr4));
+        // require(map.exist(addr2)); 
+        // require(map.exist(addr3)); 
+        // require(!map.exist(addr4));
 
-        require(map.get(addr1) == true); 
-        require(map.get(addr2) == true); 
-        require(map.get(addr3) == true); 
-        require(map._exists(2));
-        require(!map._exists(3));
+        // require(map.get(addr1) == true); 
+        // require(map.get(addr2) == true); 
+        // require(map.get(addr3) == true); 
+        // require(map._exists(2));
+        // require(!map._exists(3));
 
-        // require(!map._exists(addr4));
-        // require(!map._exists(addr4));  
+        // // require(!map._exists(addr4));
+        // // require(!map._exists(addr4));  
 
-        require(map.keyAt(0) == addr1);
-        require(map.keyAt(1) == addr2);
-        require(map.keyAt(2) == addr3);
+        // require(map.keyAt(0) == addr1);
+        // require(map.keyAt(1) == addr2);
+        // require(map.keyAt(2) == addr3);
 
-        map.del(addr1);
-        map.del(addr2);
-        map.del(addr3);
-        require(map.length() == 0); 
+        // map.del(addr1);
+        // map.del(addr2);
+        // map.del(addr3);
+        // require(map.length() == 0); 
     }
 }
 

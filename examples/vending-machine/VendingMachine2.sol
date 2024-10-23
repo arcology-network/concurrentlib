@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0 <0.9.0;
 
+import "../../lib/map/AddressU256Cum.sol";
 contract VendingMachine {
 
     // Declare state variables of the contract

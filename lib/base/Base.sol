@@ -69,7 +69,7 @@ contract Base {
      * @return A boolean indicating whether the key exists in it or not.
     */
     function _exists(bytes memory key) public  returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("getByKey(bytes)", key));
+        (bool success,) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
         return success;
     }
 
