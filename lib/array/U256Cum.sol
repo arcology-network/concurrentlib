@@ -18,14 +18,14 @@ contract U256Cum is Base {
      * @notice push an uint256 data element to the concurrent array.
      * @param value The uint256 data element to add to the array.
      */
-    function push(uint256 value, uint256 lower, uint256 upper) public virtual{ 
+    function push(uint256 value, uint256 lower, uint256 upper) public virtual returns(bool){ 
         require(value >= lower, "SafeConversion: Underflow");
         require(value <= upper, "SafeConversion: Overflow");
 
         if (!_init(uuid(), abi.encodePacked(lower), abi.encodePacked(upper))) {
-            return ;
+            return false;
         }
-        set(length() - 1, int256(value));
+        return set(length() - 1, int256(value));
     }    
 
     /**

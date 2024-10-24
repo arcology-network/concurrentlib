@@ -6,7 +6,17 @@ import "./U256Cum.sol";
 contract U256CumArrayTest {
     U256Cum container = new U256Cum();
 
-    constructor() {     
+    constructor() {    
+        require(container.push(17, 17, 111)); 
+        require(container.push(111, 17, 111)); 
+
+        require(container.get(0) == 17);
+        require(container.get(1) == 111);
+
+        require(container.length() == 2);
+        container.clear();
+        require(container.length() == 0);
+
         container.push(18, 17, 111);
         container.push(19, 18, 112);                
         container.push(20, 19, 113);
