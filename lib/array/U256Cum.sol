@@ -41,7 +41,7 @@ contract U256Cum is Base {
      * @param idx The index of the uint256 data element to retrieve.
      * @return The uint256 data element stored at the given index.
      */
-    function get(uint256 idx) public virtual returns(uint256)  {
+    function get(uint256 idx) public virtual view returns(uint256)  {
         return abi.decode(Base._get(idx), (uint256));  
     }
 
@@ -68,7 +68,7 @@ contract U256Cum is Base {
      * @param elem The element to be searched for.
      * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
      */
-    function find(uint256 elem, uint256 offset) public returns(uint256) { 
+    function find(uint256 elem, uint256 offset) public view returns(uint256) { 
         for (uint256 i = offset; i < length(); i++)
             if (elem == get(i))
                 return i;     

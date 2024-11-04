@@ -33,7 +33,7 @@ contract String is Base {
      * @param idx The index of the string data element to retrieve.
      * @return The string data element stored at the given index.
      */
-    function get(uint256 idx) public virtual returns(string memory)  {
+    function get(uint256 idx) public virtual view returns(string memory)  {
         return string(Base._get(idx));
     }
 
@@ -51,7 +51,7 @@ contract String is Base {
      * @param elem The element to be searched for.
      * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
      */
-    function find(string memory elem, uint256 offset) public returns(uint256) { 
+    function find(string memory elem, uint256 offset) public view returns(uint256) { 
         for (uint256 i = offset; i < length(); i++)
             if ((bytes(elem).length != bytes(get(i)).length) && keccak256(abi.encodePacked(elem)) == keccak256(abi.encodePacked(get(i))))
                 return i;     

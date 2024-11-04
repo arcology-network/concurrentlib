@@ -33,7 +33,7 @@ contract Bool is Base {
      * @param idx The index of the boolean element to retrieve.
      * @return The boolean element stored at the given index.
      */
-    function get(uint256 idx) public virtual  returns(bool)  {
+    function get(uint256 idx) public virtual view returns(bool)  {
         return abi.decode(Base._get(idx), (bool));  
     }
 
@@ -51,7 +51,7 @@ contract Bool is Base {
      * @param elem The element to be searched for.
      * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
      */
-    function find(bool elem, uint256 offset) public returns(uint256) { 
+    function find(bool elem, uint256 offset) public view returns(uint256) { 
         for (uint256 i = offset; i < length(); i++)
             if (elem == get(i))
                 return i;     

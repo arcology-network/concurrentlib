@@ -66,8 +66,8 @@ library Runtime {
      * @notice Get the number of concurrent instances of the specified function.
      * @return The number of concurrent instances.
      */
-    function instances(address addr, bytes4 funSign) internal returns(uint256) {
-        (,bytes memory data) = address(0xa0).call(abi.encodeWithSignature("instances(address,bytes4)", addr, funSign));
+    function instances(address addr, bytes4 funSign) internal view returns(uint256) {
+        (,bytes memory data) = address(0xa0).staticcall(abi.encodeWithSignature("instances(address,bytes4)", addr, funSign));
         return abi.decode(data, (uint256));  
     }
 

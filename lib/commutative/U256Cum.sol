@@ -26,8 +26,8 @@ contract U256Cumulative {
      * @notice Get the current value of the cumulative variable.
      * @return The current value of the cumulative variable.
      */
-    function get() public returns(uint256) {  
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("get()"));
+    function get() public view returns(uint256) {  
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("get()"));
         return abi.decode(data, (uint256));
     }
 

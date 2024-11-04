@@ -37,8 +37,8 @@ contract Base {
      * @notice Retrieve the length of the container, including nil values.
      * @return The length of the container.
      */
-    function fullLength() public returns(uint256) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("fullLength()"));
+    function fullLength() public view returns(uint256) {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("fullLength()"));
         return abi.decode(data, (uint256));
     }  
 
@@ -46,8 +46,8 @@ contract Base {
      * @notice Retrieve the length of the container, excluding nil values.
      * @return The length of the container.
      */
-    function length() public returns(uint256) {
-        (, bytes memory data) = address(API).call(abi.encodeWithSignature("length()"));
+    function length() public view returns(uint256) {
+        (, bytes memory data) = address(API).staticcall(abi.encodeWithSignature("length()"));
         return abi.decode(data, (uint256));
     }
     
@@ -55,8 +55,8 @@ contract Base {
      * @notice Retrieve the committed length of the container. This usually is the length at the previous block height.
      * @return The latest committed length of the container. This is function is thread-safe.
      */
-    function committedLength() public returns(uint256) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("peek()"));
+    function committedLength() public view returns(uint256) {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("peek()"));
         if (data.length > 0) {
             return abi.decode(data, (uint256));   
         }
@@ -68,8 +68,8 @@ contract Base {
      * @param key The key to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function _exists(bytes memory key) public  returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
+    function _exists(bytes memory key) public view returns(bool) {
+        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getKey(bytes)", key));
         return success;
     }
 
@@ -78,7 +78,7 @@ contract Base {
      * @param idx The index to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function _exists(uint256 idx) public returns(bool) {
+    function _exists(uint256 idx) public view returns(bool) {
         bytes memory key = indToKey(idx);
         if (key.length == 0) {
             return false;
@@ -100,8 +100,8 @@ contract Base {
      * @param idx The index for which to retrieve the key.
      * @return The key associated with the given index.
      */
-    function indToKey(uint256 idx) public returns(bytes memory) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
+    function indToKey(uint256 idx) public view returns(bytes memory) {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
         return data;  
     }
 
@@ -110,8 +110,8 @@ contract Base {
      * @param key The key for which to retrieve the index.
      * @return The index associated with the given key.
      */
-    function keyToInd(bytes memory key) public returns(uint256) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("indexByKey(bytes)", key));   
+    function keyToInd(bytes memory key) public view returns(uint256) {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("indexByKey(bytes)", key));   
         return abi.decode(data,(uint256));     
     }
     
@@ -180,7 +180,7 @@ contract Base {
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
      */
-    function _get(uint256 idx) public virtual returns(bytes memory) {
+    function _get(uint256 idx) public virtual view returns(bytes memory) {
         bytes memory key = indToKey(idx);
         if (key.length == 0) {
             return new bytes(0);
@@ -193,8 +193,8 @@ contract Base {
      * @param key The key associated with the data to retrieve.
      * @return The data stored at the specified key.
      */
-    function _get(bytes memory key) public returns(bytes memory)  {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("getKey(bytes)", key));
+    function _get(bytes memory key) public view returns(bytes memory)  {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("getKey(bytes)", key));
         return data;
     }
 
@@ -202,8 +202,8 @@ contract Base {
      * @notice Retrieve the minimum entry stored in the container sorted by value numerically.
      * @return encoded The minimum valu and the index.
      */
-    function minNumerical() public returns(bytes memory)  {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("minNumerical()"));
+    function minNumerical() public view returns(bytes memory)  {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("minNumerical()"));
         return data;
     }
 
@@ -211,8 +211,8 @@ contract Base {
      * @notice Retrieve the maximum entry stored in the container sorted by value numerically.
      * @return The encoded maximum value and the index.
      */
-    function maxNumerical() public returns(bytes memory)  {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("maxNumerical()"));
+    function maxNumerical() public view returns(bytes memory)  {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxNumerical()"));
         return data;
     }
 
@@ -220,8 +220,8 @@ contract Base {
      * @notice Retrieve the minimum entry stored in the container sorted by string representation.
      * @return The encoded minimum value and the index.
      */
-    function minString() public returns(bytes memory)  {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("minString()"));
+    function minString() public view returns(bytes memory)  {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("minString()"));
         return data;
     }
 
@@ -229,8 +229,8 @@ contract Base {
      * @notice Retrieve the maximum entry stored in the container sorted as a string
      * @return The encoded maximum value and the index.
      */
-    function maxString() public returns(bytes memory)  {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("maxString()"));
+    function maxString() public view returns(bytes memory)  {
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxString()"));
         return data;
     }
 
