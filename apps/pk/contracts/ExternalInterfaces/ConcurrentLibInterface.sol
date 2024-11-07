@@ -93,7 +93,7 @@ contract System {
     /// @param signature The signature of the function
     function createDefer(string calldata id, string calldata signature) external;
 
-    /// @notice Call the deferred function specified by id
+    /// @notice Call the defer function specified by id
     /// @param id The defer call id
     function callDefer(string calldata id) external;
 

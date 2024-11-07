@@ -55,8 +55,8 @@ contract U256Cumulative {
      * @notice Get the minimum bound of the cumulative variable.
      * @return The minimum bound of the cumulative variable.
      */
-    function min() public returns(uint256) { 
-        (, bytes memory data) = address(API).call(abi.encodeWithSignature("min()"));
+    function min() public view returns(uint256) { 
+        (, bytes memory data) = address(API).staticcall(abi.encodeWithSignature("min()"));
         return abi.decode(data, (uint256));
     }  
 
@@ -64,8 +64,8 @@ contract U256Cumulative {
      * @notice Get the maximum bound of the cumulative variable.
      * @return The maximum bound of the cumulative variable.
      */
-    function max() public returns(uint256) { 
-        (, bytes memory data) = address(API).call(abi.encodeWithSignature("max()"));
+    function max() public view returns(uint256) { 
+        (, bytes memory data) = address(API).staticcall(abi.encodeWithSignature("max()"));
         return abi.decode(data, (uint256));
     }    
 }

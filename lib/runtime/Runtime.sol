@@ -72,11 +72,11 @@ library Runtime {
     }
 
     /**
-     * @notice Inform the scheduler that a function needs to schedule a deferred call. This function can only be called once in the constructor.
+     * @notice Inform the scheduler that a function needs to schedule a defer call. This function can only be called once in the constructor.
      * @return The number of concurrent instances.
      */
-    function deferred(bytes4 funSign) internal returns(bool) {
-        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("deferred(bytes4)", funSign));
+    function defer(bytes4 funSign) internal returns(bool) {
+        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("defer(bytes4)", funSign));
         return successful;  
     }
 }

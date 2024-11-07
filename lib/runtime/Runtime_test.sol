@@ -29,7 +29,7 @@ contract DeferredTest  {
     U256Cumulative value = new U256Cumulative(1, 100);
 
     constructor () {
-        Runtime.deferred(bytes4(keccak256(bytes("init(uint256)"))));
+        Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))));
     }
 
     function init(uint256 v) public {
@@ -55,7 +55,7 @@ contract SequentializerTest  {
         // The init() function of the current contract cannot be called in parallel with 
         // the otherFuncs functions of the addr1 contract.
         require(Runtime.sequentialize(bytes4(keccak256("init()")), addr1, otherFuncs));
-        require(Runtime.deferred(bytes4(keccak256("init()"))));
+        require(Runtime.defer(bytes4(keccak256("init()"))));
     }
 
     function init() public {}
@@ -77,7 +77,7 @@ contract ParallizerTest  {
 
         // Only the init() function of the current contract can be called in parallel with the others.
         require(Runtime.parallelize(bytes4(keccak256("init()")), addr1, otherFuncs));
-        require(Runtime.deferred(bytes4(keccak256("def()"))));
+        require(Runtime.defer(bytes4(keccak256("def()"))));
     }
 
     function init() public {}
