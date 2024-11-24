@@ -12,12 +12,12 @@ contract AddressBooleanMapTest {
         address addr3 = 0x3333337890123456789012345678901234567890;
         address addr4 = 0x4444444890123456789012345678901234567890;
 
-        require(map.length() == 0); 
+        require(map.nonNilCount() == 0); 
         map.set(addr1, true);
   
         map.set(addr2, true);
         map.set(addr3, true);
-        require(map.length() == 3); 
+        require(map.nonNilCount() == 3); 
         
         require(map.exist(addr1)); 
         require(map.exist(addr2)); 
@@ -39,7 +39,7 @@ contract AddressBooleanMapTest {
         map.del(addr1);
         map.del(addr2);
         map.del(addr3);
-        require(map.length() == 0); 
+        require(map.nonNilCount() == 0); 
     }
 }
 
@@ -55,7 +55,7 @@ contract AddressBooleanMapConcurrentTest {
         mp.push(500000, address(this), abi.encodeWithSignature("setter(address)", addr1));
         mp.push(500000, address(this), abi.encodeWithSignature("setter(address)", addr2));
         mp.push(500000, address(this), abi.encodeWithSignature("setter(address)", addr3));
-        require(mp.length() == 3);
+        require(mp.nonNilCount() == 3);
         mp.run();
 
         require(map.exist(addr1)); 
@@ -78,7 +78,7 @@ contract AddressBooleanMapConcurrentTest {
         map.del(addr1);
         map.del(addr2);
         map.del(addr3);
-        require(map.length() == 0); 
+        require(map.nonNilCount() == 0); 
     }
 
     function setter(address v)  public {

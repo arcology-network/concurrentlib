@@ -18,7 +18,7 @@ contract ParallelSubcurrencyTest {
         mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Bob, 2222));
         mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Carol, 3333));
         mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Dave, 4444));
-        require(mp.length() == 4);
+        require(mp.nonNilCount() == 4);
         mp.run();
 
         require(coin.getter(Alice) == 1111);

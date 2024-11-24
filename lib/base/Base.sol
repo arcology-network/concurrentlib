@@ -11,7 +11,7 @@ import "../runtime/Runtime.sol";
  *      linear access.
  *
  *      The contract serves as a hybrid data structure, functioning as a map set behind the scenes.
- *      The order of elements is formed when any timing-dependent functions like "pop()" or "length()"
+ *      The order of elements is formed when any timing-dependent functions like "pop()" or "nonNilCount()"
  *      are called. However, performing concurrent "pop()" or getting the length is not recommended in
  *      a parallel environment, as these operations are timing-independent and may lead to conflicts. 
  *      Transactions resulting conflicts will be reverted to protect the state consistency.
@@ -43,14 +43,14 @@ contract Base {
     }  
 
     /**
-     * @notice Retrieve the length of the container, excluding nil values.
-     * @return The length of the container.
+     * @notice Retrieve the total number of non nil element in the container.
+     * @return The total of the container.
      */
-    function length() public view returns(uint256) {
+    function nonNilCount() public view returns(uint256) {
         (, bytes memory data) = address(API).staticcall(abi.encodeWithSignature("length()"));
         return abi.decode(data, (uint256));
     }
-    
+     
     /**
      * @notice Retrieve the committed length of the container. This usually is the length at the previous block height.
      * @return The latest committed length of the container. This is function is thread-safe.

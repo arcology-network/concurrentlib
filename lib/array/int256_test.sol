@@ -7,13 +7,13 @@ contract Int256Test {
     Int256 container = new Int256();
     
     constructor() {     
-       require(container.length() == 0); 
+       require(container.nonNilCount() == 0); 
     
         container.push((10));
         container.push((-20));
         container.push((30));
         container.push((40));
-        require(container.length() == 4); 
+        require(container.nonNilCount() == 4); 
         
         require(container.get(0) == (10));
         require(container.get(1) == (-20));
@@ -34,6 +34,6 @@ contract Int256Test {
         require(container.pop() == (13));
         require(container.pop() == (12));
         require(container.pop() == (-11));
-        require(container.length() == 0); 
+        require(container.nonNilCount() == 0); 
     }
 }

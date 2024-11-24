@@ -18,7 +18,7 @@ contract AddressU256MapTest {
         require(container.get(addr1) == 18);
         require(container.get(addr2) == 19);
         require(container.get(addr3) == 20);
-        require(container.length() == 3);
+        require(container.nonNilCount() == 3);
 
         container.set(addr1, 1); // Set delta to 1
         container.set(addr2, 1); // Set delta to 1
@@ -29,16 +29,16 @@ contract AddressU256MapTest {
         require(container.get(addr3) == 21);
 
         container.del(addr1);
-        require(container.length() == 2);
+        require(container.nonNilCount() == 2);
 
         require(!container.exist(addr1));
 
         require(!container.del(addr1));
-        require(container.length() == 2);
+        require(container.nonNilCount() == 2);
 
         container.insert(addr1, 38, 27, 111);
         require(container.get(addr1) == 38);
-        require(container.length() == 3);
+        require(container.nonNilCount() == 3);
     }
 }
 

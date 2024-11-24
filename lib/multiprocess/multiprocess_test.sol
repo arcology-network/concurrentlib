@@ -56,8 +56,8 @@ contract U256ParallelInitTest {
         mp.push(4000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
         mp.run();
 
-        require(containers[0].length() == 1);
-        require(containers[1].length() == 1);
+        require(containers[0].nonNilCount() == 1);
+        require(containers[1].nonNilCount() == 1);
     }
 
     function init(uint256 idx) public  { 
@@ -78,7 +78,7 @@ contract U256ParallelPopTest {
         mp.push(1000000, address(this), abi.encodeWithSignature("pop()"));
         mp.run();
 
-        require(container.length() == 1);
+        require(container.nonNilCount() == 1);
     }
 
     function pop() public  { 
@@ -93,7 +93,7 @@ contract U256ParallelConflictTest {
         container.push(uint256(10));
         container.push(uint256(20));
         container.push(uint256(30));
-        require(container.length() == 3);
+        require(container.nonNilCount() == 3);
     }
 
     function call() public  {     
@@ -103,7 +103,7 @@ contract U256ParallelConflictTest {
         // // mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
         mp.run();
     
-        // require(container.length() == 1); 
+        // require(container.nonNilCount() == 1); 
         // pop();
     }
 
@@ -121,23 +121,23 @@ contract U256ParallelTest {
     U256 container = new U256();
 
     function call() public  { 
-        require(container.length() == 0); 
+        require(container.nonNilCount() == 0); 
     
         container.push(uint256(10));
         container.push(uint256(20));
         container.push(uint256(30));
-        require(container.length() == 3);
+        require(container.nonNilCount() == 3);
 
         Multiprocess mp = new Multiprocess(1);
         mp.push(1000000, address(this), abi.encodeWithSignature("push(uint256)", 41));
         mp.push(1000000, address(this), abi.encodeWithSignature("push(uint256)", 51));
-        require(mp.length() == 2);
-        require(container.length() == 3);
+        require(mp.nonNilCount() == 2);
+        require(container.nonNilCount() == 3);
 
         mp.run();
         mp.clear();
 
-        require(container.length() == 5);
+        require(container.nonNilCount() == 5);
 
         require(container.get(0) == uint256(10));
         require(container.get(1) == uint256(20));
@@ -146,7 +146,7 @@ contract U256ParallelTest {
         require(container.get(4) == uint256(51));  
  
         require(container.pop() == uint256(51));  
-        require(container.length() == 4);
+        require(container.nonNilCount() == 4);
 
         mp.push(1000000, address(this), abi.encodeWithSignature("get(uint256)", 0));
         mp.push(1000000, address(this), abi.encodeWithSignature("get(uint256)", 1));
@@ -154,10 +154,10 @@ contract U256ParallelTest {
         mp.clear();
 
         pop(); // idx == 4
-        require(container.length() == 3);
+        require(container.nonNilCount() == 3);
 
         pop(); // idx == 3
-        require(container.length() == 2);
+        require(container.nonNilCount() == 2);
  
         // Here should be one conflict. So only one pop() will take effect.
         mp.clear();
@@ -165,7 +165,7 @@ contract U256ParallelTest {
         mp.push(100000, address(this), abi.encodeWithSignature("pop()"));
         mp.run();
 
-        require(container.length() == 1); 
+        require(container.nonNilCount() == 1); 
     }
 
     function push(uint256 v) public{
@@ -204,11 +204,11 @@ contract ArrayOfU256ParallelTest {
          mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 0, 14));
          mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 1, 51));
          mp.push(100000, address(this), abi.encodeWithSignature("push(uint256,uint256)", 1, 52));
-        require(mp.length() == 4);
+        require(mp.nonNilCount() == 4);
         mp.run();
 
-        require(array[0].length() == 4);
-        require(array[1].length() == 2);
+        require(array[0].nonNilCount() == 4);
+        require(array[1].nonNilCount() == 2);
 
         require(array[0].get(0) == 11);
         require(array[0].get(1) == 12);
@@ -242,7 +242,7 @@ contract Deployer {
     constructor() { 
        Multiprocess mp = new Multiprocess(1); 
        mp.push(2500000, address(this), abi.encodeWithSignature("init()"));
-       require(mp.length() == 1);
+       require(mp.nonNilCount() == 1);
        mp.run();
     }
 
@@ -257,7 +257,7 @@ contract ParaNativeAssignmentTest {
        Multiprocess mp = new Multiprocess(2); 
        mp.push(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 0));
        mp.push(50000, address(this), abi.encodeWithSignature("assigner(uint256)", 1));
-       require(mp.length() == 2);
+       require(mp.nonNilCount() == 2);
        mp.run();
 
        assert(results[0] == 10);
@@ -282,7 +282,7 @@ contract ParaFixedLengthWithConflictTest {
        mp.run();     
        require(results[0] == 111);  // 11 and 33 will be reverted due to conflicts
        require(results[1] == 211); 
-       require(container.length() == 1); 
+       require(container.nonNilCount() == 1); 
     }
 
     function updater(uint256 num) public {
@@ -302,10 +302,10 @@ contract ParaContainerConcurrentPushTest {
        mp.push(1000000, address(this), abi.encodeWithSignature("appender()"));
        mp.push(1000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
-       require(container.length() == 3);    
-       require(container2.length() == 2);   
+       require(container.nonNilCount() == 3);    
+       require(container2.nonNilCount() == 2);   
        container.push(true);
-       require(container.length() == 4);    
+       require(container.nonNilCount() == 4);    
     //    container.push(true);        
     }
 
@@ -323,13 +323,13 @@ contract MultiTempParaTest {
        mp.push(1000000, address(this), abi.encodeWithSignature("appender()"));
        mp.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
-       require(container.length() == 2);     
+       require(container.nonNilCount() == 2);     
 
        Multiprocess mp2 = new Multiprocess(2);
        mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.run();
-       require(container.length() == 4);  
+       require(container.nonNilCount() == 4);  
     }
 
     function appender()  public {
@@ -346,7 +346,7 @@ contract MultiGlobalParaSingleInUse {
        mp2 = new Multiprocess(2);
        mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.run();
-       require(container.length() == 2);    
+       require(container.nonNilCount() == 2);    
     }
 
     function appender()  public {
@@ -366,16 +366,16 @@ contract MultiprocessConcurrentBool {
        mp.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
-       require(container.length() == 2);     
+       require(container.nonNilCount() == 2);     
       
        mp2 = new Multiprocess(2);
        mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.run();
-       require(container.length() == 4);  
+       require(container.nonNilCount() == 4);  
 
        container.push(true);
-       require(container.length() == 5);  
+       require(container.nonNilCount() == 5);  
     }
 
     function appender()  public {
@@ -390,20 +390,20 @@ contract MultiLocalParaTestWithClear {
        Multiprocess mp = new Multiprocess(2);
        mp.push(1000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
-       require(container.length() == 1);    
+       require(container.nonNilCount() == 1);    
 
        mp.clear();       
-       require(mp.length() == 0);   
+       require(mp.nonNilCount() == 0);   
 
        mp.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp.run();
-       require(container.length() == 2);    
+       require(container.nonNilCount() == 2);    
 
        Multiprocess mp2 = new Multiprocess(2);
        mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.push(4000000, address(this), abi.encodeWithSignature("appender()"));
        mp2.run();
-       require(container.length() == 4);  
+       require(container.nonNilCount() == 4);  
     }
 
     function appender()  public {
@@ -420,13 +420,13 @@ contract ParallelizerArrayTest {
        parallelizers[0] .push(1000000, address(this), abi.encodeWithSignature("appender()"));
        parallelizers[0] .push(1000000, address(this), abi.encodeWithSignature("appender()"));
        parallelizers[0] .run();
-       require(container.length() == 2);  
+       require(container.nonNilCount() == 2);  
 
        parallelizers[1] = new Multiprocess(2);
        parallelizers[1] .push(1000000, address(this), abi.encodeWithSignature("appender()"));
        parallelizers[1] .push(1000000, address(this), abi.encodeWithSignature("appender()"));
        parallelizers[1] .run();
-       require(container.length() == 4);  
+       require(container.nonNilCount() == 4);  
     }
 
     function appender()  public {
@@ -586,7 +586,7 @@ contract RecursiveParallelizerOnContainerTest {
 
         // require(results[0] == 11);
         // require(results[1] == 12);
-        // require(container.length() == 2);
+        // require(container.nonNilCount() == 2);
         require(cumulative.get() == 5);
     } 
 
@@ -616,8 +616,8 @@ contract MaxRecursiveDepth4Test {
         mp.push(99999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.run();
 
-        require(container.length() == 14); 
-        require(container.length() == 14);       
+        require(container.nonNilCount() == 14); 
+        require(container.nonNilCount() == 14);       
     } 
 
     function add() public { 
@@ -654,7 +654,7 @@ contract MaxSelfRecursiveDepth4Test {
         mp.push(99999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.push(99999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.run();
-        require(container.length() == 30); // 2 + 4 + 8 + 16
+        require(container.nonNilCount() == 30); // 2 + 4 + 8 + 16
     } 
 
     function add() public { 
@@ -682,7 +682,7 @@ contract MaxRecursiveDepthOffLimitTest {
         mp.push(9999999, address(this), abi.encodeWithSignature("add()")); 
         mp.run();
   
-        require(container.length() == 31); // 1 + (2 + 4 + 8 + 16) 
+        require(container.nonNilCount() == 31); // 1 + (2 + 4 + 8 + 16) 
         require(cumulative.get() == 62);
     } 
 
@@ -705,10 +705,10 @@ contract ParaFixedLengthWithConflictRollbackTest {
         mp.push(9999999, address(this), abi.encodeWithSignature("worker()")); // Only one will go through
         mp.push(9999999, address(this), abi.encodeWithSignature("worker()")); // Only one will go through
         mp.run();
-        require(container.length() == 1);
+        require(container.nonNilCount() == 1);
 
         appender();
-        require(container.length() == 2);
+        require(container.nonNilCount() == 2);
     } 
 
     function worker() public { 
@@ -734,7 +734,7 @@ contract ParaSubbranchConflictTest {
         mp.push(9999999, address(this), abi.encodeWithSignature("worker0()")); // Only one will go through
         mp.push(9999999, address(this), abi.encodeWithSignature("worker1()")); // Only one will go through
         mp.run();
-        require(container.length() == 4);
+        require(container.nonNilCount() == 4);
     } 
 
     function worker0() public { 
@@ -800,7 +800,7 @@ contract ParentChildBranchConflictTest {
         mp.push(9999999, address(this), abi.encodeWithSignature("worker0()")); // Only one will go through
         mp.push(9999999, address(this), abi.encodeWithSignature("worker1()")); // Only one will go through
         mp.run();
-        require(container.length() == 1);
+        require(container.nonNilCount() == 1);
         require(results0[0] == 2);
     } 
 
@@ -840,11 +840,11 @@ contract MixedRecursiveMultiprocessTest {
         mp.push(9999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.push(9999999, address(this), abi.encodeWithSignature("add()")); // Only one will go through
         mp.run();
-        require(container.length() == 3);
+        require(container.nonNilCount() == 3);
 
         require(results[0] == 11);
         require(results[1] == 12);
-        require(container.length() == 3);
+        require(container.nonNilCount() == 3);
         require(cumulative.get() == 55);
         require(cumulative2.get() == 70); 
     } 
@@ -1188,13 +1188,13 @@ contract ParaDeletions{
         mp.push(50000, address(this), abi.encodeWithSignature("del(string)", "key 2"));
         mp.run();
         mp.clear();
-        require(addBoolLookup.length() == 1);
+        require(addBoolLookup.nonNilCount() == 1);
 
         mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 10", 21));
         mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 23", 31));
         mp.run();
         mp.clear();
-        require(addBoolLookup.length() == 3);
+        require(addBoolLookup.nonNilCount() == 3);
         require(addBoolLookup.get("key 10") == 21);
         require(addBoolLookup.get("key 23") == 31);
 
@@ -1203,12 +1203,12 @@ contract ParaDeletions{
         mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 23", 41));
         mp.run();
         mp.clear();      
-        require(addBoolLookup.length() == 2);
+        require(addBoolLookup.nonNilCount() == 2);
 
         mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 10", 21)); // Added it back
         mp.push(50000, address(this), abi.encodeWithSignature("add(string,uint256)", "key 23", 41));
         mp.run();
-        require(addBoolLookup.length() == 3);      
+        require(addBoolLookup.nonNilCount() == 3);      
         // require(addBoolLookup.valueAt(1) == 200);
     }
 
@@ -1263,7 +1263,7 @@ contract ParaAddressUint256Test {
         require(container.get(addr4) == 33);
         require(container.get(addr5) == 34);
 
-        require(container.length() == 5);
+        require(container.nonNilCount() == 5);
     }
 
     function add(uint256 num) public {

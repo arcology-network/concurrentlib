@@ -12,12 +12,12 @@ contract AddressU256MapTest {
         address addr3 = 0x3333337890123456789012345678901234567890;
         address addr4 = 0x4444444890123456789012345678901234567890;
 
-        require(map.length() == 0); 
+        require(map.nonNilCount() == 0); 
 
         map.set(addr1, 11);  
         map.set(addr2, 21);
         map.set(addr3, 31);
-        require(map.length() == 3); 
+        require(map.nonNilCount() == 3); 
 
         (address k, uint256 idx, uint256 v) = map.min();
         require(v == 11); 
@@ -44,7 +44,7 @@ contract AddressU256MapTest {
         map.del(addr1);
         map.del(addr2);
         map.del(addr3);
-        require(map.length() == 0); 
+        require(map.nonNilCount() == 0); 
     }
 }
 
@@ -60,7 +60,7 @@ contract AddressU256MapConcurrentTest {
         mp.push(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr1, 11));
         mp.push(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr2, 22));
         mp.push(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr3, 33));
-        require(mp.length() == 3);
+        require(mp.nonNilCount() == 3);
         mp.run();
 
         require(map.exist(addr1)); 
@@ -83,7 +83,7 @@ contract AddressU256MapConcurrentTest {
         map.del(addr1);
         map.del(addr2);
         map.del(addr3);
-        require(map.length() == 0); 
+        require(map.nonNilCount() == 0); 
     }
 
     function setter(address addr, uint256 v)  public {

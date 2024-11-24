@@ -7,7 +7,7 @@ contract AddressTest {
     Address container = new Address();
     
     constructor() {     
-        // require(container.length() == 0);    
+        // require(container.nonNilCount() == 0);    
         address addr1 = 0x1111111110123456789012345678901234567890;
         address addr2 = 0x2222222220123456789012345678901234567890;
         address addr3 = 0x3333337890123456789012345678901234567890;
@@ -16,7 +16,7 @@ contract AddressTest {
         container.push(addr1);
         container.push(addr2);
 
-        require(container.length() == 2); 
+        require(container.nonNilCount() == 2); 
 
         require(container.get(0) == addr1);
         require(container.get(1) == addr2);

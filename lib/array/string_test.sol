@@ -7,7 +7,7 @@ contract StringTest {
     String container = new String();
     
     constructor() {     
-        require(container.length() == 0); 
+        require(container.nonNilCount() == 0); 
    
         string memory str0 = "Test string 0";
         string memory str1 = "Test string 1";
@@ -18,7 +18,7 @@ contract StringTest {
         container.push(str1);
         container.push(str2);
         container.push(str3);
-        require(container.length() == 4); 
+        require(container.nonNilCount() == 4); 
 
         require(keccak256(bytes(container.get(0))) == keccak256(bytes(str0)));
         require(keccak256(bytes(container.get(1))) == keccak256(bytes(str1)));
@@ -40,6 +40,6 @@ contract StringTest {
         require(keccak256(bytes(container.pop())) == keccak256(bytes(str2)));
         require(keccak256(bytes(container.pop())) == keccak256(bytes(str3)));
 
-        require(container.length() == 0);       
+        require(container.nonNilCount() == 0);       
     }
 }

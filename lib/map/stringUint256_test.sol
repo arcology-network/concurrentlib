@@ -12,11 +12,11 @@ contract StringUint256MapTest {
         string memory k3 = "0x3333337890123456789012345678901234567890";
         string memory k4 = "0x333333";
 
-        require(map.length() == 0); 
+        require(map.nonNilCount() == 0); 
         map.set(k1, 11);
         map.set(k2, 22);
         map.set(k3, 33);
-        require(map.length() == 3); 
+        require(map.nonNilCount() == 3); 
        
         require(map.exist(k1)); 
         require(map.exist(k2)); 
@@ -38,6 +38,6 @@ contract StringUint256MapTest {
         map.del(k1);
         map.del(k2);
         map.del(k3);
-        require(map.length() == 0); 
+        require(map.nonNilCount() == 0); 
     }
 }

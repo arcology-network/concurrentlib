@@ -8,7 +8,7 @@ contract PairTest {
     Bytes bytesContainer = new Bytes();
     Bool boolContainer = new Bool();
     constructor() {     
-        require(bytesContainer.length() == 0); 
+        require(bytesContainer.nonNilCount() == 0); 
  
         bytes memory arr1 = '0x1000000000000000000000000000000000000000000000000000000000000001';
         bytes memory arr2 = '0x2000000000000000000000000000000000000000000000000000000000000002';
@@ -16,7 +16,7 @@ contract PairTest {
         bytesContainer.push(arr1);  
         bytesContainer.push(arr1); 
 
-        require(bytesContainer.length() == 2); 
+        require(bytesContainer.nonNilCount() == 2); 
 
         require(keccak256(bytesContainer.get(1)) == keccak256(arr1));
 
@@ -27,15 +27,15 @@ contract PairTest {
         require(keccak256(bytesContainer.pop()) == keccak256(arr2));
 
         bytesContainer.pop();
-        require(bytesContainer.length() == 0); 
+        require(bytesContainer.nonNilCount() == 0); 
 
-        require(boolContainer.length() == 0); 
+        require(boolContainer.nonNilCount() == 0); 
     
         boolContainer.push(true);
         boolContainer.push(false);
         boolContainer.push(false);
         boolContainer.push(true);
-        require(boolContainer.length() == 4); 
+        require(boolContainer.nonNilCount() == 4); 
 
         require(boolContainer.get(0));
         require(!boolContainer.get(1));
@@ -56,6 +56,6 @@ contract PairTest {
         require(boolContainer.pop());
         require(boolContainer.pop());
         require(!boolContainer.pop());
-        require(boolContainer.length() == 0);         
+        require(boolContainer.nonNilCount() == 0);         
     }
 }

@@ -52,7 +52,7 @@ contract Bytes32 is Base {
      * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
      */
     function find(bytes32 elem, uint256 offset) public view returns(uint256) { 
-        for (uint256 i = offset; i < length(); i++)
+        for (uint256 i = offset; i < nonNilCount(); i++)
         if (elem == get(i))
             return i;     
         return type(uint256).max;

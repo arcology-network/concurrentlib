@@ -7,7 +7,7 @@ contract Bytes32Test {
     Bytes32 container = new Bytes32();
     
     constructor() {     
-        require(container.length() == 0); 
+        require(container.nonNilCount() == 0); 
    
         bytes32 hash0 = keccak256(abi.encodePacked("0"));
         bytes32 hash1 = keccak256(abi.encodePacked("1"));
@@ -18,7 +18,7 @@ contract Bytes32Test {
         container.push(hash1);
         container.push(hash2);
         container.push(hash3);
-        require(container.length() == 4);
+        require(container.nonNilCount() == 4);
 
         require(container.get(0) == hash0);
         require(container.get(1) == hash1);
@@ -40,6 +40,6 @@ contract Bytes32Test {
         require(container.pop() == hash2);
 
         container.clear();
-        require(container.length() == 0);       
+        require(container.nonNilCount() == 0);       
     }
 }
