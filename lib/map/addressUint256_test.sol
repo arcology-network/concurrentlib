@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "./AddressUint256.sol";
 import "../multiprocess/Multiprocess.sol";
@@ -18,15 +18,16 @@ contract AddressU256MapTest {
         map.set(addr2, 21);
         map.set(addr3, 31);
         require(map.nonNilCount() == 3); 
+        require(map.valueAt(2) == 31); 
 
         (address k, uint256 idx, uint256 v) = map.min();
         require(v == 11); 
         require(idx == 0 && map.get(k) == v);
-
+        
         (k, idx, v) = map.max();
         require(v == 31); 
         require(idx == 2 && map.get(k) == v);
-        
+
         require(map.exist(addr1)); 
         require(map.exist(addr2)); 
         require(map.exist(addr3)); 

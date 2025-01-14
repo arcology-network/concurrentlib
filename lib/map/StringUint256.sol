@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../base/Base.sol";
 
@@ -37,7 +37,7 @@ contract StringUint256Map is Base {
      * @return value The string value associated with the key.
      */
     function get(string memory k) public virtual view returns(uint256 value){ 
-         return uint256(bytes32(Base._get(bytes(k))));     
+        return uint256(abi.decode(Base._get(bytes(k)), (bytes32)));     
     }    
 
     /**
@@ -54,8 +54,8 @@ contract StringUint256Map is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
-        return uint256(bytes32(Base._get(idx)));  
+    function valueAt(uint256 idx) public virtual view returns(uint256 value){
+        return uint256(abi.decode(Base._get(idx), (bytes32))  );  
     }    
 
     /**

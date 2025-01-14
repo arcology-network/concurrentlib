@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "./Address.sol";
 
 contract AddressTest {
     Address container = new Address();
-    
+
     constructor() {     
         // require(container.nonNilCount() == 0);    
         address addr1 = 0x1111111110123456789012345678901234567890;
@@ -15,16 +15,25 @@ contract AddressTest {
 
         container.push(addr1);
         container.push(addr2);
-
+ 
         require(container.nonNilCount() == 2); 
 
         require(container.get(0) == addr1);
         require(container.get(1) == addr2);
- 
+
         container.set(0, addr3);
         container.set(1, addr4);
 
         require(container.get(0) == addr3);
         require(container.get(1) == addr4);
+
+        // require(container.pop() == addr4);
+
+
+        container.push(addr1);
+        container.push(addr2);
+
+        require(container.find(addr2, 1)==3);
+
     } 
 } 

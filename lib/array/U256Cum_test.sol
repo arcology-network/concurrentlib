@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "./U256Cum.sol";
 
@@ -44,5 +44,7 @@ contract U256CumArrayTest {
 
         container.set(2, 1);
         require(container.get(2) == 21);
+
+        require(container.pop() == 21);
     }
 }

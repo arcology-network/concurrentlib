@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "./AddressU256Cum.sol";
 
-contract AddressU256MapTest {
+contract AddressU256CumTest {
     AddressU256Map container = new AddressU256Map();
-
+    event LogMax(address k,uint256 idx,uint256 v);
+    event Step(address val);
     constructor() {     
         address addr1 = 0x1111111110123456789012345678901234567890;
         address addr2 = 0x2222222220123456789012345678901234567890;
@@ -14,6 +15,8 @@ contract AddressU256MapTest {
         container.insert(addr1, 18, 17, 111);
         container.insert(addr2, 19, 18, 112);                
         container.insert(addr3, 20, 19, 113);
+        require(container.valueAt(1) == 19);
+        require(container.keyAt(0) == addr1);
 
         require(container.get(addr1) == 18);
         require(container.get(addr2) == 19);
@@ -27,6 +30,10 @@ contract AddressU256MapTest {
         require(container.get(addr1) == 19);
         require(container.get(addr2) == 20);
         require(container.get(addr3) == 21);
+        (address k, uint256 idx, uint256 v) = container.max();
+        require(idx == 2 && container.get(k) == v);
+        ( k,  idx,  v) = container.min();
+        require(idx == 0 && container.get(k) == v);
 
         container.del(addr1);
         require(container.nonNilCount() == 2);

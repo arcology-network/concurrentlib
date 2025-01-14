@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../base/Base.sol";
 
@@ -25,16 +25,29 @@ contract Address is Base {
      * @return The last address element from the array.
      */
     function pop() public virtual returns(address) { 
-        return address(uint160(bytes20(Base._pop())));
+        // return abi.decode(Base._pop(), (address));
+        bytes memory rawdata=Base._pop();
+        bytes20 resultAdr;
+        for (uint i = 0; i < 20; i++) {
+            resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+        }
+        return address(uint160(resultAdr)); 
     }
-
+    event LogBys(bytes val);
     /**
      * @notice Retrieve the address element at the given index from the concurrent array.
      * @param idx The index of the address element to retrieve.
      * @return The address element stored at the given index.
      */
     function get(uint256 idx) public virtual returns(address)  {
-        return address(uint160(bytes20(Base._get(idx))));
+        // return abi.decode(Base._get(idx), (address));
+        bytes memory rawdata=Base._get(idx);
+        emit LogBys(rawdata);
+        bytes20 resultAdr;
+        for (uint i = 0; i < 20; i++) {
+            resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+        }
+        return address(uint160(resultAdr)); 
     }
 
     /**
@@ -52,9 +65,10 @@ contract Address is Base {
      * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
      */
     function find(address elem, uint256 offset) public returns(uint256) { 
-        for (uint256 i = offset; i < nonNilCount(); i++)
+        for (uint256 i = offset; i < nonNilCount(); i++){
             if (elem == get(i))
-                return i;     
+                return i; 
+        }        
         return type(uint256).max;    
     }
 }

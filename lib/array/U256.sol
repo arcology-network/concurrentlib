@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../base/Base.sol";
 
@@ -24,8 +24,8 @@ contract U256 is Base {
      * @notice Remove and return the last uint256 data element from the concurrent array.
      * @return The last uint256 data element from the array.
      */
-    function pop() public virtual returns(uint256) {       
-        return uint256(bytes32(Base._pop()));  
+    function pop() public virtual returns(uint256) { 
+        return uint256(abi.decode(Base._pop(), (bytes32)));  
     }
 
     /**
@@ -34,7 +34,7 @@ contract U256 is Base {
      * @return The uint256 data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(uint256)  {
-        return uint256(bytes32(Base._get(idx)));
+        return uint256(abi.decode(Base._get(idx), (bytes32)));
     }
 
     /**

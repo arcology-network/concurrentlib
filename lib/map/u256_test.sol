@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "./U256.sol";
 import "../commutative/U256Cum.sol";
@@ -15,6 +15,13 @@ contract U256MapTest {
 
         require(map.valueAt(0) == 100); 
         require(map.valueAt(1) == 111); 
+
+        (uint256 k, uint256 idx, uint256 v) = map.min();
+        require(v == 100); 
+        require(idx == 0 && map.get(k) == v);
+        ( k,  idx,  v) = map.max();
+        require(v == 111); 
+        require(idx == 1 && map.get(k) == v);
 
         require(map.keyAt(0) == 10); 
         require(map.keyAt(1) == 11); 

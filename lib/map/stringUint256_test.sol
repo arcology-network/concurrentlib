@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "./StringUint256.sol";
 import "../multiprocess/Multiprocess.sol";
@@ -17,6 +17,13 @@ contract StringUint256MapTest {
         map.set(k2, 22);
         map.set(k3, 33);
         require(map.nonNilCount() == 3); 
+        require(map.valueAt(1) == 22); 
+        (string memory k, uint256 idx, uint256 v) = map.min();
+        require(v == 11); 
+        require(idx == 0 && map.get(k) == v);
+        ( k,  idx,  v) = map.max();
+        require(v == 33); 
+        require(idx == 2 && map.get(k) == v);
        
         require(map.exist(k1)); 
         require(map.exist(k2)); 

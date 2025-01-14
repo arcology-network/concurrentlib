@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../base/Base.sol";
 
@@ -36,8 +36,8 @@ contract AddressUint256Map is Base {
      * @param k The address key to retrieve the associated value.
      * @return value The address value associated with the key.
      */
-    function get(address k) public virtual view returns(uint256 value){ 
-         return uint256(bytes32(Base._get(abi.encodePacked(k))));     
+    function get(address k) public virtual returns(uint256 value){ 
+        return uint256(abi.decode(Base._get(abi.encodePacked(k)), (bytes32)));     
     }    
 
     /**
@@ -45,8 +45,13 @@ contract AddressUint256Map is Base {
      * @param idx The key to retrieve the associated index.
      * @return The key value associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(address) {    
-        return address(uint160(bytes20(Base.indToKey(idx))));      
+    function keyAt(uint256 idx) public virtual view returns(address) { 
+        bytes memory rawdata=Base.indToKey(idx);
+        bytes20 resultAdr;
+        for (uint i = 0; i < 20; i++) {
+            resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+        }
+        return address(uint160(resultAdr));  
     }   
 
     /**
@@ -55,7 +60,7 @@ contract AddressUint256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
-        return uint256(bytes32(Base._get(idx)));  
+        return uint256(abi.decode(Base._get(idx), (bytes32)) );  
     }    
 
     /**
@@ -74,13 +79,13 @@ contract AddressUint256Map is Base {
         (uint256 idx, uint256 v) =  abi.decode(Base.minNumerical(), (uint256, uint256));
         return (keyAt(idx),idx, v);
     }
-
+    
     /**
      * @notice Retrieve the max value in the map.
      * @return The maximum value by numerical comparison.
      */
     function max() public view returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v)  = abi.decode(Base.maxNumerical(), (uint256, uint256));
+         (uint256 idx, uint256 v)  = abi.decode(Base.maxNumerical(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 }
