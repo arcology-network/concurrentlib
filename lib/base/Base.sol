@@ -32,7 +32,7 @@ contract Base {
             "new(uint8,bytes,bytes)", uint8(typeID), new bytes(0), new bytes(0)));
         require(success);
     }
-    
+     
     /**
      * @notice Retrieve the length of the container, including nil values.
      * @return The length of the container.
