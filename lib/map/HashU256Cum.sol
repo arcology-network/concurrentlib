@@ -54,7 +54,7 @@ contract HashU256Map is Base {
      * @return value The uint256 value associated with the key.
      */
     function get(bytes32 key) public virtual view returns(uint256 value){    
-        return uint256(bytes32(Base._get(abi.encodePacked(key))));
+        return uint256(abi.decode(Base._get(abi.encodePacked(key)), (bytes32)));
     }    
 
     /**
@@ -62,8 +62,13 @@ contract HashU256Map is Base {
      * @param idx The key to retrieve the associated index.
      * @return The index key associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(uint256) {    
-        return uint256(bytes32(Base.indToKey(idx)));      
+    function keyAt(uint256 idx) public virtual view returns(bytes32) {    
+        bytes memory rawdata=Base.indToKey(idx);
+        bytes32 resultAdr;
+        for (uint i = 0; i < 20; i++) {
+            resultAdr |= bytes32(rawdata[i]) >> (i * 8); 
+        }
+        return resultAdr;      
     }   
 
     /**
@@ -87,7 +92,7 @@ contract HashU256Map is Base {
      * @notice Retrieve the min value in the concurrent map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public view returns(uint256, uint256, uint256) { 
+    function min() public view returns(bytes32, uint256, uint256) { 
         (uint256 idx, uint256 v) = abi.decode(Base.minNumerical(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
@@ -96,7 +101,7 @@ contract HashU256Map is Base {
      * @notice Retrieve the max value in the concurrent map.
      * @return The maximum value by numerical comparison.
      */
-    function max() public view returns(uint256, uint256, uint256) { 
+    function max() public view returns(bytes32, uint256, uint256) { 
         (uint256 idx, uint256 v) = abi.decode(Base.maxNumerical(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
