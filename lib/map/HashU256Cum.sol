@@ -77,7 +77,7 @@ contract HashU256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
      */
     function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
-        return  uint256(bytes32(Base._get(idx)));
+        return uint256(abi.decode(Base._get(idx), (bytes32)));
     }  
 
     /**
