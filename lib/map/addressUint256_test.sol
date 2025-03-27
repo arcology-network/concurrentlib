@@ -45,6 +45,44 @@ contract AddressU256MapTest {
         map.del(addr2);
         map.del(addr3);
         require(map.nonNilCount() == 0); 
+
+        map.set(addr1, 110);  
+        map.set(addr2, 210);
+        map.set(addr3, 310);
+        require(map.nonNilCount() == 3); 
+
+        require(map.valueAt(0) == 110); 
+        require(map.valueAt(1) == 210); 
+        require(map.valueAt(2) == 310); 
+
+        map.resetByInd(0);
+        map.resetByInd(1);
+        map.resetByInd(2);
+
+        require(map.valueAt(0) == 0); 
+        require(map.valueAt(1) == 0); 
+        require(map.valueAt(2) == 0); 
+        require(map.nonNilCount() == 3); 
+
+
+        map.set(addr1, 410);  
+        map.set(addr2, 510);
+        map.set(addr3, 610);
+        require(map.valueAt(0) == 410); 
+        require(map.valueAt(1) == 510); 
+        require(map.valueAt(2) == 610); 
+
+        map.resetByKey(addr1);
+        map.resetByKey(addr2);
+        map.resetByKey(addr3);
+
+        require(map.valueAt(0) == 0); 
+        require(map.valueAt(1) == 0); 
+        require(map.valueAt(2) == 0); 
+
+        require(map.get(addr1) == 0); 
+        require(map.get(addr2) == 0); 
+        require(map.get(addr3) == 0); 
     }
 }
 
