@@ -36,18 +36,40 @@ contract Multiprocess is Base(Base.BYTES) {
      * @param contractAddr The address of the smart contract to execute the function on.
      * @param funcCall The encoded function call data.
      */
-    function push(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual {
-        push(gaslimit, 0, contractAddr, funcCall);
-    }
+    // function push(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual {
+    //     push(gaslimit, 0, contractAddr, funcCall);
+    // }
 
-     /**
+    /**
      * @notice Push an executable message into the container with specified gas limit, contract address, and function call data.
      * @param gaslimit The gas limit for the execution of the function call.
      * @param ethVal The number of wei sent with the message.
      * @param contractAddr The address of the smart contract to execute the function on.
      * @param funcCall The encoded function call data.
      */
-    function push(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
+    // function push(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
+    //     _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
+    // }
+
+
+    /**
+     * @notice Add an job to the parallel job queue.
+     * @param gaslimit The gas limit for the execution of the function call.
+     * @param contractAddr The address of the smart contract to execute the function on.
+     * @param funcCall The encoded function call data.
+     */
+    function addJob(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual {
+        _set(uuid(), abi.encode(gaslimit, 0, contractAddr, funcCall));
+    }
+
+    /**
+     * @notice Add an job to the parallel job queue.
+     * @param gaslimit The gas limit for the execution of the function call.
+     * @param ethVal The number of wei sent with the message.
+     * @param contractAddr The address of the smart contract to execute the function on.
+     * @param funcCall The encoded function call data.
+     */
+    function addJob(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
         _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
     }
  
@@ -83,7 +105,7 @@ contract Multiprocess is Base(Base.BYTES) {
      *      of threads specified in the constructor.
      */
     function run() public {       
-        foreach(abi.encodePacked(numProcesses));
+        invoke(abi.encodePacked(numProcesses));
     }
 
     /**

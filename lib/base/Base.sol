@@ -32,9 +32,9 @@ contract Base {
             "new(uint8,bytes,bytes)", uint8(typeID), new bytes(0), new bytes(0)));
         require(success);
     }
-     
+         
     /**
-     * @notice Retrieve the length of the container, including nil values.
+     * @notice Retrieve the length of the container, including newly appended and deleted values if any.
      * @return The length of the container.
      */
     function fullLength() public view returns(uint256) {
@@ -44,7 +44,7 @@ contract Base {
 
     /**
      * @notice Retrieve the total number of non nil element in the container.
-     * @return The total of the container.
+     * @return The total number of non-nil values in the container.
      */
     function nonNilCount() public view returns(uint256) {
         (, bytes memory data) = address(API).staticcall(abi.encodeWithSignature("length()"));
@@ -52,7 +52,8 @@ contract Base {
     }
      
     /**
-     * @notice Retrieve the committed length of the container. This usually is the length at the previous block height.
+     * @notice Retrieve the committed length of the container. This usually is the length after previous generation or block.
+     * @dev This function is used to get the length of the container after the last commit. 
      * @return The latest committed length of the container. This is function is thread-safe.
      */
     function committedLength() public view returns(uint256) {
@@ -267,8 +268,8 @@ contract Base {
      * @notice Execute a custom operation on the container's data stored.
      * @param data Arbitrary data to be used in the custom operation.
      */
-    function foreach(bytes memory data) public {
-        address(API).call(abi.encodeWithSignature("foreach(bytes)", data));       
+    function invoke(bytes memory data) public {
+        address(API).call(abi.encodeWithSignature("invoke(bytes)", data));       
     }
 
     /**
