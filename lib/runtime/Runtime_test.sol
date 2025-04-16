@@ -12,8 +12,8 @@ contract NumConcurrentInstanceTest  {
 
     function call() public {
         Multiprocess mp = new Multiprocess(2); // 2 Threads
-        mp.push(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 1)); // Will require about 1.5M gas
-        mp.push(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 2));
+        mp.addJob(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 1)); // Will require about 1.5M gas
+        mp.addJob(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 2));
         mp.run();
         require(value.get() == 3);
     }
@@ -83,4 +83,11 @@ contract ParallizerTest  {
     function init() public {}
     function seq() public {}
     function def() public {}
+}
+
+contract PrintTest  {
+    constructor () {
+        // Runtime.print();
+        Runtime.print("Test");
+    }
 }

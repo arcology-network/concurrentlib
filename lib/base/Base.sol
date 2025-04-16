@@ -268,8 +268,8 @@ contract Base {
      * @notice Execute a custom operation on the container's data stored.
      * @param data Arbitrary data to be used in the custom operation.
      */
-    function invoke(bytes memory data) public {
-        address(API).call(abi.encodeWithSignature("invoke(bytes)", data));       
+    function invoke(bytes memory data) public returns(bool, bytes memory) {
+        return address(API).call(abi.encodeWithSignature("invoke(bytes)", data));       
     }
 
     /**

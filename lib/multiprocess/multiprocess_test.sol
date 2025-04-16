@@ -9,6 +9,7 @@ import "../commutative/U256Cum.sol";
 import "../map/StringUint256.sol";
 import "../map/AddressU256Cum.sol";
 
+
 contract U256CumulativeParallelInitTest {
     U256Cumulative[] containers = new U256Cumulative[](2);
 
@@ -16,15 +17,26 @@ contract U256CumulativeParallelInitTest {
         Multiprocess mp = new Multiprocess(2);
         mp.addJob(4000000, address(this), abi.encodeWithSignature("init(uint256)", 0)); // Will require about 1.5M gas
         mp.addJob(4000000, address(this), abi.encodeWithSignature("init(uint256)", 1));
-        mp.run();
+        (bool success, bytes memory encoded) = mp.run();
+        require(success);
+
+        JobResult[] memory results = abi.decode(encoded, (JobResult[])); 
+        require(results.length == 2);
+
+        require(results[0].success);        
+        require(abi.decode(results[0].returnData, (uint256)) == 11);
+
+        require(results[1].success);   
+        require(abi.decode(results[1].returnData, (uint256)) == 12);
 
         require(containers[0].get() == 11);
         require(containers[1].get() == 12);
     }
 
-    function init(uint256 idx) public  { 
+    function init(uint256 idx) public returns(uint256) { 
         containers[idx] = new U256Cumulative(1, 100);
         containers[idx].add(idx + 11);       
+        return idx + 11;
     }
 }
 

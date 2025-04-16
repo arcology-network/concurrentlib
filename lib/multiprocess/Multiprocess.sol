@@ -11,6 +11,12 @@ import "../base/Base.sol";
  *      It serves as a container for executable messages, enabling parallel processing
  *      similar to Python's `multiprocessing` library.
  */
+ 
+struct JobResult {
+    bool success;
+    bytes returnData;
+}
+
 contract Multiprocess is Base(Base.BYTES) {
     enum Status{ 
         SUCCESSFUL, 
@@ -104,8 +110,8 @@ contract Multiprocess is Base(Base.BYTES) {
      * @dev This function processes the executable messages concurrently with the number 
      *      of threads specified in the constructor.
      */
-    function run() public {       
-        invoke(abi.encodePacked(numProcesses));
+    function run() public returns(bool, bytes memory){       
+        return invoke(abi.encodePacked(numProcesses));
     }
 
     /**

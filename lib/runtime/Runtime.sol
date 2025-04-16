@@ -79,4 +79,14 @@ library Runtime {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("defer(bytes4)", funSign));
         return successful;  
     }
+    
+    /**
+     * @notice print a string to the console.
+     * @param info The string to print.
+     * @return The number of concurrent instances.
+     */
+    function print(bytes memory info) internal returns(bool) {
+        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
+        return successful;  
+    }
 }
