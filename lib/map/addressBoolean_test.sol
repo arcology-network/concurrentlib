@@ -40,6 +40,11 @@ contract AddressBooleanMapTest {
         map.del(addr2);
         map.del(addr3);
         require(map.nonNilCount() == 0); 
+
+        map.set(addr1, true);  
+        map.set(addr2, true);
+        map.set(addr3, true);
+        require(map.nonNilCount() == 3); 
     }
 }
 

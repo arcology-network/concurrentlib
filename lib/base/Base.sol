@@ -32,9 +32,9 @@ contract Base {
             "new(uint8,bytes,bytes)", uint8(typeID), new bytes(0), new bytes(0)));
         require(success);
     }
-    
+         
     /**
-     * @notice Retrieve the length of the container, including nil values.
+     * @notice Retrieve the length of the container, including newly appended and deleted values if any.
      * @return The length of the container.
      */
     function fullLength() public view returns(uint256) {
@@ -44,7 +44,7 @@ contract Base {
 
     /**
      * @notice Retrieve the total number of non nil element in the container.
-     * @return The total of the container.
+     * @return The total number of non-nil values in the container.
      */
     function nonNilCount() public view returns(uint256) {
         (, bytes memory data) = address(API).staticcall(abi.encodeWithSignature("length()"));
@@ -52,7 +52,8 @@ contract Base {
     }
      
     /**
-     * @notice Retrieve the committed length of the container. This usually is the length at the previous block height.
+     * @notice Retrieve the committed length of the container. This usually is the length after previous generation or block.
+     * @dev This function is used to get the length of the container after the last commit. 
      * @return The latest committed length of the container. This is function is thread-safe.
      */
     function committedLength() public view returns(uint256) {
@@ -176,6 +177,26 @@ contract Base {
     }
 
     /**
+     * @notice Reset the data associated with the key to its default value.
+     * @param key The key associated with the data to be reset.
+     * @return success true if the data was successfully reset, false otherwise.
+     */
+    function _resetByKey(bytes memory key) public returns(bool) {
+       (bool success,) = address(API).call(abi.encodeWithSignature("resetByKey(bytes)", key));
+       return success;
+    }
+
+    /**
+     * @notice Reset the data associated at the index to its default value.
+     * @param idx The index associated with the data to be reset.
+     * @return success true if the data was successfully reset, false otherwise.
+     */
+    function resetByInd(uint256 idx) public returns(bool) {
+       (bool success,) = address(API).call(abi.encodeWithSignature("resetByInd(uint256)", idx));
+       return success;
+    }
+
+    /**
      * @notice Retrieve the data at the given index from the container.
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
@@ -247,8 +268,8 @@ contract Base {
      * @notice Execute a custom operation on the container's data stored.
      * @param data Arbitrary data to be used in the custom operation.
      */
-    function foreach(bytes memory data) public {
-        address(API).call(abi.encodeWithSignature("foreach(bytes)", data));       
+    function invoke(bytes memory data) public returns(bool, bytes memory) {
+        return address(API).call(abi.encodeWithSignature("invoke(bytes)", data));       
     }
 
     /**

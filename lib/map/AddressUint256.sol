@@ -64,6 +64,15 @@ contract AddressUint256Map is Base {
     }    
 
     /**
+     * @notice Set the element to its intial value.
+     * @param k The key of the element to retrieve.
+     * @return true if the value has been reset, false otherwise.    
+    */
+    function resetByKey(address k) public returns(bool) {
+       return Base._resetByKey(abi.encodePacked(k)); 
+    }
+
+    /**
      * @notice Delete a key-value pair from the map.
      * @param k The address key to delete.
      */

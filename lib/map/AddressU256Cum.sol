@@ -10,7 +10,7 @@ import "../base/Base.sol";
  *      uint256 keys with uint256 values. It inherits from the "Base" contract
  *      to utilize container functionalities for key-value storage.
  */
-contract AddressU256Map is Base { 
+contract AddressU256CumMap is Base { 
     constructor() Base(Base.U256_CUM) {}
 
     /**
@@ -21,22 +21,22 @@ contract AddressU256Map is Base {
     function exist(address k) public view returns(bool) { 
         return Base._exists(abi.encodePacked(k)); 
     }
-    
+     
     /**
-     * @notice insert a key-value pair in the map.
-     * @param key The uint256 key to set.
-     * @param value The uint256 value associated with the key.
-     *  @param lower The uint256 value associated with the key.
-     *  @param upper The uint256 value associated with the key.
+     * @notice insert a NEW key-value pair in the map.
+     * @param key The new uint256 key to set.
+     * @param initDelta The initial delta value associated with the key.
+     *  @param lower The lower bound associated with the key.
+     *  @param upper The upper bound associated with the key.
      */
-    function insert(address key, uint256 value, uint256 lower, uint256 upper) public virtual{ 
-        require(value >= lower, "SafeConversion: Underflow");
-        require(value <= upper, "SafeConversion: Overflow");
+    function set(address key, int256 initDelta, uint256 lower, uint256 upper) public virtual { 
+        require(initDelta <= int256(lower), "Underflow"); // Hidden assumptions 
+        require(initDelta >= int256(upper), "Overflow");
 
         if (!_init(abi.encodePacked(key), abi.encodePacked(lower), abi.encodePacked(upper))) {
             return ;
         }
-        set(key, int256(value));
+        set(key, int256(initDelta));
     } 
 
     /**
