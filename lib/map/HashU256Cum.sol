@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "../base/Base.sol";
+import "../shared/Const.sol"; 
+import "../shared/Base.sol";
 
 /**
  * @author Arcology Network
@@ -11,7 +12,7 @@ import "../base/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract HashU256Map is Base { 
-    constructor() Base(Base.U256_CUM) {}
+    constructor() Base(Const.U256_CUM) {}
 
     /**
      * @notice Check if a given key exists in the map.
@@ -23,13 +24,13 @@ contract HashU256Map is Base {
     }
     
     /**
-     * @notice insert a key-value pair in the map.
+     * @notice Set a NEW key-value pair in the map. If absent, it creates a new one. If exists and bounds match, it adds; else, it fails.
      * @param key The uint256 key to set.
      * @param value The uint256 value associated with the key.
      *  @param lower The uint256 value associated with the key.
      *  @param upper The uint256 value associated with the key.
      */
-    function insert(bytes32 key, uint256 value, uint256 lower, uint256 upper) public virtual{ 
+    function set(bytes32 key, uint256 value, uint256 lower, uint256 upper) public virtual{ 
         require(value >= lower, "SafeConversion: Underflow");
         require(value <= upper, "SafeConversion: Overflow");
 
@@ -39,7 +40,7 @@ contract HashU256Map is Base {
         set(key, int256(value));
     } 
 
-    /**P
+    /**
      * @notice Set a key-value pair in the map.
      * @param key The uint256 key to set.
      * @param delta The uint256 value associated with the key.

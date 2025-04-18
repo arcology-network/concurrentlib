@@ -10,8 +10,8 @@ contract VisitCounterCaller {
     function call() public {
         // counter.visit();
         Multiprocess mp = new Multiprocess(4);
-        mp.push(100000, address(this), abi.encodeWithSignature("callVisit()"));
-        // mp.push(100000, address(this), abi.encodeWithSignature("callVisit()"));
+        mp.addJob(100000, address(this), abi.encodeWithSignature("callVisit()"));
+        // mp.addJob(100000, address(this), abi.encodeWithSignature("callVisit()"));
         mp.run();
         // require(counter.getCounter() == 2);
     }

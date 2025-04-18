@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "../base/Base.sol";
+import "../shared/Const.sol"; 
+import "../shared/Base.sol";
 
 /**
  * @author Arcology Network
@@ -10,7 +11,7 @@ import "../base/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for bytes32 storage.
  */
 contract Bytes32 is Base {
-    constructor() Base(Base.BYTES) {}
+    constructor() Base(Const.BYTES) {}
 
     /**
      * @notice Add a bytes32 data element to the concurrent array.

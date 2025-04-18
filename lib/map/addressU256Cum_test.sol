@@ -101,9 +101,9 @@ contract AddressU256CumTest {
 //         address addr4 = 0x4444444890123456789012345678901234567890;
 
 //         Multiprocess mp = new Multiprocess(2); 
-//         mp.push(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr1, 11));
-//         mp.push(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr2, 22));
-//         mp.push(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr3, 33));
+//         mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr1, 11));
+//         mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr2, 22));
+//         mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr3, 33));
 //         require(mp.nonNilCount() == 3);
 //         mp.run();
 

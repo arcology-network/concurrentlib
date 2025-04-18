@@ -25,20 +25,20 @@ contract BallotTest {
         Multiprocess mp = new Multiprocess(5); 
 
         // Push 5 transactions calling giveRightToVote to the multiprocessor job queue.
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr1));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr2));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr3));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr4));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr5));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr1));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr2));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr3));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr4));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr5));
         mp.run(); // Run the jobs in parallel.
         mp.clear(); // Clear the job queue.
 
         // Push 5 transactions calling delegate to the multiprocessor job queue.
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr1, 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr3, 1));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr5, 1));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr1, 0));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr3, 1));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr5, 1));
         mp.run(); // Run the jobs in parallel.
         mp.rollback(); // Clear the job queue.
 
@@ -54,24 +54,24 @@ contract BallotTest {
         ballot = new Ballot(msg.sender, proposalNames);   
         
         mp = new Multiprocess(5); 
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr1));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr2));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr3));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr4));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr5));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr1));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr2));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr3));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr4));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("giveRightToVote(address)", addr5));
         mp.run(); // Run the jobs in parallel.
         mp.clear(); // Clear the job queue.
 
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("delegate(address,address)", addr2, addr1));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("delegate(address,address)", addr4, addr1));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("delegate(address,address)", addr2, addr1));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("delegate(address,address)", addr4, addr1));
         mp.run(); // Run the jobs in parallel.
         mp.clear(); // Clear the job queue.
 
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr1, 0));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0)); // This should FAIL because addr2 has delegated to addr1.
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr3, 1));
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0)); // This should fail because addr4 has delegated to addr1.
-        mp.push(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr5, 1));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr1, 0));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr2, 0)); // This should FAIL because addr2 has delegated to addr1.
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr3, 1));
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr4, 0)); // This should fail because addr4 has delegated to addr1.
+        mp.addJob(1000000, address(ballot), abi.encodeWithSignature("vote(address,uint256)", addr5, 1));
         mp.run(); // Run the jobs in parallel.
         mp.rollback(); // Clear the job queue.
 
