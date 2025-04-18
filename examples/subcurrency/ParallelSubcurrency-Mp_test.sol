@@ -14,10 +14,10 @@ contract ParallelSubcurrencyTest {
         address Dave = 0x3333337890123456789012345678901234567890;
 
         Multiprocess mp = new Multiprocess(4);
-        mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Alice, 1111));
-        mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Bob, 2222));
-        mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Carol, 3333));
-        mp.push(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Dave, 4444));
+        mp.addJob(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Alice, 1111));
+        mp.addJob(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Bob, 2222));
+        mp.addJob(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Carol, 3333));
+        mp.addJob(100000, address(coin), abi.encodeWithSignature("mint(address,uint256)", Dave, 4444));
         require(mp.nonNilCount() == 4);
         mp.run();
 

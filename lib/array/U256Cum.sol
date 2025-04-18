@@ -2,7 +2,8 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 
-import "../base/Base.sol";
+import "../shared/Const.sol"; 
+import "../shared/Base.sol";
 
 /**
  * @author Arcology Network
@@ -12,7 +13,16 @@ import "../base/Base.sol";
  *      It can only store positive integers within the lower and upper bounds. The lower bound must be less than the upper bound and they must be both positive.
  */
 contract U256Cum is Base {
-    constructor() Base(Base.U256_CUM) {}
+    constructor() Base(Const.U256_CUM) {}
+    
+    /**
+     * @notice Initialize the uint256 data element at the given index in the concurrent array.
+     * @param lower The minimum value of the element.
+     * @param upper The maxium value of the element.
+     */
+    // function init(uint256 lower, uint256 upper) public { 
+    //     Base._init(uuid(), abi.encodePacked(lower), abi.encodePacked(upper));  
+    // }
 
     /**
      * @notice push an uint256 data element to the concurrent array.
@@ -22,10 +32,11 @@ contract U256Cum is Base {
         require(value >= lower, "SafeConversion: Underflow");
         require(value <= upper, "SafeConversion: Overflow");
 
-        if (!_init(uuid(), abi.encodePacked(lower), abi.encodePacked(upper))) {
+        bytes memory key = uuid();
+        if (!_init(key, abi.encodePacked(lower), abi.encodePacked(upper))) {
             return false;
         }
-        return set(nonNilCount() - 1, int256(value));
+        return _set(key, abi.encodePacked(int256(value)));
     }    
 
     /**
@@ -44,15 +55,6 @@ contract U256Cum is Base {
     function get(uint256 idx) public virtual view returns(uint256)  {
         return abi.decode(Base._get(idx), (uint256));  
     }
-
-    /**
-     * @notice Initialize the uint256 data element at the given index in the concurrent array.
-     * @param lower The minimum value of the element.
-     * @param upper The maxium value of the element.
-     */
-    // function init(uint256 lower, uint256 upper) public { 
-    //     Base._init(uuid(), abi.encodePacked(lower), abi.encodePacked(upper));  
-    // }
 
     /**
      * @notice Set the uint256 data element at the given index in the concurrent array.
@@ -79,7 +81,7 @@ contract U256Cum is Base {
     //  * @notice Retrieve the min element in the concurrent array.
     //  * @return The minimum element in the array by numerical comparison.
     //  */
-    // function min() public returns(uint256, uint256) { 
+    // function min() public view returns(uint256, uint256) { 
     //     return abi.decode(Base.minNumerical(), (uint256, uint256));
     // }
 
@@ -87,7 +89,7 @@ contract U256Cum is Base {
     //  * @notice Retrieve the max element in the concurrent array.
     //  * @return The maximum value in the array by numerical comparison.
     //  */
-    // function max() public returns(uint256, uint256) { 
-    //     return abi.decode(Base.maxNumerical(), (uint256));
+    // function max() public view returns(uint256, uint256) { 
+    //     return abi.decode(Base.maxNumerical(), (uint256, uint256));
     // }
 }

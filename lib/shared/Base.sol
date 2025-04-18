@@ -21,8 +21,8 @@ import "../runtime/Runtime.sol";
 contract Base {
     address internal API = address(0x84);
 
-    uint8 public constant BYTES = 107;
-    uint8 public constant U256_CUM = 103; // Cumulative u256
+    // uint8 public constant BYTES = 107;
+    // uint8 public constant U256_CUM = 103; // Cumulative u256
     
     /**
      * @notice Constructor to initiate communication with the external contract.
@@ -70,7 +70,7 @@ contract Base {
      * @return A boolean indicating whether the key exists in it or not.
     */
     function _exists(bytes memory key) public view returns(bool) {
-        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getKey(bytes)", key));
+        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));
         return success;
     }
 
@@ -137,7 +137,7 @@ contract Base {
      * @return success true if the data was successfully updated, false otherwise.
      */
     function _set(bytes memory key, bytes memory elem) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("setKey(bytes,bytes)", key, elem));
+        (bool success,) = address(API).call(abi.encodeWithSignature("setByKey(bytes,bytes)", key, elem));
         return success;   
     }
 
@@ -172,7 +172,7 @@ contract Base {
      * @return success true if the data was successfully deleted, false otherwise.
      */
     function _del(bytes memory key) public returns(bool) {
-       (bool success,) = address(API).call(abi.encodeWithSignature("delKey(bytes)", key));
+       (bool success,) = address(API).call(abi.encodeWithSignature("delByKey(bytes)", key));
        return success;
     }
 
@@ -202,11 +202,8 @@ contract Base {
      * @return The data stored at the specified index.
      */
     function _get(uint256 idx) public virtual view returns(bytes memory) {
-        bytes memory key = indToKey(idx);
-        if (key.length == 0) {
-            return new bytes(0);
-        }
-        return this._get(key);
+        (,bytes memory elem) = address(API).staticcall(abi.encodeWithSignature("getByIndex(uint256)", idx)); 
+        return elem;
     }
 
     /**
@@ -215,7 +212,7 @@ contract Base {
      * @return The data stored at the specified key.
      */
     function _get(bytes memory key) public view returns(bytes memory)  {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("getKey(bytes)", key));
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));
         return data;
     }
 
@@ -256,7 +253,7 @@ contract Base {
     }
 
     /**
-     * @notice Clear all data stored.
+     * @notice Set all the to their default value.
      * @return success true if the all the data was successfully deleted, false otherwise.
      */
     function clear() public returns(bool)  {

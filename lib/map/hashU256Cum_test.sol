@@ -11,9 +11,9 @@ contract HashU256MapTest {
         bytes32 hash2 = keccak256(abi.encodePacked("1"));
         bytes32 hash3 = keccak256(abi.encodePacked("2"));
 
-        container.insert(hash1, 18, 17, 111);
-        container.insert(hash2, 19, 18, 112);                
-        container.insert(hash3, 20, 19, 113);
+        container.set(hash1, 18, 17, 111);
+        container.set(hash2, 19, 18, 112);                
+        container.set(hash3, 20, 19, 113);
 
         require(container.get(hash1) == 18);
         require(container.get(hash2) == 19);
@@ -36,7 +36,7 @@ contract HashU256MapTest {
         require(!container.del(hash1));
         require(container.nonNilCount() == 2);
 
-        container.insert(hash1, 38, 27, 111);
+        container.set(hash1, 38, 27, 111);
         require(container.get(hash1) == 38);
         require(container.nonNilCount() == 3);
     }

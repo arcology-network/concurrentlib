@@ -2,7 +2,8 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "../storage/Storage.sol";
-import "../base/Base.sol";
+import "../shared/Const.sol"; 
+import "../shared/Base.sol";
 
 /**
  * @author Arcology Network
@@ -17,7 +18,7 @@ struct JobResult {
     bytes returnData;
 }
 
-contract Multiprocess is Base(Base.BYTES) {
+contract Multiprocess is Base(Const.BYTES) {
     enum Status{ 
         SUCCESSFUL, 
         EXECUTION_FAILED, 

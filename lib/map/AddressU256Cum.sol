@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0 <0.9.0;
 
-import "../base/Base.sol";
+import "../shared/Const.sol"; 
+import "../shared/Base.sol";
 
 /**
  * @author Arcology Network
@@ -11,7 +12,7 @@ import "../base/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract AddressU256CumMap is Base { 
-    constructor() Base(Base.U256_CUM) {}
+    constructor() Base(Const.U256_CUM) {}
 
     /**
      * @notice Check if a given key exists in the map.
@@ -23,7 +24,7 @@ contract AddressU256CumMap is Base {
     }
      
     /**
-     * @notice insert a NEW key-value pair in the map.
+     * @notice Set a NEW key-value pair in the map. If absent, it creates a new one. If exists and bounds match, it adds; else, it fails.
      * @param key The new uint256 key to set.
      * @param initDelta The initial delta value associated with the key.
      *  @param lower The lower bound associated with the key.
