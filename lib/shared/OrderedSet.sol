@@ -7,18 +7,10 @@ import "../runtime/Runtime.sol";
 /**
  * @author Arcology Network
  * @title BytesOrderedSet Concurrent Container
- * @dev The BytesOrderedSet contract is a concurrent container designed for concurrent operations,
+ * @dev The BytesOrderedSet contract is designed for concurrent operations,
  *      allowing elements to be added in different processes running in parallel without
  *      causing state conflicts. It provides functionalities for both key-value lookup and
  *      linear access.
- *
- *      The contract serves as a hybrid data structure, functioning as a map set behind the scenes.
- *      The order of elements is formed when any timing-dependent functions like "pop()" or "nonNilCount()"
- *      are called. However, performing concurrent "pop()" or getting the length is not recommended in
- *      a parallel environment, as these operations are timing-independent and may lead to conflicts. 
- *      Transactions resulting conflicts will be reverted to protect the state consistency.
- *
- *      Delopers should exercise caution when accessing the container concurrently to avoid conflicts.
  */
 contract BytesOrderedSet {
     address internal API = address(0x84);
@@ -37,15 +29,8 @@ contract BytesOrderedSet {
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
      */
-    function _get(uint256 idx) public virtual view returns(bytes memory) {
-        // (,bytes memory key) = address(API).staticcall(abi.encodeWithSignature("keyByIndex(uint256)", idx)); 
-        // if (key.length == 0) {
-        //     return new bytes(0);
-        // }
-        // // return this._get(key);
-        // (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));
-        // return data;
-        (,bytes memory elem) = address(API).staticcall(abi.encodeWithSignature("getByIndex(uint256)", idx)); 
+    function get(uint256 idx) public virtual view returns(bytes memory) {
+        (,bytes memory elem) = address(API).staticcall(abi.encodeWithSignature("keyByIndex(uint256)", idx)); 
         return elem;
     }
          
@@ -73,9 +58,8 @@ contract BytesOrderedSet {
      * @param elem The data to be stored.
      * @return success true if the data was successfully updated, false otherwise.
      */
-    function set(bytes memory elem) public returns(bool) {
-        bytes memory key = Runtime.uuid();
-        (bool success,) = address(API).call(abi.encodeWithSignature("setByKey(bytes,bytes)", key, elem));
+    function set(bytes memory elem) public virtual returns(bool) {
+        (bool success,) = address(API).call(abi.encodeWithSignature("setByKey(bytes,bytes)", elem, hex"01"));
         return success;   
     }
 
