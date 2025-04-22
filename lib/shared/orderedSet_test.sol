@@ -36,5 +36,10 @@ contract OrderedSetTest {
         require(container.exists(arr1));
         require(container.exists(arr2));
         require(!container.exists(arr3));
+        require(container.Length() == 2);
+
+        container.set(arr1);  
+        container.set(arr2); 
+        require(container.Length() == 2);
     }
 }

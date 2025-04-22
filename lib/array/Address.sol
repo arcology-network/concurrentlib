@@ -27,7 +27,7 @@ contract Address is Base {
      */
     function pop() public virtual returns(address) { 
         // return abi.decode(Base._pop(), (address));
-        bytes memory rawdata=Base._pop();
+        bytes memory rawdata=Base._delLast();
         bytes20 resultAdr;
         for (uint i = 0; i < 20; i++) {
             resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
@@ -40,9 +40,10 @@ contract Address is Base {
      * @param idx The index of the address element to retrieve.
      * @return The address element stored at the given index.
      */
+    
     function get(uint256 idx) public virtual returns(address)  {
         // return abi.decode(Base._get(idx), (address));
-        bytes memory rawdata=Base._get(idx);
+        (,bytes memory rawdata)=Base._get(idx);
         emit LogBys(rawdata);
         bytes20 resultAdr;
         for (uint i = 0; i < 20; i++) {

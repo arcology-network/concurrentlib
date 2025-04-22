@@ -38,7 +38,8 @@ contract AddressBooleanMap is Base {
      * @return The boolean value associated with the key.
      */
     function get(address k) public virtual view returns(bool){ 
-        return abi.decode(Base._get(abi.encodePacked(k)), (bool));  
+        (bool success, bytes memory data) = Base._get(abi.encodePacked(k));
+        return (abi.decode(data, (bool)));  
     }   
 
     /**
@@ -61,7 +62,8 @@ contract AddressBooleanMap is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual view returns(bool){ 
-        return abi.decode(Base._get(idx), (bool));  
+        (,bytes memory data) = Base._get(idx);
+        return abi.decode(data, (bool));  
     }    
 
     /**

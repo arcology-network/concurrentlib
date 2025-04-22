@@ -22,7 +22,7 @@ contract ByteTest {
         container.set(1, arr2);       
         require(keccak256(container.get(0)) == keccak256(arr1));
         require(keccak256(container.get(1)) == keccak256(arr2));
-        require(keccak256(container.pop()) == keccak256(arr2));
+        require(keccak256(container.delLast()) == keccak256(arr2));
 
         container.clear();
         require(container.nonNilCount() == 0); 

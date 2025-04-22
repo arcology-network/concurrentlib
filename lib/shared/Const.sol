@@ -3,6 +3,6 @@ pragma solidity >=0.7.0;
 import "../runtime/Runtime.sol";
 
 library Const {
-    uint8 public constant BYTES = 107;
     uint8 public constant U256_CUM = 103; // Cumulative u256
+    uint8 public constant BYTES = 107;
 }

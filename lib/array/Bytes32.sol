@@ -26,7 +26,7 @@ contract Bytes32 is Base {
      * @return The last bytes32 data element from the array.
      */
     function pop() public virtual returns(bytes32) {
-        return abi.decode(Base._pop(), (bytes32));
+        return abi.decode(Base._delLast(), (bytes32));
     }
 
     /**
@@ -35,7 +35,8 @@ contract Bytes32 is Base {
      * @return The bytes32 data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(bytes32)  {
-        return abi.decode(Base._get(idx), (bytes32));
+        (,bytes memory data)=Base._get(idx);
+        return abi.decode(data, (bytes32));
     }
 
     /**
