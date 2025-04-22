@@ -11,8 +11,8 @@ import "../runtime/Runtime.sol";
  *      linear access.
  *
  *      The contract serves as a hybrid data structure, functioning as a map set behind the scenes.
- *      The order of elements is formed when any timing-dependent functions like "pop()" or "nonNilCount()"
- *      are called. However, performing concurrent "pop()" or getting the length is not recommended in
+ *      The order of elements is formed when any timing-dependent functions like "delLast()" or "nonNilCount()"
+ *      are called. However, performing concurrent "delLast()" or getting the length is not recommended in
  *      a parallel environment, as these operations are timing-independent and may lead to conflicts. 
  *      Transactions resulting conflicts will be reverted to protect the state consistency.
  *
@@ -65,35 +65,64 @@ contract Base {
     }
 
     /**
-     * @notice Checks if a key exists in the the data structure. *
-     * @param key The key to check for existence.
-     * @return A boolean indicating whether the key exists in it or not.
-    */
-    function _exists(bytes memory key) public view returns(bool) {
-        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));
-        return success;
+     * @notice Removes and returns the last element of the container.
+     * @return The data of the removed element.
+     */
+    function _delLast() public virtual returns(bytes memory) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("delLast()"));
+        return data;
     }
-
+    
     /**
-     * @notice Checks if the index exists in the the data structure.
-     * @param idx The index to check for existence.
-     * @return A boolean indicating whether the key exists in it or not.
-    */
-    function _exists(uint256 idx) public view returns(bool) {
+     * @notice Delete the data at the given index in the container.
+     * @param idx The index of the data to be deleted.
+     * @return success true if the data was successfully deleted, false otherwise.
+     */
+    function _del(uint256 idx) public returns(bool) {
         bytes memory key = indToKey(idx);
         if (key.length == 0) {
             return false;
         }
-        return _exists(key);
+        return _del(key);
+    }
+    
+    /**
+     * @notice Delete the data associated with the given key from the container.
+     * @param key The key associated with the data to be deleted.
+     * @return success true if the data was successfully deleted, false otherwise.
+     */
+    function _del(bytes memory key) public returns(bool) {
+       (bool success,) = address(API).call(abi.encodeWithSignature("delByKey(bytes)", key));
+       return success;
+    }
+    
+    /**
+     * @notice Delete all the elements.
+     * @return success true if the all the data was successfully deleted, false otherwise.
+     */
+    function clear() public returns(bool)  {
+        (bool success,) = address(API).call(abi.encodeWithSignature("clear()"));
+        return success;       
+    }
+    
+    /**
+     * @notice Reset the data associated with the key to its default value.
+     * @param key The key associated with the data to be reset.
+     * @return success true if the data was successfully reset, false otherwise.
+     */
+    function _resetByKey(bytes memory key) public returns(bool) {
+       (bool success,) = address(API).call(abi.encodeWithSignature("resetByKey(bytes)", key));
+       return success;
     }
 
     /**
-     * @notice Removes and returns the last element of the container.
-     * @return The data of the removed element.
+     * @notice Reset the data associated at the index to its default value.
+     * @param idx The index associated with the data to be reset.
+     * @return success true if the data was successfully reset, false otherwise.
      */
-    function _pop() public virtual returns(bytes memory) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("pop()"));
-        return data;
+    function resetByInd(uint256 idx) public returns(bool) {
+       (bool success,) = address(API).call(abi.encodeWithSignature("resetByInd(uint256)", idx));
+       return success;
     }
 
     /**
@@ -102,7 +131,7 @@ contract Base {
      * @return The key associated with the given index.
      */
     function indToKey(uint256 idx) public view returns(bytes memory) {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("keyByIndex(uint256)", idx));   
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("indToKey(uint256)", idx));   
         return data;  
     }
 
@@ -112,7 +141,7 @@ contract Base {
      * @return The index associated with the given key.
      */
     function keyToInd(bytes memory key) public view returns(uint256) {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("indexByKey(bytes)", key));   
+        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("keyToInd(bytes)", key));   
         return abi.decode(data,(uint256));     
     }
     
@@ -152,58 +181,37 @@ contract Base {
         (bool success,) = address(API).call(abi.encodeWithSignature("init(bytes,bytes,bytes)", key, min, max));
         return success;   
     }
+    
+    /**
+     * @notice Checks if a key exists in the the data structure. *
+     * @param key The key to check for existence.
+     * @return A boolean indicating whether the key exists in it or not.
+    */
+    function _exists(bytes memory key) public view returns(bool) {
+        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));
+        return success;
+    }
 
     /**
-     * @notice Delete the data at the given index in the container.
-     * @param idx The index of the data to be deleted.
-     * @return success true if the data was successfully deleted, false otherwise.
-     */
-    function _del(uint256 idx) public returns(bool) {
+     * @notice Checks if the index exists in the the data structure.
+     * @param idx The index to check for existence.
+     * @return A boolean indicating whether the key exists in it or not.
+    */
+    function _exists(uint256 idx) public view returns(bool) {
         bytes memory key = indToKey(idx);
         if (key.length == 0) {
             return false;
         }
-        return _del(key);
+        return _exists(key);
     }
-
-    /**
-     * @notice Delete the data associated with the given key from the container.
-     * @param key The key associated with the data to be deleted.
-     * @return success true if the data was successfully deleted, false otherwise.
-     */
-    function _del(bytes memory key) public returns(bool) {
-       (bool success,) = address(API).call(abi.encodeWithSignature("delByKey(bytes)", key));
-       return success;
-    }
-
-    /**
-     * @notice Reset the data associated with the key to its default value.
-     * @param key The key associated with the data to be reset.
-     * @return success true if the data was successfully reset, false otherwise.
-     */
-    function _resetByKey(bytes memory key) public returns(bool) {
-       (bool success,) = address(API).call(abi.encodeWithSignature("resetByKey(bytes)", key));
-       return success;
-    }
-
-    /**
-     * @notice Reset the data associated at the index to its default value.
-     * @param idx The index associated with the data to be reset.
-     * @return success true if the data was successfully reset, false otherwise.
-     */
-    function resetByInd(uint256 idx) public returns(bool) {
-       (bool success,) = address(API).call(abi.encodeWithSignature("resetByInd(uint256)", idx));
-       return success;
-    }
-
+    
     /**
      * @notice Retrieve the data at the given index from the container.
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
      */
-    function _get(uint256 idx) public virtual view returns(bytes memory) {
-        (,bytes memory elem) = address(API).staticcall(abi.encodeWithSignature("getByIndex(uint256)", idx)); 
-        return elem;
+    function _get(uint256 idx) public view returns(bool, bytes memory) {
+        return address(API).staticcall(abi.encodeWithSignature("getByIndex(uint256)", idx)); 
     }
 
     /**
@@ -211,9 +219,8 @@ contract Base {
      * @param key The key associated with the data to retrieve.
      * @return The data stored at the specified key.
      */
-    function _get(bytes memory key) public view returns(bytes memory)  {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));
-        return data;
+    function _get(bytes memory key) public view returns(bool, bytes memory)  {
+        return address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));  
     }
 
     /**
@@ -250,15 +257,6 @@ contract Base {
     function maxString() public view returns(bytes memory)  {
         (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxString()"));
         return data;
-    }
-
-    /**
-     * @notice Set all the to their default value.
-     * @return success true if the all the data was successfully deleted, false otherwise.
-     */
-    function clear() public returns(bool)  {
-        (bool success,) = address(API).call(abi.encodeWithSignature("clear()"));
-        return success;       
     }
 
     /**

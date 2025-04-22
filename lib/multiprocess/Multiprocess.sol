@@ -38,28 +38,6 @@ contract Multiprocess is Base(Const.BYTES) {
     } 
 
     /**
-     * @notice Push an executable message into the container with specified gas limit, contract address, and function call data.
-     * @param gaslimit The gas limit for the execution of the function call.
-     * @param contractAddr The address of the smart contract to execute the function on.
-     * @param funcCall The encoded function call data.
-     */
-    // function push(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual {
-    //     push(gaslimit, 0, contractAddr, funcCall);
-    // }
-
-    /**
-     * @notice Push an executable message into the container with specified gas limit, contract address, and function call data.
-     * @param gaslimit The gas limit for the execution of the function call.
-     * @param ethVal The number of wei sent with the message.
-     * @param contractAddr The address of the smart contract to execute the function on.
-     * @param funcCall The encoded function call data.
-     */
-    // function push(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
-    //     _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
-    // }
-
-
-    /**
      * @notice Add an job to the parallel job queue.
      * @param gaslimit The gas limit for the execution of the function call.
      * @param contractAddr The address of the smart contract to execute the function on.
@@ -84,8 +62,8 @@ contract Multiprocess is Base(Const.BYTES) {
      * @notice Pop an executable message from the container.
      * @return The popped executable message.
      */
-    function pop() public virtual returns(bytes memory) { 
-        return abi.decode(Base._pop(), (bytes));  
+    function delLast() public virtual returns(bytes memory) { 
+        return abi.decode(Base._delLast(), (bytes));  
     }
 
     /**
@@ -94,7 +72,8 @@ contract Multiprocess is Base(Const.BYTES) {
      * @return The executable message at the specified index.
      */
     function get(uint256 idx) public virtual returns(bytes memory) {
-        return abi.decode(Base._get(idx), (bytes));  
+        (,bytes memory data) = Base._get(idx);
+        return abi.decode(data, (bytes));  
     }
 
     /**

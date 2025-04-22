@@ -25,8 +25,8 @@ contract Bytes is Base {
      * @notice Remove and return the last bytes data element from the concurrent array.
      * @return The last bytes data element from the array.
      */
-    function pop() public virtual returns(bytes memory) { 
-        return Base._pop();  
+    function delLast() public virtual returns(bytes memory) { 
+        return Base._delLast();  
     }
 
     /**
@@ -35,7 +35,8 @@ contract Bytes is Base {
      * @return The bytes data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(bytes memory)  { 
-        return Base._get(idx);  
+        (,bytes memory data) = Base._get(idx);
+        return data;  
     }
 
     /**
@@ -46,16 +47,4 @@ contract Bytes is Base {
     function set(uint256 idx, bytes memory elem) public { 
         Base._set(idx, (elem));
     }
-    
-    /**
-     * @notice Find the index of the address element in the concurrent array.
-     * @param elem The element to be searched for.
-     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
-     */
-    function find(bytes memory elem, uint256 offset) public view returns(uint256) { 
-        for (uint256 i = offset; i < nonNilCount(); i++)
-            if (keccak256(elem) == keccak256(get(i)))
-                return i;     
-        return type(uint256).max;   
-     }
 }

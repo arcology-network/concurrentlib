@@ -26,8 +26,8 @@ contract Int256 is Base {
      * @notice Remove and return the last int256 data element from the concurrent array.
      * @return The last int256 data element from the array.
      */
-    function pop() public virtual returns(int256) { 
-        return abi.decode(Base._pop(), (int256));  
+    function delLast() public virtual returns(int256) { 
+        return abi.decode(Base._delLast(), (int256));  
     }
 
     /**
@@ -36,7 +36,8 @@ contract Int256 is Base {
      * @return The int256 data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(int256)  {
-        return abi.decode(Base._get(idx), (int256));  
+        (,bytes memory data) = Base._get(idx);
+        return abi.decode(data, (int256));  
     }
 
     /**
@@ -44,35 +45,7 @@ contract Int256 is Base {
      * @param idx The index where the int256 data element should be stored.
      * @param elem The int256 data element to be stored at the specified index.
      */
-    function set(uint256 idx, int256 elem) public { 
-        Base._set(idx, abi.encodePacked(elem));  
+    function set(uint256 idx, int256 elem) public returns(bool) { 
+       return Base._set(idx, abi.encodePacked(elem));  
     }
-
-    /**
-     * @notice Find the index of the address element in the concurrent array.
-     * @param elem The element to be searched for.
-     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
-     */
-    function find(int256 elem, uint256 offset) public view returns(uint256) { 
-        for (uint256 i = offset; i < nonNilCount(); i++)
-            if (elem == get(i))
-                return i;     
-        return type(uint256).max;
-    }
-
-    // /**
-    //  * @notice Retrieve the min element in the concurrent array.
-    //  * @return The minimum element in the array by numerical comparison.
-    //  */
-    // function min() public returns(int256, int256) { 
-    //     return abi.decode(Base.minNumerical(), (int256, int256));
-    // }
-
-    // /**
-    //  * @notice Retrieve the max element in the concurrent array.
-    //  * @return The maximum value in the array by numerical comparison.
-    //  */
-    // function max() public returns(int256, int256) { 
-    //     return abi.decode(Base.maxNumerical(), (int256));
-    // }
 }

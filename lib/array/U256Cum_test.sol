@@ -23,20 +23,18 @@ contract U256CumArrayTest {
       
         require(container.nonNilCount() == 3);
 
-        Runtime.print(abi.encodePacked(container.fullLength()));
+        require(container.get(2) == 18);
+        require(container.get(3) == 19);
+        require(container.get(4) == 20);
 
-        // require(container.get(5) == 18);
-        // require(container.get(1) == 19);
-        // require(container.get(2) == 20);
+        require(container.set(2, 1));
+        require(container.get(2) == 19);
 
-        // container.set(0, 1);
-        // require(container.get(0) == 19);
+        require(container.set(3, -1));
+        require(container.get(3) == 18);      
 
-        // container.set(0, -1);
-        // require(container.get(0) == 18);      
-
-        // container.set(0, -1);
-        // require(container.get(0) == 17);  
+        require(!container.set(4, -3)); // Won't change the value, because the value is out of range
+        require(container.get(4) == 20);  
 
         // require(!container.set(0, -1)); // Must fail, because the value is out of range
         // require(container.get(0) == 17);  // The value should not be changed

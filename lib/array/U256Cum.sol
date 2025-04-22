@@ -14,15 +14,6 @@ import "../shared/Base.sol";
  */
 contract U256Cum is Base {
     constructor() Base(Const.U256_CUM) {}
-    
-    /**
-     * @notice Initialize the uint256 data element at the given index in the concurrent array.
-     * @param lower The minimum value of the element.
-     * @param upper The maxium value of the element.
-     */
-    // function init(uint256 lower, uint256 upper) public { 
-    //     Base._init(uuid(), abi.encodePacked(lower), abi.encodePacked(upper));  
-    // }
 
     /**
      * @notice push an uint256 data element to the concurrent array.
@@ -43,8 +34,8 @@ contract U256Cum is Base {
      * @notice Remove and return the last uint256 data element from the concurrent array.
      * @return The last uint256 data element from the array.
      */
-    function pop() public virtual returns(uint256) { 
-        return abi.decode(Base._pop(), (uint256));  
+    function delLast() public virtual returns(uint256) { 
+        return abi.decode(Base._delLast(), (uint256));  
     }
 
     /**
@@ -53,7 +44,18 @@ contract U256Cum is Base {
      * @return The uint256 data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(uint256)  {
-        return abi.decode(Base._get(idx), (uint256));  
+        (, bytes memory data) = Base._get(idx);
+        return abi.decode(data, (uint256));  
+    }
+
+    /**
+     * @notice Get the data at the given index from the container, returning a boolean indicating success.
+     * @param idx The index of the data to retrieve.
+     * @return The data stored at the specified index.
+     */
+    function at(uint256 idx) public view returns(bool, uint256) {
+        (bool success, bytes memory data) = Base._get(idx);
+        return (success, abi.decode(data, (uint256)));
     }
 
     /**
@@ -64,32 +66,4 @@ contract U256Cum is Base {
     function set(uint256 idx, int256 delta) public returns(bool) { 
         return _set(idx, abi.encodePacked(delta));  
     }
-
-    /**
-     * @notice Find the index of the address element in the concurrent array.
-     * @param elem The element to be searched for.
-     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
-     */
-    function find(uint256 elem, uint256 offset) public view returns(uint256) { 
-        for (uint256 i = offset; i < nonNilCount(); i++)
-            if (elem == get(i))
-                return i;     
-        return type(uint256).max;
-    }
-
-    // /**
-    //  * @notice Retrieve the min element in the concurrent array.
-    //  * @return The minimum element in the array by numerical comparison.
-    //  */
-    // function min() public view returns(uint256, uint256) { 
-    //     return abi.decode(Base.minNumerical(), (uint256, uint256));
-    // }
-
-    // /**
-    //  * @notice Retrieve the max element in the concurrent array.
-    //  * @return The maximum value in the array by numerical comparison.
-    //  */
-    // function max() public view returns(uint256, uint256) { 
-    //     return abi.decode(Base.maxNumerical(), (uint256, uint256));
-    // }
 }

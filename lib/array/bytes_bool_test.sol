@@ -24,9 +24,9 @@ contract PairTest {
 
         require(keccak256(bytesContainer.get(0)) == keccak256(arr1));
         require(keccak256(bytesContainer.get(1)) == keccak256(arr2));
-        require(keccak256(bytesContainer.pop()) == keccak256(arr2));
+        require(keccak256(bytesContainer.delLast()) == keccak256(arr2));
 
-        bytesContainer.pop();
+        bytesContainer.delLast();
         require(bytesContainer.nonNilCount() == 0); 
 
         require(boolContainer.nonNilCount() == 0); 
@@ -52,10 +52,10 @@ contract PairTest {
         require(boolContainer.get(2));
         require(!boolContainer.get(3));
 
-        require(!boolContainer.pop());
-        require(boolContainer.pop());
-        require(boolContainer.pop());
-        require(!boolContainer.pop());
+        require(!boolContainer.delLast());
+        require(boolContainer.delLast());
+        require(boolContainer.delLast());
+        require(!boolContainer.delLast());
         require(boolContainer.nonNilCount() == 0);         
     }
 }

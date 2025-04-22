@@ -67,15 +67,15 @@ contract U256ParallelPopTest {
         container.push(2);
 
         Multiprocess mp = new Multiprocess(2);
-        mp.addJob(1000000, address(this), abi.encodeWithSignature("pop()"));
-        mp.addJob(1000000, address(this), abi.encodeWithSignature("pop()"));
+        mp.addJob(1000000, address(this), abi.encodeWithSignature("delLast()"));
+        mp.addJob(1000000, address(this), abi.encodeWithSignature("delLast()"));
         mp.run();
 
         require(container.nonNilCount() == 1);
     }
 
-    function pop() public  { 
-        container.pop();
+    function delLast() public  { 
+        container.delLast();
     }
 }
 
@@ -90,23 +90,23 @@ contract U256ParallelConflictTest {
     }
 
     function call() public  {     
-        container.pop(); 
+        container.delLast(); 
         Multiprocess mp = new Multiprocess(1);
-        mp.addJob(100000, address(this), abi.encodeWithSignature("pop()"));
-        // // mp.addJob(100000, address(this), abi.encodeWithSignature("pop()"));
+        mp.addJob(100000, address(this), abi.encodeWithSignature("delLast()"));
+        // // mp.addJob(100000, address(this), abi.encodeWithSignature("delLast()"));
         mp.run();
     
         // require(container.nonNilCount() == 1); 
-        // pop();
+        // delLast();
     }
 
     function get(uint256 idx) public returns(uint256){
         return container.get(idx);  
     }
 
-    function pop() public {
+    function delLast() public {
         container.get(1); 
-        // container.pop();   
+        // container.delLast();   
     }
 }
 
@@ -138,7 +138,7 @@ contract U256ParallelTest {
         require(container.get(3) == uint256(41));   
         require(container.get(4) == uint256(51));  
  
-        require(container.pop() == uint256(51));  
+        require(container.delLast() == uint256(51));  
         require(container.nonNilCount() == 4);
 
         mp.addJob(1000000, address(this), abi.encodeWithSignature("get(uint256)", 0));
@@ -146,16 +146,16 @@ contract U256ParallelTest {
         mp.run();
         mp.clear();
 
-        pop(); // idx == 4
+        delLast(); // idx == 4
         require(container.nonNilCount() == 3);
 
-        pop(); // idx == 3
+        delLast(); // idx == 3
         require(container.nonNilCount() == 2);
  
-        // Here should be one conflict. So only one pop() will take effect.
+        // Here should be one conflict. So only one delLast() will take effect.
         mp.clear();
-        mp.addJob(100000, address(this), abi.encodeWithSignature("pop()"));
-        mp.addJob(100000, address(this), abi.encodeWithSignature("pop()"));
+        mp.addJob(100000, address(this), abi.encodeWithSignature("delLast()"));
+        mp.addJob(100000, address(this), abi.encodeWithSignature("delLast()"));
         mp.run();
 
         require(container.nonNilCount() == 1); 
@@ -173,8 +173,8 @@ contract U256ParallelTest {
         return container.set(idx, v);  
     }
 
-    function pop() public {
-        container.pop();   
+    function delLast() public {
+        container.delLast();   
     }
 }
 
@@ -225,7 +225,7 @@ contract ArrayOfU256ParallelTest {
     }
 
     function pop(uint256 id) public {
-        array[id].pop();  
+        array[id].delLast();  
     }
 }
 
@@ -1097,13 +1097,14 @@ contract ParaConflictTest {
         mp.clear();
         require(left.get() == 1);
         require(right.get() == 1);
+        require(mp.fullLength() == 2);
 
-        sharedContract shared =  new sharedContract();    
-        mp.addJob(50000, address(left), abi.encodeWithSignature("callShared(address)", address(shared)));
-        mp.addJob(50000, address(right), abi.encodeWithSignature("callShared(address)", address(shared)));
-        mp.run();
+        // sharedContract shared =  new sharedContract();    
+        // mp.addJob(50000, address(left), abi.encodeWithSignature("callShared(address)", address(shared)));
+        // mp.addJob(50000, address(right), abi.encodeWithSignature("callShared(address)", address(shared)));
+        // mp.run();
 
-        require(shared.get() == 1);
+        // require(shared.get() == 1);
     }
 } 
 

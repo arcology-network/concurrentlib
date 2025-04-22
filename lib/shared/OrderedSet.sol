@@ -14,13 +14,15 @@ import "../runtime/Runtime.sol";
  */
 contract BytesOrderedSet {
     address internal API = address(0x84);
+    bytes internal constant MIN = abi.encodePacked(uint256(0));
+    bytes internal constant MAX = abi.encodePacked(type(uint256).max);
     
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
     constructor () {       
         (bool success,) = address(API).call(abi.encodeWithSignature(
-            "new(uint8,bytes,bytes)", uint8(Const.BYTES), new bytes(0), new bytes(0)));
+            "new(uint8,bytes,bytes)", uint8(Const.U256_CUM), new bytes(0), new bytes(0)));
         require(success);
     }
     
@@ -30,8 +32,18 @@ contract BytesOrderedSet {
      * @return The data stored at the specified index.
      */
     function get(uint256 idx) public virtual view returns(bytes memory) {
-        (,bytes memory elem) = address(API).staticcall(abi.encodeWithSignature("keyByIndex(uint256)", idx)); 
+        (,bytes memory elem) = address(API).staticcall(abi.encodeWithSignature("indToKey(uint256)", idx)); 
         return elem;
+    }
+      
+    /**
+     * @notice Checks if a key exists in the the data structure. *
+     * @param elem The elem to check for existence.
+     * @return A boolean indicating whether the key exists in it or not.
+    */
+    function exists(bytes memory elem) public view returns(bool) {
+        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", elem));
+        return success;
     }
          
     /**
@@ -42,24 +54,14 @@ contract BytesOrderedSet {
         (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("fullLength()"));
         return abi.decode(data, (uint256));
     }  
-  
-    /**
-     * @notice Checks if a key exists in the the data structure. *
-     * @param elem The elem to check for existence.
-     * @return A boolean indicating whether the key exists in it or not.
-    */
-    function exists(bytes memory elem) public view returns(bool) {
-        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", elem));
-        return success;
-    }
 
     /**
      * @notice Set the data associated with the given key in the container.
      * @param elem The data to be stored.
      * @return success true if the data was successfully updated, false otherwise.
      */
-    function set(bytes memory elem) public virtual returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("setByKey(bytes,bytes)", elem, hex"01"));
+    function set(bytes memory elem) public returns(bool) {
+        (bool success,) = address(API).call(abi.encodeWithSignature("init(bytes,bytes,bytes)", elem, MIN, MAX));
         return success;   
     }
 

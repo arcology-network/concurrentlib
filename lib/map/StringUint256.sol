@@ -38,7 +38,8 @@ contract StringUint256Map is Base {
      * @return value The string value associated with the key.
      */
     function get(string memory k) public virtual view returns(uint256 value){ 
-         return uint256(bytes32(Base._get(bytes(k))));     
+        (bool success, bytes memory data) = Base._get(bytes(k));
+         return uint256(bytes32(data));     
     }    
 
     /**
@@ -56,7 +57,8 @@ contract StringUint256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
-        return uint256(bytes32(Base._get(idx)));  
+        (bool success, bytes memory data) = Base._get(idx);
+        return uint256(bytes32(data));
     }    
 
     /**

@@ -25,8 +25,8 @@ contract String is Base {
      * @notice Remove and return the last string data element from the concurrent array.
      * @return The last string data element from the array.
      */
-    function pop() public virtual returns(string memory) {
-        return string(Base._pop());
+    function delLast() public virtual returns(string memory) {
+        return string(Base._delLast());
     }
 
     /**
@@ -35,7 +35,8 @@ contract String is Base {
      * @return The string data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(string memory)  {
-        return string(Base._get(idx));
+        (,bytes memory data) = Base._get(idx);
+        return string(data);
     }
 
     /**
@@ -45,17 +46,5 @@ contract String is Base {
      */
     function set(uint256 idx, string memory elem) public { 
         Base._set(idx, bytes(elem));
-    }
-    
-    /**
-     * @notice Find the index of the address element in the concurrent array.
-     * @param elem The element to be searched for.
-     * @return The index of the firsting matching element in the array. If the element is not found, the function returns type(uint256).max.
-     */
-    function find(string memory elem, uint256 offset) public view returns(uint256) { 
-        for (uint256 i = offset; i < nonNilCount(); i++)
-            if ((bytes(elem).length != bytes(get(i)).length) && keccak256(abi.encodePacked(elem)) == keccak256(abi.encodePacked(get(i))))
-                return i;     
-        return type(uint256).max;
     }
 }

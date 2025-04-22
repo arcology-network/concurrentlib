@@ -37,10 +37,10 @@ contract U256Test {
         require(container.get(2) == uint256(13));
         require(container.get(3) == uint256(14));
 
-        require(container.pop() == uint256(14));
-        require(container.pop() == uint256(13));
-        require(container.pop() == uint256(12));
-        require(container.pop() == uint256(11));
+        require(container.delLast() == uint256(14));
+        require(container.delLast() == uint256(13));
+        require(container.delLast() == uint256(12));
+        require(container.delLast() == uint256(11));
         require(container.nonNilCount() == 0); 
         
         // Nested array
@@ -70,10 +70,10 @@ contract U256Test {
         require(_0.get(3) == uint256(104));   
 
 
-        require(_0.pop() == uint256(104));
-        require(_0.pop() == uint256(103));
-        require(_0.pop() == uint256(102));
-        require(_0.pop() == uint256(101));
+        require(_0.delLast() == uint256(104));
+        require(_0.delLast() == uint256(103));
+        require(_0.delLast() == uint256(102));
+        require(_0.delLast() == uint256(101));
         require(_0.nonNilCount() == 0); 
 
         U256 _1= array[1];
@@ -87,10 +87,10 @@ contract U256Test {
         require(_1.get(2) == uint256(113));
         require(_1.get(3) == uint256(114));   
 
-        require(_1.pop() == uint256(114));
-        require(_1.pop() == uint256(113));
-        require(_1.pop() == uint256(112));
-        require(_1.pop() == uint256(111));
+        require(_1.delLast() == uint256(114));
+        require(_1.delLast() == uint256(113));
+        require(_1.delLast() == uint256(112));
+        require(_1.delLast() == uint256(111));
         require(_1.nonNilCount() == 0); 
     }
 }

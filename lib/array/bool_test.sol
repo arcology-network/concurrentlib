@@ -30,10 +30,10 @@ contract BoolTest {
         require(boolContainer.get(2));
         require(!boolContainer.get(3));
 
-        require(!boolContainer.pop());
-        require(boolContainer.pop());
-        require(boolContainer.pop());
-        require(!boolContainer.pop());
+        require(!boolContainer.delLast());
+        require(boolContainer.delLast());
+        require(boolContainer.delLast());
+        require(!boolContainer.delLast());
         require(boolContainer.nonNilCount() == 0);  
         boolContainer.push(true);
         boolContainer.push(true);
