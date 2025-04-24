@@ -31,9 +31,8 @@ contract HashU256Map is Base {
      *  @param upper The uint256 value associated with the key.
      */
     function set(bytes32 key, uint256 value, uint256 lower, uint256 upper) public virtual{ 
-        require(value >= lower, "SafeConversion: Underflow");
-        require(value <= upper, "SafeConversion: Overflow");
-
+        require((value < 0  && uint256(value) <= lower) || value >= 0 && uint256(value) >= lower && uint256(value) <= upper, "Out of bounds");
+ 
         if (!_init(abi.encodePacked(key), abi.encodePacked(lower), abi.encodePacked(upper))) {
             return ;
         }

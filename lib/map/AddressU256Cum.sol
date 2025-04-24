@@ -31,12 +31,12 @@ contract AddressU256CumMap is Base {
      *  @param upper The upper bound associated with the key.
      */
     function set(address key, int256 initDelta, uint256 lower, uint256 upper) public virtual { 
-        require(initDelta <= int256(lower), "Underflow"); // Hidden assumptions 
-        require(initDelta >= int256(upper), "Overflow");
+        require((initDelta < 0  && uint256(initDelta) <= lower) || initDelta >= 0 && uint256(initDelta) >= lower && uint256(initDelta) <= upper, "Out of bounds");
 
         if (!_init(abi.encodePacked(key), abi.encodePacked(lower), abi.encodePacked(upper))) {
             return ;
         }
+
         set(key, int256(initDelta));
     } 
 
