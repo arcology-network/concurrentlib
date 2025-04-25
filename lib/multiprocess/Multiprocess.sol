@@ -40,16 +40,6 @@ contract Multiprocess is Base(Const.BYTES) {
     /**
      * @notice Add an job to the parallel job queue.
      * @param gaslimit The gas limit for the execution of the function call.
-     * @param contractAddr The address of the smart contract to execute the function on.
-     * @param funcCall The encoded function call data.
-     */
-    function addJob(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual {
-        _set(uuid(), abi.encode(gaslimit, 0, contractAddr, funcCall));
-    }
-
-    /**
-     * @notice Add an job to the parallel job queue.
-     * @param gaslimit The gas limit for the execution of the function call.
      * @param ethVal The number of wei sent with the message.
      * @param contractAddr The address of the smart contract to execute the function on.
      * @param funcCall The encoded function call data.
