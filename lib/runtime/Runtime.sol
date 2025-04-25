@@ -37,14 +37,6 @@ library Runtime {
     }
 
     /**
-     * @notice Call a custom operation.
-     * @return The result of the custom operation.
-     */
-    function eval(string memory func, uint256 data) internal returns(bool, bytes memory) {
-        return address(0xa0).call(abi.encodeWithSignature(func, data)); 
-    }
-
-    /**
      * @notice The funtion instructs the scheduler to avoid executing the specified functions with itself in parallel.
      * @param others The list of function signatures and their contract address to avoid executing in parallel.
      */
@@ -77,16 +69,6 @@ library Runtime {
      */
     function defer(bytes4 funSign) internal returns(bool) {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("defer(bytes4)", funSign));
-        return successful;  
-    }
-    
-    /**
-     * @notice print a string to the console.
-     * @param info The string to print.
-     * @return The number of concurrent instances.
-     */
-    function print(bytes memory info) internal returns(bool) {
-        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
         return successful;  
     }
 }

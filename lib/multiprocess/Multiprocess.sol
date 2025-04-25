@@ -91,14 +91,8 @@ contract Multiprocess is Base(Const.BYTES) {
      *      of threads specified in the constructor.
      */
     function run() public returns(bool, bytes memory){       
-        return invoke(abi.encodePacked(numProcesses));
-    }
-
-    /**
-     * @notice Roll back all state changes made in the current block and reset the contract to the previous state.
-     * @dev Caution: Using this function, especially in the constructor, may cause the contract deployment to fail.
-     */
-    function rollback() public {
-        address(0xa0).call(abi.encodeWithSignature("Reset()"));     
+        (bool success, bytes memory data) = invoke(abi.encodePacked(numProcesses));
+        clear();
+        return (success, data);
     }
 }

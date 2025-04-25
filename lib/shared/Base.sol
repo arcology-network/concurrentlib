@@ -78,7 +78,7 @@ contract Base {
      * @param idx The index of the data to be deleted.
      * @return success true if the data was successfully deleted, false otherwise.
      */
-    function _del(uint256 idx) public returns(bool) {
+    function del(uint256 idx) public returns(bool) {
         bytes memory key = indToKey(idx);
         if (key.length == 0) {
             return false;
@@ -197,7 +197,7 @@ contract Base {
      * @param idx The index to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function _exists(uint256 idx) public view returns(bool) {
+    function exists(uint256 idx) public view returns(bool) {
         bytes memory key = indToKey(idx);
         if (key.length == 0) {
             return false;
@@ -245,19 +245,19 @@ contract Base {
      * @notice Retrieve the minimum entry stored in the container sorted by string representation.
      * @return The encoded minimum value and the index.
      */
-    function minString() public view returns(bytes memory)  {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("minString()"));
-        return data;
-    }
+    // function minString() public view returns(bytes memory)  {
+    //     (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("minString()"));
+    //     return data;
+    // }
 
     /**
      * @notice Retrieve the maximum entry stored in the container sorted as a string
      * @return The encoded maximum value and the index.
      */
-    function maxString() public view returns(bytes memory)  {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxString()"));
-        return data;
-    }
+    // function maxString() public view returns(bytes memory)  {
+    //     (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxString()"));
+    //     return data;
+    // }
 
     /**
      * @notice Execute a custom operation on the container's data stored.

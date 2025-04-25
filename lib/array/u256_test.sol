@@ -68,7 +68,7 @@ contract U256Test {
         require(_0.get(1) == uint256(102));
         require(_0.get(2) == uint256(103));
         require(_0.get(3) == uint256(104));   
-
+        require(_0.nonNilCount() == 4); 
 
         require(_0.delLast() == uint256(104));
         require(_0.delLast() == uint256(103));
