@@ -85,8 +85,8 @@ library Runtime {
      * @param info The string to print.
      * @return The number of concurrent instances.
      */
-    function print(bytes memory info) internal returns(bool) {
-        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
-        return successful;  
-    }
+    // function print(bytes memory info) internal returns(bool) {
+    //     (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
+    //     return successful;  
+    // }
 }
