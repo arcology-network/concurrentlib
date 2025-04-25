@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0 <0.9.0;
 
-import "../storage/Storage.sol";
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
 
@@ -19,13 +18,6 @@ struct JobResult {
 }
 
 contract Multiprocess is Base(Const.BYTES) {
-    enum Status{ 
-        SUCCESSFUL, 
-        EXECUTION_FAILED, 
-        CONFLICT,
-        ABORTED,
-        FAILED_TO_RETRIVE
-    }
     uint256 numProcesses = 1;
 
     /**
@@ -44,37 +36,10 @@ contract Multiprocess is Base(Const.BYTES) {
      * @param contractAddr The address of the smart contract to execute the function on.
      * @param funcCall The encoded function call data.
      */
-    function addJob(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
-        _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
+    function addJob(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public returns(bool) {
+        return _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
     }
- 
-    /**
-     * @notice Pop an executable message from the container.
-     * @return The popped executable message.
-     */
-    function delLast() public virtual returns(bytes memory) { 
-        return abi.decode(Base._delLast(), (bytes));  
-    }
-
-    /**
-     * @notice Get an executable message from the container at the specified index.
-     * @param idx The index of the executable message to retrieve.
-     * @return The executable message at the specified index.
-     */
-    function get(uint256 idx) public virtual returns(bytes memory) {
-        (,bytes memory data) = Base._get(idx);
-        return abi.decode(data, (bytes));  
-    }
-
-    /**
-     * @notice Set an executable message at the specified index in the container.
-     * @param idx The index where the executable message should be stored.
-     * @param elem The executable message data to be stored at the specified index.
-     */
-    function set(uint256 idx, bytes memory elem) public { 
-        Base._set(idx, abi.encode(elem));   
-    }
-
+   
     /**
      * @notice Execute the executable messages in the container concurrently.
      * @dev This function processes the executable messages concurrently with the number 
