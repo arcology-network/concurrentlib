@@ -3,10 +3,10 @@ pragma solidity >=0.8.0 <0.9.0;
 
 /**
  * @author Arcology Network
- * @title Runtime Library
- * @dev The Runtime Library provides runtime information to developers.
- *      It exposes functions to retrieve pseudo-process IDs (PIDs) and pseudo-random UUIDs.
+ * @title Debug Library
+ * @dev The Library provides a set of functions for debugging and logging information to the console.
  */
+
 library Debug {
     /**
      * @notice print a string to the console.
