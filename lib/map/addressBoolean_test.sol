@@ -26,8 +26,8 @@ contract AddressBooleanMapTest {
         require(map.get(addr1) == true); 
         require(map.get(addr2) == true); 
         require(map.get(addr3) == true); 
-        require(map._exists(2));
-        require(!map._exists(3));
+        require(map.exists(2));
+        require(!map.exists(3));
 
         require(!map.exist(addr4));
  
@@ -56,9 +56,9 @@ contract AddressBooleanMapConcurrentTest {
         address addr4 = 0x4444444890123456789012345678901234567890;
 
         Multiprocess mp = new Multiprocess(2); 
-        mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address)", addr1));
-        mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address)", addr2));
-        mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address)", addr3));
+        mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address)", addr1));
+        mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address)", addr2));
+        mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address)", addr3));
         require(mp.nonNilCount() == 3);
         mp.run();
 

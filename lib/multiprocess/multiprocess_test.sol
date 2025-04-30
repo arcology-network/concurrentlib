@@ -115,11 +115,7 @@ contract U256ParallelConflictTest {
         container.delLast(); 
         Multiprocess mp = new Multiprocess(1);
         mp.addJob(100000, 0, address(this), abi.encodeWithSignature("delLast()"));
-        // // mp.addJob(100000, 0, address(this), abi.encodeWithSignature("delLast()"));
         mp.run();
-    
-        // require(container.nonNilCount() == 1); 
-        // delLast();
     }
 
     function get(uint256 idx) public returns(uint256){

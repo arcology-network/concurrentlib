@@ -65,8 +65,8 @@ contract U256Map is Base {
      * @notice Delete a key-value pair from the map.
      * @param key The uint256 key to delete.
      */
-    function del(uint256 key) public { 
-        Base._del((abi.encodePacked(key)));  
+    function del(uint256 key) public override returns(bool){ 
+        return Base._del((abi.encodePacked(key)));  
     }
 
     /**

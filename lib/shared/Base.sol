@@ -78,7 +78,7 @@ contract Base {
      * @param idx The index of the data to be deleted.
      * @return success true if the data was successfully deleted, false otherwise.
      */
-    function del(uint256 idx) public returns(bool) {
+    function del(uint256 idx) public virtual returns(bool) {
         bytes memory key = indToKey(idx);
         if (key.length == 0) {
             return false;
