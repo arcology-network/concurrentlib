@@ -2,6 +2,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 import "../runtime/Runtime.sol";
 import "./Backend.sol";
+import "./Const.sol";
 /**
  * @author Arcology Network
  * @title Base Concurrent Container
@@ -18,23 +19,18 @@ import "./Backend.sol";
  *
  *      Delopers should exercise caution when accessing the container concurrently to avoid conflicts.
  */
-contract Base is Backend{
-    // address internal API = address(0x84);
-
-    // uint8 public constant BYTES = 107;
-    // uint8 public constant U256_CUM = 103; // Cumulative u256
-    
+contract Base is Backend{    
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor (uint8 typeID) Backend(typeID, address(0x84)) {}
+    constructor (uint8 typeID) Backend(typeID, Const.CONTAINER_ADDR) {}
          
     /**
      * @notice Retrieve the length of the container, including newly appended and deleted values if any.
      * @return The length of the container.
      */
-    function fullLength() public view returns(uint256) {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("fullLength()"));
+    function fullLength() public returns(uint256) {
+        (,bytes memory data) = eval(abi.encodeWithSignature("fullLength()"));
         return abi.decode(data, (uint256));
     }  
 
@@ -42,8 +38,8 @@ contract Base is Backend{
      * @notice Retrieve the total number of non nil element in the container.
      * @return The total number of non-nil values in the container.
      */
-    function nonNilCount() public view returns(uint256) {
-        (, bytes memory data) = address(API).staticcall(abi.encodeWithSignature("length()"));
+    function nonNilCount() public returns(uint256) {
+        (,bytes memory data) = eval(abi.encodeWithSignature("length()"));
         return abi.decode(data, (uint256));
     }
      
@@ -52,8 +48,8 @@ contract Base is Backend{
      * @dev This function is used to get the length of the container after the last commit. 
      * @return The latest committed length of the container. This is function is thread-safe.
      */
-    function committedLength() public view returns(uint256) {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("peek()"));
+    function committedLength() public returns(uint256) {
+        (,bytes memory data) = eval(abi.encodeWithSignature("committedLength()"));
         if (data.length > 0) {
             return abi.decode(data, (uint256));   
         }
@@ -65,7 +61,7 @@ contract Base is Backend{
      * @return The data of the removed element.
      */
     function _delLast() public virtual returns(bytes memory) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("delLast()"));
+        (,bytes memory data) = eval(abi.encodeWithSignature("delLast()"));
         return data;
     }
     
@@ -88,7 +84,7 @@ contract Base is Backend{
      * @return success true if the data was successfully deleted, false otherwise.
      */
     function _del(bytes memory key) public returns(bool) {
-       (bool success,) = address(API).call(abi.encodeWithSignature("delByKey(bytes)", key));
+       (bool success,)  = eval(abi.encodeWithSignature("delByKey(bytes)", key));
        return success;
     }
     
@@ -97,7 +93,7 @@ contract Base is Backend{
      * @return success true if the all the data was successfully deleted, false otherwise.
      */
     function clear() public returns(bool)  {
-        (bool success,) = address(API).call(abi.encodeWithSignature("clear()"));
+        (bool success,)  = eval(abi.encodeWithSignature("clear()"));
         return success;       
     }
     
@@ -107,7 +103,7 @@ contract Base is Backend{
      * @return success true if the data was successfully reset, false otherwise.
      */
     function _resetByKey(bytes memory key) public returns(bool) {
-       (bool success,) = address(API).call(abi.encodeWithSignature("resetByKey(bytes)", key));
+       (bool success,) = eval(abi.encodeWithSignature("resetByKey(bytes)", key));
        return success;
     }
 
@@ -117,7 +113,7 @@ contract Base is Backend{
      * @return success true if the data was successfully reset, false otherwise.
      */
     function resetByInd(uint256 idx) public returns(bool) {
-       (bool success,) = address(API).call(abi.encodeWithSignature("resetByInd(uint256)", idx));
+       (bool success,) = eval(abi.encodeWithSignature("resetByInd(uint256)", idx));
        return success;
     }
 
@@ -126,8 +122,8 @@ contract Base is Backend{
      * @param idx The index for which to retrieve the key.
      * @return The key associated with the given index.
      */
-    function indToKey(uint256 idx) public view returns(bytes memory) {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("indToKey(uint256)", idx));   
+    function indToKey(uint256 idx) public returns(bytes memory) {
+        (, bytes memory data) = eval(abi.encodeWithSignature("indToKey(uint256)", idx));
         return data;  
     }
 
@@ -136,8 +132,8 @@ contract Base is Backend{
      * @param key The key for which to retrieve the index.
      * @return The index associated with the given key.
      */
-    function keyToInd(bytes memory key) public view returns(uint256) {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("keyToInd(bytes)", key));   
+    function keyToInd(bytes memory key) public returns(uint256) {
+        (, bytes memory data) = eval(abi.encodeWithSignature("keyToInd(bytes)", key));   
         return abi.decode(data,(uint256));     
     }
     
@@ -162,7 +158,7 @@ contract Base is Backend{
      * @return success true if the data was successfully updated, false otherwise.
      */
     function _set(bytes memory key, bytes memory elem) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("setByKey(bytes,bytes)", key, elem));
+        (bool success,) = eval(abi.encodeWithSignature("setByKey(bytes,bytes)", key, elem));
         return success;   
     }
 
@@ -174,7 +170,7 @@ contract Base is Backend{
      * @return success true if the data was successfully updated, false otherwise.
      */
     function _init(bytes memory key, bytes memory min, bytes memory max) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("init(bytes,bytes,bytes)", key, min, max));
+        (bool success,) = eval(abi.encodeWithSignature("init(bytes,bytes,bytes)", key, min, max));
         return success;   
     }
     
@@ -183,8 +179,8 @@ contract Base is Backend{
      * @param key The key to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function exists(bytes memory key) public view returns(bool) {
-        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));
+    function exists(bytes memory key) public returns(bool) {
+        (bool success,) = eval(abi.encodeWithSignature("getByKey(bytes)", key));
         return success;
     }
 
@@ -193,7 +189,7 @@ contract Base is Backend{
      * @param idx The index to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function exists(uint256 idx) public view returns(bool) {
+    function exists(uint256 idx) public returns(bool) {
         bytes memory key = indToKey(idx);
         if (key.length == 0) {
             return false;
@@ -206,8 +202,8 @@ contract Base is Backend{
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
      */
-    function _get(uint256 idx) public view returns(bool, bytes memory) {
-        return address(API).staticcall(abi.encodeWithSignature("getByIndex(uint256)", idx)); 
+    function _get(uint256 idx) public returns(bool, bytes memory) {
+        return eval(abi.encodeWithSignature("getByIndex(uint256)", idx)); 
     }
 
     /**
@@ -215,16 +211,16 @@ contract Base is Backend{
      * @param key The key associated with the data to retrieve.
      * @return The data stored at the specified key.
      */
-    function _get(bytes memory key) public view returns(bool, bytes memory)  {
-        return address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));  
+    function _get(bytes memory key) public returns(bool, bytes memory)  {
+        return eval(abi.encodeWithSignature("getByKey(bytes)", key));  
     }
 
     /**
      * @notice Retrieve the minimum entry stored in the container sorted by value numerically.
      * @return encoded The minimum valu and the index.
      */
-    function minNumerical() public view returns(bytes memory)  {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("minNumerical()"));
+    function _min() public returns(bytes memory)  {
+        (,bytes memory data) = eval(abi.encodeWithSignature("min()"));
         return data;
     }
 
@@ -232,35 +228,17 @@ contract Base is Backend{
      * @notice Retrieve the maximum entry stored in the container sorted by value numerically.
      * @return The encoded maximum value and the index.
      */
-    function maxNumerical() public view returns(bytes memory)  {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxNumerical()"));
+    function _max() public returns(bytes memory)  {
+        (,bytes memory data) = eval(abi.encodeWithSignature("max()"));
         return data;
     }
-
-    /**
-     * @notice Retrieve the minimum entry stored in the container sorted by string representation.
-     * @return The encoded minimum value and the index.
-     */
-    // function minString() public view returns(bytes memory)  {
-    //     (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("minString()"));
-    //     return data;
-    // }
-
-    /**
-     * @notice Retrieve the maximum entry stored in the container sorted as a string
-     * @return The encoded maximum value and the index.
-     */
-    // function maxString() public view returns(bytes memory)  {
-    //     (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxString()"));
-    //     return data;
-    // }
 
     /**
      * @notice Execute a custom operation on the container's data stored.
      * @param data Arbitrary data to be used in the custom operation.
      */
     function invoke(bytes memory data) public returns(bool, bytes memory) {
-        return address(API).call(abi.encodeWithSignature("invoke(bytes)", data));       
+        return address(API).call(abi.encodeWithSignature("invoke(bytes)", data));  
     }
 
     /**

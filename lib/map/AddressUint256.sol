@@ -37,7 +37,7 @@ contract AddressUint256Map is Base {
      * @param k The address key to retrieve the associated value.
      * @return value The address value associated with the key.
      */
-    function get(address k) public virtual view returns(uint256 value){ 
+    function get(address k) public virtual returns(uint256 value){ 
         (bool success, bytes memory data) = Base._get(abi.encodePacked(k));
          return uint256(bytes32(data));     
     }    
@@ -47,7 +47,7 @@ contract AddressUint256Map is Base {
      * @param idx The key to retrieve the associated index.
      * @return The key value associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(address) {    
+    function keyAt(uint256 idx) public virtual returns(address) {    
         return address(uint160(bytes20(Base.indToKey(idx))));      
     }   
 
@@ -56,7 +56,7 @@ contract AddressUint256Map is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
+    function valueAt(uint256 idx) public virtual returns(uint256 value){ 
         (bool success, bytes memory data) = Base._get(idx);
         return uint256(bytes32(data));  
     }    
@@ -82,8 +82,8 @@ contract AddressUint256Map is Base {
      * @notice Retrieve the min value in the map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public view returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v) =  abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public returns(address, uint256, uint256) { 
+        (uint256 idx, uint256 v) =  abi.decode(Base._min(), (uint256, uint256));
         return (keyAt(idx),idx, v);
     }
 
@@ -91,8 +91,8 @@ contract AddressUint256Map is Base {
      * @notice Retrieve the max value in the map.
      * @return The maximum value by numerical comparison.
      */
-    function max() public view returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v)  = abi.decode(Base.maxNumerical(), (uint256, uint256));
+    function max() public returns(address, uint256, uint256) { 
+        (uint256 idx, uint256 v)  = abi.decode(Base._max(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 }

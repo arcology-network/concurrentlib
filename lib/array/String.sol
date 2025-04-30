@@ -34,7 +34,7 @@ contract String is Base {
      * @param idx The index of the string data element to retrieve.
      * @return The string data element stored at the given index.
      */
-    function get(uint256 idx) public virtual view returns(string memory)  {
+    function get(uint256 idx) public virtual returns(string memory)  {
         (,bytes memory data) = Base._get(idx);
         return string(data);
     }

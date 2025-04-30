@@ -34,7 +34,7 @@ contract Bytes is Base {
      * @param idx The index of the bytes data element to retrieve.
      * @return The bytes data element stored at the given index.
      */
-    function get(uint256 idx) public virtual view returns(bytes memory)  { 
+    function get(uint256 idx) public virtual returns(bytes memory)  { 
         (,bytes memory data) = Base._get(idx);
         return data;  
     }

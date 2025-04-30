@@ -19,7 +19,7 @@ contract StringUint256Map is Base {
      * @param k The string key to check for existence.
      * @return true if the key exists, false otherwise.
      */
-    function exist(string memory k) public virtual view returns(bool) { 
+    function exist(string memory k) public virtual returns(bool) { 
         return Base.exists(bytes(k));
     }
 
@@ -37,7 +37,7 @@ contract StringUint256Map is Base {
      * @param k The string key to retrieve the associated value.
      * @return value The string value associated with the key.
      */
-    function get(string memory k) public virtual view returns(uint256 value){ 
+    function get(string memory k) public virtual returns(uint256 value){ 
         (bool success, bytes memory data) = Base._get(bytes(k));
          return uint256(bytes32(data));     
     }    
@@ -47,7 +47,7 @@ contract StringUint256Map is Base {
      * @param idx The key to retrieve the associated index.
      * @return The key value associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(string memory) {    
+    function keyAt(uint256 idx) public virtual returns(string memory) {    
         return string(Base.indToKey(idx));      
     }   
 
@@ -56,7 +56,7 @@ contract StringUint256Map is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
+    function valueAt(uint256 idx) public virtual returns(uint256 value){ 
         (bool success, bytes memory data) = Base._get(idx);
         return uint256(bytes32(data));
     }    
@@ -73,8 +73,8 @@ contract StringUint256Map is Base {
      * @notice Retrieve the min value in the concurrent map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public view returns(string memory, uint256, uint256) { 
-        (uint256 idx, uint256 v) = abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public  returns(string memory, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base._min(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 
@@ -82,8 +82,8 @@ contract StringUint256Map is Base {
      * @notice Retrieve the max value in the concurrent map.
      * @return The maximum value by numerical comparison.
      */
-    function max() public view returns(string memory, uint256, uint256) { 
-        (uint256 idx, uint256 v) = abi.decode(Base.maxNumerical(), (uint256, uint256));
+    function max() public returns(string memory, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base._max(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 }

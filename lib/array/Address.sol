@@ -35,7 +35,7 @@ contract Address is Base {
      * @return The address element stored at the given index.
      */
     
-    function get(uint256 idx) public virtual returns(address)  {
+    function get(uint256 idx) public returns(address)  {
         (,bytes memory data) = Base._get(idx);
         return address(uint160(bytes20(data)));
     }

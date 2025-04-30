@@ -26,7 +26,7 @@ contract Multiprocess is Base(Const.BYTES) {
      * @param threads The number of parallel processors (ranging from 1 to 255) for parallel processing.
      */
     constructor (uint256 threads){
-        API = address(0xb0);
+        API = Const.MULTIPROCESSOR_ADDR;
         numProcesses = threads; 
     } 
 

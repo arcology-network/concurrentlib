@@ -35,7 +35,7 @@ contract Int256 is Base {
      * @param idx The index of the int256 data element to retrieve.
      * @return The int256 data element stored at the given index.
      */
-    function get(uint256 idx) public virtual view returns(int256)  {
+    function get(uint256 idx) public virtual returns(int256)  {
         (,bytes memory data) = Base._get(idx);
         return abi.decode(data, (int256));  
     }

@@ -34,7 +34,7 @@ contract Bool is Base {
      * @param idx The index of the boolean element to retrieve.
      * @return The boolean element stored at the given index.
      */
-    function get(uint256 idx) public virtual view returns(bool)  {
+    function get(uint256 idx) public virtual returns(bool)  {
         (,bytes memory data) = Base._get(idx);
         return abi.decode(data, (bool));  
     }
