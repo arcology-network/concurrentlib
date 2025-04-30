@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "./AddressU256Cum.sol";
-import "../multiprocess/Multiprocess.sol";
+// import "../multiprocess/Multiprocess.sol";
 
 contract AddressU256CumMapTest {
     AddressU256CumMap map = new AddressU256CumMap();

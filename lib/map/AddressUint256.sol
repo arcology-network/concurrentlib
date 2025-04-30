@@ -20,7 +20,7 @@ contract AddressUint256Map is Base {
      * @return true if the key exists, false otherwise.
      */
     function exist(address k) public virtual returns(bool) { 
-        return Base._exists(abi.encodePacked(k));
+        return Base.exists(abi.encodePacked(k));
     }
 
     /**

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0 <0.9.0;
 import "../runtime/Runtime.sol";
-
+import "./Backend.sol";
 /**
  * @author Arcology Network
  * @title Base Concurrent Container
@@ -18,8 +18,8 @@ import "../runtime/Runtime.sol";
  *
  *      Delopers should exercise caution when accessing the container concurrently to avoid conflicts.
  */
-contract Base {
-    address internal API = address(0x84);
+contract Base is Backend{
+    // address internal API = address(0x84);
 
     // uint8 public constant BYTES = 107;
     // uint8 public constant U256_CUM = 103; // Cumulative u256
@@ -27,11 +27,7 @@ contract Base {
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor (uint8 typeID) {
-        (bool success,) = address(API).call(abi.encodeWithSignature(
-            "new(uint8,bytes,bytes)", uint8(typeID), new bytes(0), new bytes(0)));
-        require(success);
-    }
+    constructor (uint8 typeID) Backend(typeID, address(0x84)) {}
          
     /**
      * @notice Retrieve the length of the container, including newly appended and deleted values if any.
@@ -187,7 +183,7 @@ contract Base {
      * @param key The key to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function _exists(bytes memory key) public view returns(bool) {
+    function exists(bytes memory key) public view returns(bool) {
         (bool success,) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", key));
         return success;
     }
@@ -202,7 +198,7 @@ contract Base {
         if (key.length == 0) {
             return false;
         }
-        return _exists(key);
+        return exists(key);
     }
     
     /**

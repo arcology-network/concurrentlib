@@ -3,6 +3,7 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
+import "../shared/Backend.sol";
 
 /**
  * @author Arcology Network
@@ -25,7 +26,7 @@ contract Multiprocess is Base(Const.BYTES) {
      * @param threads The number of parallel processors (ranging from 1 to 255) for parallel processing.
      */
     constructor (uint256 threads){
-        Base.API = address(0xb0);
+        API = address(0xb0);
         numProcesses = threads; 
     } 
 

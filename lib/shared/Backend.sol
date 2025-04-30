@@ -18,7 +18,7 @@ import "../runtime/Runtime.sol";
  *      Delopers should exercise caution when accessing the container concurrently to avoid conflicts.
  */
 contract Backend {
-    address internal API;
+    address public API;
 
     /**
      * @notice Constructor to initiate communication with the external contract.

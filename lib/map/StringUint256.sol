@@ -20,7 +20,7 @@ contract StringUint256Map is Base {
      * @return true if the key exists, false otherwise.
      */
     function exist(string memory k) public virtual view returns(bool) { 
-        return Base._exists(bytes(k));
+        return Base.exists(bytes(k));
     }
 
     /**

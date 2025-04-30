@@ -20,7 +20,7 @@ contract HashU256Map is Base {
      * @return true if the key exists, false otherwise.
      */    
     function exist(bytes32 k) public view returns(bool) { 
-        return Base._exists(abi.encodePacked(k)); 
+        return Base.exists(abi.encodePacked(k)); 
     }
     
     /**
