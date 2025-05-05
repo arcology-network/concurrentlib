@@ -4,7 +4,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
 import "../shared/Backend.sol";
-
+import "../runtime/Runtime.sol";
 /**
  * @author Arcology Network
  * @title Multiprocess Container
@@ -18,7 +18,7 @@ struct JobResult {
     bytes returnData;
 }
 
-contract Multiprocess is Base(Const.BYTES) {
+contract Multiprocess is Backend(Const.BYTES, Const.MULTIPROCESSOR_ADDR) {
     uint256 numProcesses = 1;
 
     /**
@@ -26,7 +26,6 @@ contract Multiprocess is Base(Const.BYTES) {
      * @param threads The number of parallel processors (ranging from 1 to 255) for parallel processing.
      */
     constructor (uint256 threads){
-        API = Const.MULTIPROCESSOR_ADDR;
         numProcesses = threads; 
     } 
 
@@ -38,17 +37,19 @@ contract Multiprocess is Base(Const.BYTES) {
      * @param funcCall The encoded function call data.
      */
     function addJob(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public returns(bool) {
-        return _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
+        bytes memory data = abi.encode(gaslimit, ethVal, contractAddr, funcCall);
+        (bool success,) = eval(abi.encodeWithSignature("setByKey(bytes,bytes)", Runtime.uuid(), data));
+        return success;
     }
-   
+
     /**
      * @notice Execute the executable messages in the container concurrently.
      * @dev This function processes the executable messages concurrently with the number 
      *      of threads specified in the constructor.
      */
     function run() public returns(bool, bytes memory){       
-        (bool success, bytes memory data) = invoke(abi.encodePacked(numProcesses));
-        clear();
+        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("invoke(bytes)", abi.encodePacked(numProcesses))); 
+        (success,) = eval(abi.encodeWithSignature("clear()"));
         return (success, data);
     }
 }
