@@ -38,8 +38,11 @@ contract AddressUint256Map is Base {
      * @return value The address value associated with the key.
      */
     function get(address k) public virtual returns(uint256 value){ 
-        (,bytes memory data)=Base._get(abi.encodePacked(k));
-        return uint256(abi.decode(data, (bytes32)));     
+        (bool exist,bytes memory data)=Base._get(abi.encodePacked(k));
+        if(exist)
+            return uint256(abi.decode(data, (bytes32)));     
+        else
+            return uint256(0);
     }    
 
     /**
@@ -62,8 +65,11 @@ contract AddressUint256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
-        (,bytes memory data)=Base._get(idx);
-        return uint256(abi.decode(data, (bytes32)) );  
+        (bool exist,bytes memory data)=Base._get(idx);
+        if(exist)
+            return uint256(abi.decode(data, (bytes32)) ); 
+        else
+            return uint256(0); 
     }    
 
     /**

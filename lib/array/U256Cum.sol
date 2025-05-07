@@ -44,8 +44,11 @@ contract U256Cum is Base {
      * @return The uint256 data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(uint256)  {
-        (, bytes memory data) = Base._get(idx);
-        return abi.decode(data, (uint256));  
+        (bool exist, bytes memory data) = Base._get(idx);
+        if(exist)
+            return abi.decode(data, (uint256)); 
+        else
+            return  uint256(0);
     }
 
     /**

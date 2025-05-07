@@ -54,9 +54,9 @@ contract Multiprocess is Base(Const.BYTES) {
      * @param contractAddr The address of the smart contract to execute the function on.
      * @param funcCall The encoded function call data.
      */
-    function addJob(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
-        _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
-    }
+    // function addJob(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
+    //     _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
+    // }
  
     /**
      * @notice Pop an executable message from the container.
@@ -72,8 +72,13 @@ contract Multiprocess is Base(Const.BYTES) {
      * @return The executable message at the specified index.
      */
     function get(uint256 idx) public virtual returns(bytes memory) {
-        (,bytes memory data) = Base._get(idx);
-        return abi.decode(data, (bytes));  
+        (bool exist,bytes memory data) = Base._get(idx);
+        if(exist)
+            return abi.decode(data, (bytes));  
+        else{
+            bytes memory datas;
+            return datas;
+        }
     }
 
     /**

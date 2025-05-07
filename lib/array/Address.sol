@@ -43,11 +43,12 @@ contract Address is Base {
     
     function get(uint256 idx) public virtual returns(address)  {
         // return abi.decode(Base._get(idx), (address));
-        (,bytes memory rawdata)=Base._get(idx);
-        emit LogBys(rawdata);
+        (bool exist,bytes memory rawdata)=Base._get(idx);
         bytes20 resultAdr;
-        for (uint i = 0; i < 20; i++) {
-            resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+        if(exist){
+            for (uint i = 0; i < 20; i++) {
+                resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+            }
         }
         return address(uint160(resultAdr)); 
     }

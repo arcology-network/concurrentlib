@@ -35,8 +35,13 @@ contract Bytes32 is Base {
      * @return The bytes32 data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(bytes32)  {
-        (,bytes memory data)=Base._get(idx);
-        return abi.decode(data, (bytes32));
+        (bool exist,bytes memory data)=Base._get(idx);
+        if(exist)
+            return abi.decode(data, (bytes32));
+        else{
+            bytes32 defaultVal;
+            return defaultVal;
+        }
     }
 
     /**

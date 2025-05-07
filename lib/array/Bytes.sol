@@ -35,8 +35,13 @@ contract Bytes is Base {
      * @return The bytes data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(bytes memory)  { 
-        (,bytes memory data) = Base._get(idx);
-        return data;  
+        (bool exist,bytes memory data) = Base._get(idx);
+        if(exist)
+            return data;  
+        else{
+            bytes memory tmpData;
+            return tmpData
+        }
     }
 
     /**
