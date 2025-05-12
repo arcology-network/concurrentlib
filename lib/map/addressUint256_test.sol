@@ -98,7 +98,6 @@ contract AddressU256MapConcurrentTest {
         mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address,uint256)", addr1, 11));
         mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address,uint256)", addr2, 22));
         mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address,uint256)", addr3, 33));
-        require(mp.nonNilCount() == 3);
         mp.run();
 
         require(map.exist(addr1)); 

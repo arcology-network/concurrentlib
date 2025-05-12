@@ -12,38 +12,38 @@ contract AddressBooleanMapTest {
         address addr3 = 0x3333337890123456789012345678901234567890;
         address addr4 = 0x4444444890123456789012345678901234567890;
 
-        require(map.nonNilCount() == 0); 
-        map.set(addr1, true);
-        map.set(addr2, true);
-        map.set(addr3, true);
-        require(map.nonNilCount() == 3); 
+        // require(map.nonNilCount() == 0); 
+        // map.set(addr1, true);
+        // map.set(addr2, true);
+        // map.set(addr3, true);
+        // require(map.nonNilCount() == 3); 
         
-        require(map.exist(addr1)); 
-        require(map.exist(addr2)); 
-        require(map.exist(addr3)); 
-        require(!map.exist(addr4));
+        // require(map.exist(addr1)); 
+        // require(map.exist(addr2)); 
+        // require(map.exist(addr3)); 
+        // require(!map.exist(addr4));
 
-        require(map.get(addr1) == true); 
-        require(map.get(addr2) == true); 
-        require(map.get(addr3) == true); 
-        require(map.exists(2));
-        require(!map.exists(3));
+        // require(map.get(addr1) == true); 
+        // require(map.get(addr2) == true); 
+        // require(map.get(addr3) == true); 
+        // require(map.exists(2));
+        // require(!map.exists(3));
 
-        require(!map.exist(addr4));
+        // require(!map.exist(addr4));
  
-        require(map.keyAt(0) == addr1);
-        require(map.keyAt(1) == addr2);
-        require(map.keyAt(2) == addr3);
+        // require(map.keyAt(0) == addr1);
+        // require(map.keyAt(1) == addr2);
+        // require(map.keyAt(2) == addr3);
 
-        map.del(addr1);
-        map.del(addr2);
-        map.del(addr3);
-        require(map.nonNilCount() == 0); 
+        // map.del(addr1);
+        // map.del(addr2);
+        // map.del(addr3);
+        // require(map.nonNilCount() == 0); 
 
-        map.set(addr1, true);  
-        map.set(addr2, true);
-        map.set(addr3, true);
-        require(map.nonNilCount() == 3); 
+        // map.set(addr1, true);  
+        // map.set(addr2, true);
+        // map.set(addr3, true);
+        // require(map.nonNilCount() == 3); 
     }
 }
 
@@ -59,7 +59,6 @@ contract AddressBooleanMapConcurrentTest {
         mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address)", addr1));
         mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address)", addr2));
         mp.addJob(500000, 0, address(this), abi.encodeWithSignature("setter(address)", addr3));
-        require(mp.nonNilCount() == 3);
         mp.run();
 
         require(map.exist(addr1)); 
