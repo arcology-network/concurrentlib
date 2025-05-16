@@ -30,7 +30,7 @@ contract HashU256Map is Base {
      *  @param lower The uint256 value associated with the key.
      *  @param upper The uint256 value associated with the key.
      */
-    function set(bytes32 key, uint256 value, uint256 lower, uint256 upper) public virtual{ 
+    function set(bytes32 key, uint256 value, uint256 lower, uint256 upper) public { 
         require(value >= lower, "SafeConversion: Underflow");
         require(value <= upper, "SafeConversion: Overflow");
 
@@ -54,8 +54,8 @@ contract HashU256Map is Base {
      * @param key The uint256 key to retrieve the associated value.
      * @return value The uint256 value associated with the key.
      */
-    function get(bytes32 key) public virtual returns(uint256 value){   
-        (bool success, bytes memory data) = Base._get(abi.encodePacked(key)); 
+    function get(bytes32 key) public returns(uint256 value){   
+        (,bytes memory data) = Base._get(abi.encodePacked(key)); 
         return uint256(bytes32(data));
     }    
 
@@ -64,7 +64,7 @@ contract HashU256Map is Base {
      * @param idx The key to retrieve the associated index.
      * @return The index key associated with the index.
      */
-    function keyAt(uint256 idx) public virtual returns(uint256) {    
+    function keyAt(uint256 idx) public  returns(uint256) {    
         return uint256(bytes32(Base.indToKey(idx)));      
     }   
 
@@ -73,8 +73,8 @@ contract HashU256Map is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
      */
-    function valueAt(uint256 idx) public virtual returns(uint256 value){ 
-        (bool success, bytes memory data) = Base._get(idx); 
+    function valueAt(uint256 idx) public  returns(uint256 value){ 
+        (,bytes memory data) = Base._get(idx); 
         return  uint256(bytes32(data));
     }  
 
