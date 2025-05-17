@@ -37,7 +37,7 @@ contract U256Map is Base {
      * @param key The uint256 key to retrieve the associated value.
      * @return value The uint256 value associated with the key.
      */
-    function get(uint256 key) public virtual view returns(uint256 value){    
+    function get(uint256 key) public virtual returns(uint256 value){    
         (bool exist,bytes memory data)= Base._get(abi.encodePacked(key));
         if(exist)
             return uint256(abi.decode(data, (bytes32)));
@@ -50,7 +50,7 @@ contract U256Map is Base {
      * @param idx The key to retrieve the associated index.
      * @return The index key associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(uint256) {    
+    function keyAt(uint256 idx) public virtual returns(uint256) {    
         return uint256(abi.decode(Base.indToKey(idx), (bytes32)) );        
     }   
 
@@ -59,7 +59,7 @@ contract U256Map is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
      */
-    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
+    function valueAt(uint256 idx) public virtual returns(uint256 value){ 
         (bool exist,bytes memory data)=Base._get(idx);
         if(exist)
             return  uint256(abi.decode(data, (bytes32)));

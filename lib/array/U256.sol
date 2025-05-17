@@ -25,7 +25,7 @@ contract U256 is Base {
      * @notice Remove and return the last uint256 data element from the concurrent array. Length will remain the same.
      * @return The last uint256 data element from the array.
      */
-    function delLast() public virtual returns(uint256) {       
+    function delLast() public returns(uint256) {       
         return uint256(abi.decode(Base._delLast(), (bytes32)));  
     }
 
@@ -34,7 +34,7 @@ contract U256 is Base {
      * @param idx The index of the uint256 data element to retrieve.
      * @return The uint256 data element stored at the given index.
      */
-    function get(uint256 idx) public virtual view returns(uint256)  {
+    function get(uint256 idx) public returns(uint256)  {
         (bool exist,bytes memory data)=Base._get(idx);
         if(exist)
             return uint256(abi.decode(data, (bytes32)));

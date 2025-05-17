@@ -37,7 +37,7 @@ contract StringUint256Map is Base {
      * @param k The string key to retrieve the associated value.
      * @return value The string value associated with the key.
      */
-    function get(string memory k) public virtual view returns(uint256 value){ 
+    function get(string memory k) public virtual returns(uint256 value){ 
         (bool exist,bytes memory data)=Base._get(bytes(k));
         if(exist)
             return uint256(abi.decode(data, (bytes32)));     
@@ -59,7 +59,7 @@ contract StringUint256Map is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
+    function valueAt(uint256 idx) public virtual returns(uint256 value){ 
         (bool exist,bytes memory data)=Base._get(idx);
         if(exist)
             return uint256(abi.decode(data,(bytes32)));  

@@ -50,7 +50,7 @@ contract AddressBooleanMap is Base {
      * @param idx The key to retrieve the associated index.
      * @return The index key associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(address) {    
+    function keyAt(uint256 idx) public virtual returns(address) {    
         bytes memory rawdata=Base.indToKey(idx);
         bytes20 resultAdr;
         for (uint i = 0; i < 20; i++) {
@@ -64,7 +64,7 @@ contract AddressBooleanMap is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function valueAt(uint256 idx) public virtual view returns(bool){ 
+    function valueAt(uint256 idx) public virtual returns(bool){ 
         (bool success,bytes memory data) = Base._get(idx);
         if(success)
             return abi.decode(data, (bool));  
