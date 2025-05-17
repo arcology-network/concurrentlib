@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
@@ -26,7 +26,7 @@ contract Bytes32 is Base {
      * @return The last bytes32 data element from the array.
      */
     function delLast() public virtual returns(bytes32) {
-        return bytes32(Base._delLast());
+        return abi.decode(Base._delLast(), (bytes32));
     }
 
     /**
@@ -35,8 +35,13 @@ contract Bytes32 is Base {
      * @return The bytes32 data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(bytes32)  {
-        (,bytes memory data) = Base._get(idx);
-        return bytes32(data);
+        (bool exist,bytes memory data)=Base._get(idx);
+        if(exist)
+            return abi.decode(data, (bytes32));
+        else{
+            bytes32 defaultVal;
+            return defaultVal;
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
@@ -35,8 +35,11 @@ contract String is Base {
      * @return The string data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(string memory)  {
-        (,bytes memory data) = Base._get(idx);
-        return string(data);
+        (bool exist,bytes memory data) = Base._get(idx);
+        if(exist)
+            return string(data);
+        else
+            return string("");
     }
 
     /**

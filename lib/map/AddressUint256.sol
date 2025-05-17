@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
@@ -38,8 +38,11 @@ contract AddressUint256Map is Base {
      * @return value The address value associated with the key.
      */
     function get(address k) public virtual view returns(uint256 value){ 
-        (bool success, bytes memory data) = Base._get(abi.encodePacked(k));
-         return uint256(bytes32(data));     
+        (bool exist,bytes memory data)=Base._get(abi.encodePacked(k));
+        if(exist)
+            return uint256(abi.decode(data, (bytes32)));     
+        else
+            return uint256(0);    
     }    
 
     /**
@@ -48,7 +51,12 @@ contract AddressUint256Map is Base {
      * @return The key value associated with the index.
      */
     function keyAt(uint256 idx) public virtual view returns(address) {    
-        return address(uint160(bytes20(Base.indToKey(idx))));      
+        bytes memory rawdata=Base.indToKey(idx);
+        bytes20 resultAdr;
+        for (uint i = 0; i < 20; i++) {
+            resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+        }
+        return address(uint160(resultAdr));      
     }   
 
     /**
@@ -57,8 +65,11 @@ contract AddressUint256Map is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
-        (bool success, bytes memory data) = Base._get(idx);
-        return uint256(bytes32(data));  
+        (bool exist,bytes memory data)=Base._get(idx);
+        if(exist)
+            return uint256(abi.decode(data, (bytes32)) ); 
+        else
+            return uint256(0); 
     }    
 
     /**

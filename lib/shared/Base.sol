@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 import "../runtime/Runtime.sol";
 
 /**
@@ -245,19 +245,19 @@ contract Base {
      * @notice Retrieve the minimum entry stored in the container sorted by string representation.
      * @return The encoded minimum value and the index.
      */
-    function minString() public view returns(bytes memory)  {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("minString()"));
-        return data;
-    }
+    // function minString() public view returns(bytes memory)  {
+    //     (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("minString()"));
+    //     return data;
+    // }
 
     /**
      * @notice Retrieve the maximum entry stored in the container sorted as a string
      * @return The encoded maximum value and the index.
      */
-    function maxString() public view returns(bytes memory)  {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxString()"));
-        return data;
-    }
+    // function maxString() public view returns(bytes memory)  {
+    //     (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("maxString()"));
+    //     return data;
+    // }
 
     /**
      * @notice Execute a custom operation on the container's data stored.

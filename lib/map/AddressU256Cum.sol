@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
@@ -31,12 +31,12 @@ contract AddressU256CumMap is Base {
      *  @param upper The upper bound associated with the key.
      */
     function set(address key, int256 initDelta, uint256 lower, uint256 upper) public virtual { 
-        require(initDelta <= int256(lower), "Underflow"); // Hidden assumptions 
-        require(initDelta >= int256(upper), "Overflow");
+        require((initDelta < 0  && uint256(initDelta) <= lower) || initDelta >= 0 && uint256(initDelta) >= lower && uint256(initDelta) <= upper, "Out of bounds");
 
         if (!_init(abi.encodePacked(key), abi.encodePacked(lower), abi.encodePacked(upper))) {
             return ;
         }
+
         set(key, int256(initDelta));
     } 
 
@@ -54,29 +54,40 @@ contract AddressU256CumMap is Base {
      * @param key The uint256 key to retrieve the associated value.
      * @return value The uint256 value associated with the key.
      */
-    function get(address key) public virtual view returns(uint256 value){    
-        (bool success, bytes memory data) = Base._get(abi.encodePacked(key));
-        return uint256(bytes32(data));
-    }    
+    function get(address key) public virtual view returns(uint256 value){  
+        (bool exist,bytes memory data)= Base._get(abi.encodePacked(key));
+        if(exist)
+            return uint256(abi.decode(data, (bytes32)));
+        else
+            return uint256(0);
+    }   
 
     /**
      * @notice Get the key based on it index.
      * @param idx The key to retrieve the associated index.
      * @return The index key associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(uint256) {    
-        return uint256(bytes32(Base.indToKey(idx)));      
-    }   
+    function keyAt(uint256 idx) public virtual  returns(address) {  
+        bytes memory rawdata=Base.indToKey(idx);
+        bytes20 resultAdr;
+        for (uint i = 0; i < 20; i++) {
+            resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+        }
+        return address(uint160(resultAdr));      
+    }    
 
     /**
      * @notice Retrieves the value stored at the specified index.
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
      */
-    function valueAt(uint256 idx) public virtual view returns(bool, uint256 value){ 
-        (bool success, bytes memory data) = Base._get(abi.encodePacked(idx));
-        return (success, uint256(bytes32(data)));
-    }  
+    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
+        (bool exist,bytes memory data)=Base._get(idx);
+        if(exist)
+            return  uint256(abi.decode(data, (bytes32)));
+        else
+            return uint256(0); 
+    } 
 
     /**
      * @notice Delete a key-value pair from the map.
@@ -90,16 +101,17 @@ contract AddressU256CumMap is Base {
      * @notice Retrieve the min value in the concurrent map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public view returns(uint256, uint256, uint256) { 
+    function min() public returns(address, uint256, uint256) { 
         (uint256 idx, uint256 v) = abi.decode(Base.minNumerical(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
+    
 
     /**
      * @notice Retrieve the max value in the concurrent map.
      * @return The maximum value by numerical comparison.
      */
-    function max() public view returns(uint256, uint256, uint256) { 
+    function max() public returns(address, uint256, uint256) { 
         (uint256 idx, uint256 v) = abi.decode(Base.maxNumerical(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }

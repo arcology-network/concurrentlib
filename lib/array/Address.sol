@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
@@ -19,14 +19,19 @@ contract Address is Base {
      */
     function push(address elem) public virtual{ 
         Base._set(uuid(), abi.encodePacked(elem));
-    }    
+    } 
 
    /**
      * @notice Remove and return the last address element from the concurrent array.
      * @return The last address element from the array.
      */
     function delLast() public virtual returns(address) { 
-        return address(uint160(bytes20(Base._delLast())));
+        bytes memory rawdata=Base._delLast();
+        bytes20 resultAdr;
+        for (uint i = 0; i < 20; i++) {
+            resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+        }
+        return address(uint160(resultAdr)); 
     }
 
     /**
@@ -36,8 +41,15 @@ contract Address is Base {
      */
     
     function get(uint256 idx) public virtual returns(address)  {
-        (,bytes memory data) = Base._get(idx);
-        return address(uint160(bytes20(data)));
+        (bool exist,bytes memory rawdata)=Base._get(idx);
+        bytes20 resultAdr;
+        if(exist){
+            for (uint i = 0; i < 20; i++) {
+                resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+            }
+        }
+        return address(uint160(resultAdr)); 
+
     }
 
     /**

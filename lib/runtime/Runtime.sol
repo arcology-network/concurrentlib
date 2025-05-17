@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 /**
  * @author Arcology Network
@@ -85,8 +85,8 @@ library Runtime {
      * @param info The string to print.
      * @return The number of concurrent instances.
      */
-    function print(bytes memory info) internal returns(bool) {
-        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
-        return successful;  
-    }
+    // function print(bytes memory info) internal returns(bool) {
+    //     (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
+    //     return successful;  
+    // }
 }

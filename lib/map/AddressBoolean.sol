@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
@@ -39,7 +39,10 @@ contract AddressBooleanMap is Base {
      */
     function get(address k) public virtual view returns(bool){ 
         (bool success, bytes memory data) = Base._get(abi.encodePacked(k));
-        return (abi.decode(data, (bool)));  
+        if(success)
+            return (abi.decode(data, (bool))); 
+        else
+            return false;   
     }   
 
     /**
@@ -48,7 +51,12 @@ contract AddressBooleanMap is Base {
      * @return The index key associated with the index.
      */
     function keyAt(uint256 idx) public virtual view returns(address) {    
-        return address(uint160(bytes20(Base.indToKey(idx))));
+        bytes memory rawdata=Base.indToKey(idx);
+        bytes20 resultAdr;
+        for (uint i = 0; i < 20; i++) {
+            resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
+        }
+        return address(uint160(resultAdr));  
     }   
 
     /**
@@ -57,8 +65,11 @@ contract AddressBooleanMap is Base {
      * @return value The value retrieved from the storage array at the given index.    
     */
     function valueAt(uint256 idx) public virtual view returns(bool){ 
-        (,bytes memory data) = Base._get(idx);
-        return abi.decode(data, (bool));  
+        (bool success,bytes memory data) = Base._get(idx);
+        if(success)
+            return abi.decode(data, (bool));  
+        else
+            return false;
     }    
 
     /**

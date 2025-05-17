@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0;
 
 
 import "../shared/Const.sol"; 
@@ -44,8 +44,11 @@ contract U256Cum is Base {
      * @return The uint256 data element stored at the given index.
      */
     function get(uint256 idx) public virtual view returns(uint256)  {
-        (, bytes memory data) = Base._get(idx);
-        return abi.decode(data, (uint256));  
+        (bool exist, bytes memory data) = Base._get(idx);
+        if(exist)
+            return abi.decode(data, (uint256)); 
+        else
+            return  uint256(0);
     }
 
     /**
@@ -55,7 +58,10 @@ contract U256Cum is Base {
      */
     function at(uint256 idx) public view returns(bool, uint256) {
         (bool success, bytes memory data) = Base._get(idx);
-        return (success, abi.decode(data, (uint256)));
+        if(success)
+            return (success,abi.decode(data, (uint256))); 
+        else
+            return  (success,uint256(0));
     }
 
     /**
