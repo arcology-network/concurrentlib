@@ -17,7 +17,7 @@ contract U256 is Base {
      * @notice Add a uint256 data element to the concurrent array.
      * @param elem The uint256 data element to add to the array.
      */
-    function push(uint256 elem) public virtual{ 
+    function push(uint256 elem) public { 
        Base._set(uuid(), abi.encodePacked(elem));
     }    
 
@@ -50,20 +50,20 @@ contract U256 is Base {
     function set(uint256 idx, uint256 elem) public { 
         Base._set(idx, abi.encodePacked(elem));
     }
-    
+
     /**
      * @notice Retrieve the min element in the concurrent array.
      * @return The minimum element in the array by numerical comparison.
      */
-    function min() public view returns(uint256, uint256) { 
-        return abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public returns(uint256, uint256) { 
+        return abi.decode(Base._min(), (uint256, uint256));
     }
 
     /**
      * @notice Retrieve the max element in the concurrent array.
      * @return The maximum value in the array by numerical comparison.
      */
-    function max() public view returns(uint256, uint256) { 
-        return abi.decode(Base.maxNumerical(), (uint256, uint256));
+    function max() public returns(uint256, uint256) { 
+        return abi.decode(Base._max(), (uint256, uint256));
     }
 }

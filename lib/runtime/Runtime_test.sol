@@ -2,6 +2,7 @@
 pragma solidity >=0.7.0;
 
 import "./Runtime.sol";
+import "./Debug.sol";
 import "../multiprocess/Multiprocess.sol";
 import "../commutative/U256Cum.sol";
 
@@ -88,6 +89,6 @@ contract ParallizerTest  {
 contract PrintTest  {
     constructor () {
         // Runtime.print();
-        Runtime.print("Test");
+        Debug.print("Test");
     }
 }

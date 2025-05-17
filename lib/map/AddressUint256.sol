@@ -20,7 +20,7 @@ contract AddressUint256Map is Base {
      * @return true if the key exists, false otherwise.
      */
     function exist(address k) public virtual returns(bool) { 
-        return Base._exists(abi.encodePacked(k));
+        return Base.exists(abi.encodePacked(k));
     }
 
     /**
@@ -93,8 +93,8 @@ contract AddressUint256Map is Base {
      * @notice Retrieve the min value in the map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public view returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v) =  abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public returns(address, uint256, uint256) { 
+        (uint256 idx, uint256 v) =  abi.decode(Base._min(), (uint256, uint256));
         return (keyAt(idx),idx, v);
     }
 
@@ -102,8 +102,8 @@ contract AddressUint256Map is Base {
      * @notice Retrieve the max value in the map.
      * @return The maximum value by numerical comparison.
      */
-    function max() public view returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v)  = abi.decode(Base.maxNumerical(), (uint256, uint256));
+    function max() public returns(address, uint256, uint256) { 
+        (uint256 idx, uint256 v)  = abi.decode(Base._max(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 }

@@ -13,7 +13,7 @@ import "../runtime/Runtime.sol";
  *      linear access.
  */
 contract BytesOrderedSet {
-    address internal API = address(0x84);
+    address internal API = Const.CONTAINER_ADDR;
     bytes internal constant MIN = abi.encodePacked(uint256(0));
     bytes internal constant MAX = abi.encodePacked(type(uint256).max);
     
@@ -31,8 +31,8 @@ contract BytesOrderedSet {
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
      */
-    function get(uint256 idx) public virtual view returns(bytes memory) {
-        (,bytes memory elem) = address(API).staticcall(abi.encodeWithSignature("indToKey(uint256)", idx)); 
+    function get(uint256 idx) public virtual returns(bytes memory) {
+        (,bytes memory elem) = address(API).call(abi.encodeWithSignature("indToKey(uint256)", idx)); 
         return elem;
     }
       
@@ -41,8 +41,8 @@ contract BytesOrderedSet {
      * @param elem The elem to check for existence.
      * @return A boolean indicating whether the key exists in it or not.
     */
-    function exists(bytes memory elem) public view returns(bool) {
-        (bool success,) = address(API).staticcall(abi.encodeWithSignature("getByKey(bytes)", elem));
+    function exists(bytes memory elem) public returns(bool) {
+        (bool success,) = address(API).call(abi.encodeWithSignature("getByKey(bytes)", elem));
         return success;
     }
          
@@ -50,8 +50,8 @@ contract BytesOrderedSet {
      * @notice Retrieve the length of the container, including newly appended and deleted values if any.
      * @return The length of the container.
      */
-    function Length() public view returns(uint256) {
-        (,bytes memory data) = address(API).staticcall(abi.encodeWithSignature("fullLength()"));
+    function Length() public returns(uint256) {
+        (,bytes memory data) = address(API).call(abi.encodeWithSignature("fullLength()"));
         return abi.decode(data, (uint256));
     }  
 

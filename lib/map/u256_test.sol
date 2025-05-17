@@ -42,9 +42,8 @@ contract ConcurrenctU256MapTest {
     U256Map map = new U256Map();
     function call() public { 
        Multiprocess mp = new Multiprocess(2); 
-       mp.addJob(500000, address(this), abi.encodeWithSignature("assigner(uint256)", 11));
-       mp.addJob(500000, address(this), abi.encodeWithSignature("assigner(uint256)", 33));
-       require(mp.nonNilCount() == 2);
+       mp.addJob(500000, 0, address(this), abi.encodeWithSignature("assigner(uint256)", 11));
+       mp.addJob(500000, 0, address(this), abi.encodeWithSignature("assigner(uint256)", 33));
        mp.run();
 
         require(map.get(11) == 110); 

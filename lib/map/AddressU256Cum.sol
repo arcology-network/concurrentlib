@@ -19,8 +19,8 @@ contract AddressU256CumMap is Base {
      * @param k The uint256 key to check for existence.
      * @return true if the key exists, false otherwise.
      */    
-    function exist(address k) public view returns(bool) { 
-        return Base._exists(abi.encodePacked(k)); 
+    function exist(address k) public returns(bool) { 
+        return Base.exists(abi.encodePacked(k)); 
     }
      
     /**
@@ -101,8 +101,8 @@ contract AddressU256CumMap is Base {
      * @notice Retrieve the min value in the concurrent map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v) = abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public  returns(address, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base._min(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
     
@@ -112,7 +112,7 @@ contract AddressU256CumMap is Base {
      * @return The maximum value by numerical comparison.
      */
     function max() public returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v) = abi.decode(Base.maxNumerical(), (uint256, uint256));
+        (uint256 idx, uint256 v) = abi.decode(Base._max(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 }
