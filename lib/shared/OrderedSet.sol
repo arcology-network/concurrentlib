@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "../shared/Const.sol";
-import "../runtime/Runtime.sol";
+import "./Const.sol";
+import "./Backend.sol";
+// import "../runtime/Runtime.sol";
+
 
 /**
  * @author Arcology Network
@@ -12,18 +14,17 @@ import "../runtime/Runtime.sol";
  *      causing state conflicts. It provides functionalities for both key-value lookup and
  *      linear access.
  */
-contract BytesOrderedSet {
-    address internal API = Const.CONTAINER_ADDR;
+contract BytesOrderedSet is Backend {
     bytes internal constant MIN = abi.encodePacked(uint256(0));
     bytes internal constant MAX = abi.encodePacked(type(uint256).max);
     
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor () {       
-        (bool success,) = address(API).call(abi.encodeWithSignature(
-            "new(uint8,bytes,bytes)", uint8(Const.U256_CUM), new bytes(0), new bytes(0)));
-        require(success);
+    constructor () Backend(Const.U256_CUM, Const.CONTAINER_ADDR) {       
+        // (bool success,) = address(API).call(abi.encodeWithSignature(
+        //     "new(uint8,bytes,bytes)", uint8(Const.U256_CUM), new bytes(0), new bytes(0)));
+        // require(success);
     }
     
     /**
@@ -31,8 +32,8 @@ contract BytesOrderedSet {
      * @param idx The index of the data to retrieve.
      * @return The data stored at the specified index.
      */
-    function get(uint256 idx) public virtual returns(bytes memory) {
-        (,bytes memory elem) = address(API).call(abi.encodeWithSignature("indToKey(uint256)", idx)); 
+    function get(uint256 idx) public returns(bytes memory) {        
+        (,bytes memory elem) = eval(abi.encodeWithSignature("indToKey(uint256)", idx)); 
         return elem;
     }
       
@@ -42,7 +43,7 @@ contract BytesOrderedSet {
      * @return A boolean indicating whether the key exists in it or not.
     */
     function exists(bytes memory elem) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("getByKey(bytes)", elem));
+        (bool success,) = eval(abi.encodeWithSignature("getByKey(bytes)", elem));
         return success;
     }
          
@@ -51,7 +52,7 @@ contract BytesOrderedSet {
      * @return The length of the container.
      */
     function Length() public returns(uint256) {
-        (,bytes memory data) = address(API).call(abi.encodeWithSignature("fullLength()"));
+        (,bytes memory data) = eval(abi.encodeWithSignature("fullLength()"));
         return abi.decode(data, (uint256));
     }  
 
@@ -61,7 +62,7 @@ contract BytesOrderedSet {
      * @return success true if the data was successfully updated, false otherwise.
      */
     function set(bytes memory elem) public returns(bool) {
-        (bool success,) = address(API).call(abi.encodeWithSignature("init(bytes,bytes,bytes)", elem, MIN, MAX));
+        (bool success,) = eval(abi.encodeWithSignature("init(bytes,bytes,bytes)", elem, MIN, MAX));
         return success;   
     }
 
@@ -70,7 +71,7 @@ contract BytesOrderedSet {
      * @return success true if the all the data was successfully deleted, false otherwise.
      */
     function clear() public returns(bool)  {
-        (bool success,) = address(API).call(abi.encodeWithSignature("clear()"));
+        (bool success,) = eval(abi.encodeWithSignature("clear()"));
         return success;       
     }  
 }

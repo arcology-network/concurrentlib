@@ -1,5 +1,4 @@
 pragma solidity >=0.7.0;
-import "../runtime/Runtime.sol";
 
 /**
  * @author Arcology Network
