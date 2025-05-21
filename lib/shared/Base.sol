@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 import "../runtime/Runtime.sol";
-import "./Backend.sol";
+import "./ConcurrentGateway.sol";
 import "./Const.sol";
 /**
  * @author Arcology Network
@@ -19,11 +19,11 @@ import "./Const.sol";
  *
  *      Delopers should exercise caution when accessing the container concurrently to avoid conflicts.
  */
-contract Base is Backend{    
+contract Base is ConcurrentGateway{    
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor (uint8 typeID) Backend(typeID, Const.CONTAINER_ADDR) {}
+    constructor (uint8 typeID) ConcurrentGateway(typeID, Const.CONTAINER_ADDR) {}
          
     /**
      * @notice Retrieve the length of the container, including newly appended and deleted values if any.

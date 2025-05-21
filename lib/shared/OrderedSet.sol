@@ -2,7 +2,7 @@
 pragma solidity >=0.7.0;
 
 import "./Const.sol";
-import "./Backend.sol";
+import "./ConcurrentGateway.sol";
 // import "../runtime/Runtime.sol";
 
 
@@ -14,14 +14,14 @@ import "./Backend.sol";
  *      causing state conflicts. It provides functionalities for both key-value lookup and
  *      linear access.
  */
-contract BytesOrderedSet is Backend {
+contract BytesOrderedSet is ConcurrentGateway {
     bytes internal constant MIN = abi.encodePacked(uint256(0));
     bytes internal constant MAX = abi.encodePacked(type(uint256).max);
     
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor () Backend(Const.U256_CUM, Const.CONTAINER_ADDR) {       
+    constructor () ConcurrentGateway(Const.U256_CUM, Const.CONTAINER_ADDR) {       
         // (bool success,) = address(API).call(abi.encodeWithSignature(
         //     "new(uint8,bytes,bytes)", uint8(Const.U256_CUM), new bytes(0), new bytes(0)));
         // require(success);

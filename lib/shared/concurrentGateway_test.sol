@@ -3,12 +3,12 @@
 pragma solidity >=0.7.0;
 
 import "./Const.sol";
-import "./Backend.sol";
+import "./ConcurrentGateway.sol";
 import "../runtime/Runtime.sol";
 import "../runtime/Debug.sol";
 
-contract BackendTest {
-    Backend container = new Backend(Const.BYTES, Const.CONTAINER_ADDR);    
+contract ConcurrentGatewayTest {
+    ConcurrentGateway container = new ConcurrentGateway(Const.BYTES, Const.CONTAINER_ADDR);    
 
     constructor() {       
         bytes memory elem1 = '0x1111111';

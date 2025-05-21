@@ -3,7 +3,7 @@ pragma solidity >=0.7.0;
 
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
-import "../shared/Backend.sol";
+import "../shared/ConcurrentGateway.sol";
 import "../runtime/Runtime.sol";
 /**
  * @author Arcology Network
@@ -18,7 +18,7 @@ struct JobResult {
     bytes returnData;
 }
 
-contract Multiprocess is Backend(Const.BYTES, Const.MULTIPROCESSOR_ADDR) {
+contract Multiprocess is ConcurrentGateway(Const.BYTES, Const.MULTIPROCESSOR_ADDR) {
     uint256 numProcesses = 1;
 
     /**

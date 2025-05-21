@@ -924,9 +924,9 @@ contract ParallelCumulativeU256 {
 		// require(cumulative.committedLength() == 0);
 
 		
+        mp.addJob(200000, 0, address(this), abi.encodeWithSignature("add(uint256)", 1)); // 7 + 50 + 1  < 100 => 58  
 		mp.addJob(200000, 0, address(this), abi.encodeWithSignature("add(uint256)", 50)); // 7 + 50 < 100 => 57
 		mp.addJob(200000, 0, address(this), abi.encodeWithSignature("add(uint256)", 50)); // 7 + 50 + 50  > 100 still 57 
-		mp.addJob(200000, 0, address(this), abi.encodeWithSignature("add(uint256)", 1)); // 7 + 50 + 1  < 100 => 58  
 		mp.run();  
 
 		require(cumulative.get() == 58);
