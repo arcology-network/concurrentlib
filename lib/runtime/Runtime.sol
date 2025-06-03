@@ -71,4 +71,15 @@ library Runtime {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("defer(bytes4)", funSign));
         return successful;  
     }
+ 
+    /**
+     * @notice Top up the gas for the deferred TX once called.
+     * @param prepaidVal The value has been prepaid during the parallel execution by the non-deferred TXs
+     * @param prepaidGas The gas has been prepaid during the parallel execution by the non-deferred TXs
+     * @return A boolean indicating whether the top-up was successful.
+     */
+    function topupGas(uint256 prepaidVal, uint256 prepaidGas) internal returns(bool) {
+        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("topupGas(uint256,uint256)", prepaidVal, prepaidGas));
+        return successful;  
+    }
 }

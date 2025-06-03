@@ -29,13 +29,14 @@ contract NumConcurrentInstanceTest  {
 contract DeferredTest  {
     U256Cumulative value = new U256Cumulative(1, 100);
 
-    constructor () {
-        Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))));
+    constructor () payable {
+        Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))));  
     }
 
     function init(uint256 v) public {
         bytes4 funSign = bytes4(keccak256(bytes("init(uint256)")));
         if (Runtime.instances(address(this),funSign) == 0) {
+            Runtime.topupGas(100, 100); // Top up gas by 1,000,000 units
             value.add(v);    
         }
     }
@@ -85,6 +86,17 @@ contract ParallizerTest  {
     function seq() public {}
     function def() public {}
 }
+
+contract TopupGasTest  {
+    constructor () {
+        Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))));
+    }
+
+    function init() public {
+        Runtime.topupGas(100, 100); // Top up gas by 1,000,000 units
+    }
+}
+
 
 contract PrintTest  {
     constructor () {
