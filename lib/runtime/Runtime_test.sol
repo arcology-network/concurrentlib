@@ -88,12 +88,10 @@ contract ParallizerTest  {
 }
 
 contract TopupGasTest  {
-    constructor () {
-        Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))));
-    }
+    constructor () {}
 
     function init() public {
-        Runtime.topupGas(100, 100); // Top up gas by 1,000,000 units
+        Runtime.topupGas(222, 111); // Top up gas by 1,000,000 units
     }
 }
 
