@@ -58,10 +58,10 @@ library Runtime {
      * @notice Get the number of concurrent instances of the specified function.
      * @return The number of concurrent instances.
      */
-    function instances(address addr, bytes4 funSign) internal view returns(uint256) {
-        (,bytes memory data) = address(0xa0).staticcall(abi.encodeWithSignature("instances(address,bytes4)", addr, funSign));
-        return abi.decode(data, (uint256));  
-    }
+    // function instances(address addr, bytes4 funSign) internal view returns(uint256) {
+    //     (,bytes memory data) = address(0xa0).staticcall(abi.encodeWithSignature("instances(address,bytes4)", addr, funSign));
+    //     return abi.decode(data, (uint256));  
+    // }
 
     /**
      * @notice Inform the scheduler that a function needs to schedule a defer call. This function can only be called once in the constructor.
@@ -80,6 +80,16 @@ library Runtime {
      */
     function topupGas(uint256 prepaidVal, uint256 prepaidGas) internal returns(bool) {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("topupGas(uint256,uint256)", prepaidVal, prepaidGas));
+        return successful;  
+    }
+
+    /**
+     * @notice Send doesn't check the sender's balance. It relies on acumulator to ensure that the sender has enough balance.
+     * @param val The total value to be transferred.
+     * @return A boolean indicating whether the top-up was successful.
+     */
+    function send(address recipient, uint256 val) internal returns(bool) {
+        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("send(address,uint256)", recipient, val));
         return successful;  
     }
 }

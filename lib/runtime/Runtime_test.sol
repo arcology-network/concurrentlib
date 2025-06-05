@@ -6,41 +6,41 @@ import "./Debug.sol";
 import "../multiprocess/Multiprocess.sol";
 import "../commutative/U256Cum.sol";
 
-contract NumConcurrentInstanceTest  {   
-        receive() external payable {}
-    // fallback() external payable {}
-    U256Cumulative value = new U256Cumulative(1, 100);
+// contract NumConcurrentInstanceTest  {   
+//         receive() external payable {}
+//     // fallback() external payable {}
+//     U256Cumulative value = new U256Cumulative(1, 100);
 
-    function call() public {
-        Multiprocess mp = new Multiprocess(2); // 2 Threads
-        mp.addJob(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 1)); // Will require about 1.5M gas
-        mp.addJob(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 2));
-        mp.run();
-        require(value.get() == 3);
-    }
+//     function call() public {
+//         Multiprocess mp = new Multiprocess(2); // 2 Threads
+//         mp.addJob(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 1)); // Will require about 1.5M gas
+//         mp.addJob(4000000, 11, address(this), abi.encodeWithSignature("init(uint256)", 2));
+//         mp.run();
+//         require(value.get() == 3);
+//     }
 
-    function init(uint256 v) public payable  {
-        if (Runtime.instances(address(this), bytes4(keccak256(bytes("init(uint256)")))) == 2) {
-            value.add(v);    
-        }
-    }
-}
+//     function init(uint256 v) public payable  {
+//         if (Runtime.instances(address(this), bytes4(keccak256(bytes("init(uint256)")))) == 2) {
+//             value.add(v);    
+//         }
+//     }
+// }
 
-contract DeferredTest  {
-    U256Cumulative value = new U256Cumulative(1, 100);
+// contract DeferredTest  {
+//     U256Cumulative value = new U256Cumulative(1, 100);
 
-    constructor () payable {
-        Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))));  
-    }
+//     constructor () payable {
+//         Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))));  
+//     }
 
-    function init(uint256 v) public {
-        bytes4 funSign = bytes4(keccak256(bytes("init(uint256)")));
-        if (Runtime.instances(address(this),funSign) == 0) {
-            Runtime.topupGas(100, 100); // Top up gas by 1,000,000 units
-            value.add(v);    
-        }
-    }
-}
+//     function init(uint256 v) public {
+//         bytes4 funSign = bytes4(keccak256(bytes("init(uint256)")));
+//         if (Runtime.instances(address(this),funSign) == 0) {
+//             Runtime.topupGas(100, 100); // Top up gas by 1,000,000 units
+//             value.add(v);    
+//         }
+//     }
+// }
 
 contract SequentializerTest  {
     address addr1 = 0x1111111110123456789012345678901234567890;
