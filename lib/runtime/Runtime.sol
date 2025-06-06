@@ -82,14 +82,4 @@ library Runtime {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("topupGas(uint256,uint256)", prepaidVal, prepaidGas));
         return successful;  
     }
-
-    /**
-     * @notice Send doesn't check the sender's balance. It relies on acumulator to ensure that the sender has enough balance.
-     * @param val The total value to be transferred.
-     * @return A boolean indicating whether the top-up was successful.
-     */
-    function send(address recipient, uint256 val) internal returns(bool) {
-        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("send(address,uint256)", recipient, val));
-        return successful;  
-    }
 }
