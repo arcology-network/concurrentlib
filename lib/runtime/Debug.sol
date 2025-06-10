@@ -13,17 +13,17 @@ library Debug {
      * @param info The string to print.
      * @return The number of concurrent instances.
      */
-    function print(bytes memory info) internal returns(bool) {
+    function print(bytes memory info) public returns(bool) {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
         return successful;  
     }
 
-    function print(uint256 info) internal returns(bool) {
+    function print(uint256 info) public returns(bool) {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
         return successful;  
     }
 
-    function print(address info) internal returns(bool) {
+    function print(address info) public returns(bool) {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
         return successful;  
     }
