@@ -78,8 +78,38 @@ library Runtime {
      * @param prepaidGas The gas has been prepaid during the parallel execution by the non-deferred TXs
      * @return A boolean indicating whether the top-up was successful.
      */
-    function topupGas(uint256 prepaidVal, uint256 prepaidGas) internal returns(bool) {
-        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("topupGas(uint256,uint256)", prepaidVal, prepaidGas));
-        return successful;  
+    // function topupGas(uint256 prepaidVal, uint256 prepaidGas) internal returns(bool) {
+    //     (bool successful,) = address(0xa0).call(abi.encodeWithSignature("topupGas(uint256,uint256)", prepaidVal, prepaidGas));
+    //     return successful;  
+    // }
+
+    /**
+     * @notice Send gas to the current contract to sponsor gas for the deferred TX.
+     * @param gas The amount of gas to send.
+     */
+    function sponsorGas(uint64 gas) internal returns(bool) {
+       (bool success,) = address(0xa0).call(abi.encodeWithSignature("sponsorGas(uint64)", gas));      
+       return success;
+    }
+
+    /**
+     * @notice Top up gas on the fly using reserved prepaid gas.
+     * @param gas The amount of gas to top up.
+     */
+    function useSponsoredGas(uint64 gas) internal returns(bool) {
+        (bool success,) =  address(0xa0).call(abi.encodeWithSignature("useSponsoredGas(uint64)", gas));      
+        return success; 
+    }
+
+     /**
+     * @notice Get the sponsored gas for the deferred TX.
+     * @return The amount of gas that has been sponsored.
+     */
+    function getSponsoredGas() internal returns(uint64) {
+        (bool success, bytes memory data) =  address(0xa0).call(abi.encodeWithSignature("getSponsoredGas()"));      
+        if (!success) {
+            return 0; // If the call fails, return 0
+        }
+        return abi.decode(data, (uint64));
     }
 }

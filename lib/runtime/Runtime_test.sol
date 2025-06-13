@@ -87,11 +87,13 @@ contract ParallizerTest  {
     function def() public {}
 }
 
-contract TopupGasTest  {
+contract TestSponsorGas  {
     constructor () {}
 
     function init() public {
-        Runtime.topupGas(222, 111); // Top up gas by 1,000,000 units
+        Runtime.sponsorGas(222); // Top up gas by 1,000,000 units
+        Runtime.useSponsoredGas(111); // Use 1,000,000 units of gas
+        require(Runtime.getSponsoredGas() == 111);
     }
 }
 
