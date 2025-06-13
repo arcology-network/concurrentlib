@@ -37,14 +37,6 @@ library Runtime {
     }
 
     /**
-     * @notice Call a custom operation.
-     * @return The result of the custom operation.
-     */
-    function eval(string memory func, uint256 data) internal returns(bool, bytes memory) {
-        return address(0xa0).call(abi.encodeWithSignature(func, data)); 
-    }
-
-    /**
      * @notice The funtion instructs the scheduler to avoid executing the specified functions with itself in parallel.
      * @param others The list of function signatures and their contract address to avoid executing in parallel.
      */
@@ -66,10 +58,10 @@ library Runtime {
      * @notice Get the number of concurrent instances of the specified function.
      * @return The number of concurrent instances.
      */
-    function instances(address addr, bytes4 funSign) internal view returns(uint256) {
-        (,bytes memory data) = address(0xa0).staticcall(abi.encodeWithSignature("instances(address,bytes4)", addr, funSign));
-        return abi.decode(data, (uint256));  
-    }
+    // function instances(address addr, bytes4 funSign) internal view returns(uint256) {
+    //     (,bytes memory data) = address(0xa0).staticcall(abi.encodeWithSignature("instances(address,bytes4)", addr, funSign));
+    //     return abi.decode(data, (uint256));  
+    // }
 
     /**
      * @notice Inform the scheduler that a function needs to schedule a defer call. This function can only be called once in the constructor.
@@ -79,14 +71,15 @@ library Runtime {
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("defer(bytes4)", funSign));
         return successful;  
     }
-    
+ 
     /**
-     * @notice print a string to the console.
-     * @param info The string to print.
-     * @return The number of concurrent instances.
+     * @notice Top up the gas for the deferred TX once called.
+     * @param prepaidVal The value has been prepaid during the parallel execution by the non-deferred TXs
+     * @param prepaidGas The gas has been prepaid during the parallel execution by the non-deferred TXs
+     * @return A boolean indicating whether the top-up was successful.
      */
-    // function print(bytes memory info) internal returns(bool) {
-    //     (bool successful,) = address(0xa0).call(abi.encodeWithSignature("print(bytes)", info));
-    //     return successful;  
-    // }
+    function topupGas(uint256 prepaidVal, uint256 prepaidGas) internal returns(bool) {
+        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("topupGas(uint256,uint256)", prepaidVal, prepaidGas));
+        return successful;  
+    }
 }

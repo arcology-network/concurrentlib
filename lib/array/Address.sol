@@ -19,14 +19,13 @@ contract Address is Base {
      */
     function push(address elem) public virtual{ 
         Base._set(uuid(), abi.encodePacked(elem));
-    }    
+    } 
 
    /**
      * @notice Remove and return the last address element from the concurrent array.
      * @return The last address element from the array.
      */
-    function pop() public virtual returns(address) { 
-        // return abi.decode(Base._pop(), (address));
+    function delLast() public virtual returns(address) { 
         bytes memory rawdata=Base._delLast();
         bytes20 resultAdr;
         for (uint i = 0; i < 20; i++) {
@@ -41,8 +40,7 @@ contract Address is Base {
      * @return The address element stored at the given index.
      */
     
-    function get(uint256 idx) public virtual returns(address)  {
-        // return abi.decode(Base._get(idx), (address));
+    function get(uint256 idx) public returns(address)  {
         (bool exist,bytes memory rawdata)=Base._get(idx);
         bytes20 resultAdr;
         if(exist){

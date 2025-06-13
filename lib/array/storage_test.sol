@@ -10,7 +10,7 @@ contract StorageTest {
         bArray.push(true);
     }
     
-    function call() view public {     
+    function call() public {     
        require(bArray.fullLength() == 1);
     }
 }

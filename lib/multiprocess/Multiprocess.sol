@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "../storage/Storage.sol";
 import "../shared/Const.sol"; 
 import "../shared/Base.sol";
-
+import "../shared/ConcurrentGateway.sol";
+import "../runtime/Runtime.sol";
 /**
  * @author Arcology Network
  * @title Multiprocess Container
@@ -18,14 +18,7 @@ struct JobResult {
     bytes returnData;
 }
 
-contract Multiprocess is Base(Const.BYTES) {
-    enum Status{ 
-        SUCCESSFUL, 
-        EXECUTION_FAILED, 
-        CONFLICT,
-        ABORTED,
-        FAILED_TO_RETRIVE
-    }
+contract Multiprocess is ConcurrentGateway(Const.BYTES, Const.MULTIPROCESSOR_ADDR) {
     uint256 numProcesses = 1;
 
     /**
@@ -33,19 +26,8 @@ contract Multiprocess is Base(Const.BYTES) {
      * @param threads The number of parallel processors (ranging from 1 to 255) for parallel processing.
      */
     constructor (uint256 threads){
-        Base.API = address(0xb0);
         numProcesses = threads; 
     } 
-
-    /**
-     * @notice Add an job to the parallel job queue.
-     * @param gaslimit The gas limit for the execution of the function call.
-     * @param contractAddr The address of the smart contract to execute the function on.
-     * @param funcCall The encoded function call data.
-     */
-    function addJob(uint256 gaslimit, address contractAddr, bytes memory funcCall) public virtual {
-        _set(uuid(), abi.encode(gaslimit, 0, contractAddr, funcCall));
-    }
 
     /**
      * @notice Add an job to the parallel job queue.
@@ -54,40 +36,10 @@ contract Multiprocess is Base(Const.BYTES) {
      * @param contractAddr The address of the smart contract to execute the function on.
      * @param funcCall The encoded function call data.
      */
-    // function addJob(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public virtual {
-    //     _set(uuid(), abi.encode(gaslimit, ethVal, contractAddr, funcCall));
-    // }
- 
-    /**
-     * @notice Pop an executable message from the container.
-     * @return The popped executable message.
-     */
-    function delLast() public virtual returns(bytes memory) { 
-        return abi.decode(Base._delLast(), (bytes));  
-    }
-
-    /**
-     * @notice Get an executable message from the container at the specified index.
-     * @param idx The index of the executable message to retrieve.
-     * @return The executable message at the specified index.
-     */
-    function get(uint256 idx) public virtual returns(bytes memory) {
-        (bool exist,bytes memory data) = Base._get(idx);
-        if(exist)
-            return abi.decode(data, (bytes));  
-        else{
-            bytes memory datas;
-            return datas;
-        }
-    }
-
-    /**
-     * @notice Set an executable message at the specified index in the container.
-     * @param idx The index where the executable message should be stored.
-     * @param elem The executable message data to be stored at the specified index.
-     */
-    function set(uint256 idx, bytes memory elem) public { 
-        Base._set(idx, abi.encode(elem));   
+    function addJob(uint256 gaslimit, uint256 ethVal, address contractAddr, bytes memory funcCall) public returns(bool) {
+        bytes memory data = abi.encode(gaslimit, ethVal, contractAddr, funcCall);
+        (bool success,) = eval(abi.encodeWithSignature("setByKey(bytes,bytes)", Runtime.uuid(), data));
+        return success;
     }
 
     /**
@@ -96,14 +48,8 @@ contract Multiprocess is Base(Const.BYTES) {
      *      of threads specified in the constructor.
      */
     function run() public returns(bool, bytes memory){       
-        return invoke(abi.encodePacked(numProcesses));
-    }
-
-    /**
-     * @notice Roll back all state changes made in the current block and reset the contract to the previous state.
-     * @dev Caution: Using this function, especially in the constructor, may cause the contract deployment to fail.
-     */
-    function rollback() public {
-        address(0xa0).call(abi.encodeWithSignature("Reset()"));     
+        (bool success, bytes memory data) = address(API).call(abi.encodeWithSignature("invoke(bytes)", abi.encodePacked(numProcesses))); 
+        (success,) = eval(abi.encodeWithSignature("clear()"));
+        return (success, data);
     }
 }

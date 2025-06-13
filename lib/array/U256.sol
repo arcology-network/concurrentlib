@@ -17,7 +17,7 @@ contract U256 is Base {
      * @notice Add a uint256 data element to the concurrent array.
      * @param elem The uint256 data element to add to the array.
      */
-    function push(uint256 elem) public virtual{ 
+    function push(uint256 elem) public { 
        Base._set(uuid(), abi.encodePacked(elem));
     }    
 
@@ -25,7 +25,7 @@ contract U256 is Base {
      * @notice Remove and return the last uint256 data element from the concurrent array. Length will remain the same.
      * @return The last uint256 data element from the array.
      */
-    function pop() public virtual returns(uint256) { 
+    function delLast() public returns(uint256) {       
         return uint256(abi.decode(Base._delLast(), (bytes32)));  
     }
 
@@ -34,7 +34,7 @@ contract U256 is Base {
      * @param idx The index of the uint256 data element to retrieve.
      * @return The uint256 data element stored at the given index.
      */
-    function get(uint256 idx) public virtual view returns(uint256)  {
+    function get(uint256 idx) public returns(uint256)  {
         (bool exist,bytes memory data)=Base._get(idx);
         if(exist)
             return uint256(abi.decode(data, (bytes32)));
@@ -50,20 +50,20 @@ contract U256 is Base {
     function set(uint256 idx, uint256 elem) public { 
         Base._set(idx, abi.encodePacked(elem));
     }
-    
+
     /**
      * @notice Retrieve the min element in the concurrent array.
      * @return The minimum element in the array by numerical comparison.
      */
-    function min() public view returns(uint256, uint256) { 
-        return abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public returns(uint256, uint256) { 
+        return abi.decode(Base._min(), (uint256, uint256));
     }
 
     /**
      * @notice Retrieve the max element in the concurrent array.
      * @return The maximum value in the array by numerical comparison.
      */
-    function max() public view returns(uint256, uint256) { 
-        return abi.decode(Base.maxNumerical(), (uint256, uint256));
+    function max() public returns(uint256, uint256) { 
+        return abi.decode(Base._max(), (uint256, uint256));
     }
 }

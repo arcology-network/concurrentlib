@@ -20,7 +20,7 @@ contract AddressUint256Map is Base {
      * @return true if the key exists, false otherwise.
      */
     function exist(address k) public virtual returns(bool) { 
-        return Base._exists(abi.encodePacked(k));
+        return Base.exists(abi.encodePacked(k));
     }
 
     /**
@@ -38,25 +38,24 @@ contract AddressUint256Map is Base {
      * @return value The address value associated with the key.
      */
     function get(address k) public virtual returns(uint256 value){ 
-        (bool exist,bytes memory data)=Base._get(abi.encodePacked(k));
-        if(exist)
+        (bool success, bytes memory data)=Base._get(abi.encodePacked(k));
+        if(success)
             return uint256(abi.decode(data, (bytes32)));     
-        else
-            return uint256(0);
+        return uint256(0);    
     }    
 
     /**
-     * @notice Get the key based on it index.
+     * @notice Get the key based on it index.   
      * @param idx The key to retrieve the associated index.
      * @return The key value associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(address) { 
+    function keyAt(uint256 idx) public virtual returns(address) {    
         bytes memory rawdata=Base.indToKey(idx);
         bytes20 resultAdr;
         for (uint i = 0; i < 20; i++) {
             resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
         }
-        return address(uint160(resultAdr));  
+        return address(uint160(resultAdr));      
     }   
 
     /**
@@ -64,12 +63,11 @@ contract AddressUint256Map is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
-        (bool exist,bytes memory data)=Base._get(idx);
-        if(exist)
-            return uint256(abi.decode(data, (bytes32)) ); 
-        else
-            return uint256(0); 
+    function valueAt(uint256 idx) public virtual returns(uint256 value){ 
+        (bool success, bytes memory data)=Base._get(idx);
+        if(success && data.length>0)
+            return uint256(abi.decode(data, (bytes32)) );       
+        return uint256(0); 
     }    
 
     /**
@@ -93,8 +91,8 @@ contract AddressUint256Map is Base {
      * @notice Retrieve the min value in the map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public view returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v) =  abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public returns(address, uint256, uint256) { 
+        (uint256 idx, uint256 v) =  abi.decode(Base._min(), (uint256, uint256));
         return (keyAt(idx),idx, v);
     }
     
@@ -102,8 +100,8 @@ contract AddressUint256Map is Base {
      * @notice Retrieve the max value in the map.
      * @return The maximum value by numerical comparison.
      */
-    function max() public view returns(address, uint256, uint256) { 
-         (uint256 idx, uint256 v)  = abi.decode(Base.maxNumerical(), (uint256, uint256));
+    function max() public returns(address, uint256, uint256) { 
+        (uint256 idx, uint256 v)  = abi.decode(Base._max(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 }

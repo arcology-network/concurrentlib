@@ -19,8 +19,8 @@ contract AddressBooleanMap is Base {
      * @param k The address key to check for existence.
      * @return true if the key exists, false otherwise.
      */
-    function exist(address k) public view returns(bool) { 
-        return Base._exists(abi.encodePacked(k));
+    function exist(address k) public returns(bool) { 
+        return Base.exists(abi.encodePacked(k));
     }
 
     /**
@@ -37,12 +37,12 @@ contract AddressBooleanMap is Base {
      * @param k The address key to retrieve the associated value.
      * @return The boolean value associated with the key.
      */
-    function get(address k) public virtual view returns(bool){ 
+    function get(address k) public virtual returns(bool){ 
         (bool success, bytes memory data) = Base._get(abi.encodePacked(k));
         if(success)
             return (abi.decode(data, (bool))); 
         else
-            return false; 
+            return false;   
     }   
 
     /**
@@ -50,7 +50,7 @@ contract AddressBooleanMap is Base {
      * @param idx The key to retrieve the associated index.
      * @return The index key associated with the index.
      */
-    function keyAt(uint256 idx) public virtual  returns(address) {  
+    function keyAt(uint256 idx) public virtual returns(address) {    
         bytes memory rawdata=Base.indToKey(idx);
         bytes20 resultAdr;
         for (uint i = 0; i < 20; i++) {
@@ -64,7 +64,7 @@ contract AddressBooleanMap is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
     */
-    function valueAt(uint256 idx) public virtual view returns(bool){ 
+    function valueAt(uint256 idx) public virtual returns(bool){ 
         (bool success,bytes memory data) = Base._get(idx);
         if(success)
             return abi.decode(data, (bool));  

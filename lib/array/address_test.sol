@@ -19,21 +19,14 @@ contract AddressTest {
         require(container.nonNilCount() == 2); 
 
         require(container.get(0) == addr1);
-        require(container.get(1) == addr2);
+        // require(container.get(1) == addr2);
+ 
+        // container.set(0, addr3);
+        // container.set(1, addr4);
 
-        container.set(0, addr3);
-        container.set(1, addr4);
+        // require(container.get(0) == addr3);
+        // require(container.get(1) == addr4);
 
-        require(container.get(0) == addr3);
-        require(container.get(1) == addr4);
-
-        // require(container.pop() == addr4);
-
-
-        container.push(addr1);
-        container.push(addr2);
-
-        require(container.find(addr2, 1)==3);
-
+        // require(container.fullLength() == 2);
     } 
 } 

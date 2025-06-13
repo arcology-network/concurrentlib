@@ -2,7 +2,7 @@
 pragma solidity >=0.7.0;
 
 import "./AddressU256Cum.sol";
-import "../multiprocess/Multiprocess.sol";
+// import "../multiprocess/Multiprocess.sol";
 
 contract AddressU256CumTest {
     AddressU256CumMap container = new AddressU256CumMap();
@@ -21,41 +21,40 @@ contract AddressU256CumTest {
         container.set(addr3, 0, 0, 1000);
         require(container.nonNilCount() == 3); 
 
-        // (address k, uint256 idx, uint256 v) = map.min();
-        // require(v == 11); 
-        // require(idx == 0 && map.get(k) == v);
+        (address k, uint256 idx, uint256 v) = map.min();
+        require(idx == 0 && v == 0 && map.get(k) == v);
 
-        // (k, idx, v) = map.max();
-        // require(v == 31); 
-        // require(idx == 2 && map.get(k) == v);
+        map.set(addr2, 31, 0, 1000);
+        (k, idx, v) = map.max();
+        require(v == 31); 
+
+        map.set(addr3, 32);
+        (k, idx, v) = map.max();
+        require(v == 32 && idx == 2); 
         
-        // require(map.exist(addr1)); 
-        // require(map.exist(addr2)); 
-        // require(map.exist(addr3)); 
-        // require(!map.exist(addr4)); 
+        require(map.exist(addr1)); 
+        require(map.exist(addr2)); 
+        require(map.exist(addr3)); 
+        require(!map.exist(addr4)); 
 
-        container.set(addr1, 18, 17, 111);
-        container.set(addr2, 19, 18, 112);                
-        container.set(addr3, 20, 19, 113);
-        require(container.valueAt(1) == 19);
-        require(container.keyAt(0) == addr1);
+        require(map.get(addr1) == 0); 
+        require(map.get(addr2) == 31); 
+        require(map.get(addr3) == 32); 
+        require(!map.exist(addr4)); 
 
-        // require(map.keyAt(0) == addr1);
-        // require(map.keyAt(1) == addr2);
-        // require(map.keyAt(2) == addr3);
+        require(map.keyAt(0) == addr1);
+        require(map.keyAt(1) == addr2);
+        require(map.keyAt(2) == addr3);
 
-        // map.del(addr1);
-        // map.del(addr2);
-        // map.del(addr3);
-        // require(map.nonNilCount() == 0); 
+        map.del(addr1);
+        map.del(addr2);
+        map.del(addr3);
+        require(map.nonNilCount() == 0); 
 
-        require(container.get(addr1) == 19);
-        require(container.get(addr2) == 20);
-        require(container.get(addr3) == 21);
-        (address k, uint256 idx, uint256 v) = container.max();
-        require(idx == 2 && container.get(k) == v);
-        ( k,  idx,  v) = container.min();
-        require(idx == 0 && container.get(k) == v);
+        map.set(addr1, 110);  
+        map.set(addr2, 210);
+        map.set(addr3, 310);
+        require(map.nonNilCount() == 3); 
 
         // require(map.valueAt(0) == 110); 
         // require(map.valueAt(1) == 210); 
@@ -104,7 +103,6 @@ contract AddressU256CumTest {
 //         mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr1, 11));
 //         mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr2, 22));
 //         mp.addJob(500000, address(this), abi.encodeWithSignature("setter(address,uint256)", addr3, 33));
-//         require(mp.nonNilCount() == 3);
 //         mp.run();
 
 //         require(map.exist(addr1)); 

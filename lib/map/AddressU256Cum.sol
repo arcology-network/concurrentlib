@@ -19,8 +19,8 @@ contract AddressU256CumMap is Base {
      * @param k The uint256 key to check for existence.
      * @return true if the key exists, false otherwise.
      */    
-    function exist(address k) public view returns(bool) { 
-        return Base._exists(abi.encodePacked(k)); 
+    function exist(address k) public returns(bool) { 
+        return Base.exists(abi.encodePacked(k)); 
     }
      
     /**
@@ -30,7 +30,7 @@ contract AddressU256CumMap is Base {
      *  @param lower The lower bound associated with the key.
      *  @param upper The upper bound associated with the key.
      */
-    function set(address key, int256 initDelta, uint256 lower, uint256 upper) public virtual { 
+    function set(address key, int256 initDelta, uint256 lower, uint256 upper) public { 
         require((initDelta < 0  && uint256(initDelta) <= lower) || initDelta >= 0 && uint256(initDelta) >= lower && uint256(initDelta) <= upper, "Out of bounds");
 
         if (!_init(abi.encodePacked(key), abi.encodePacked(lower), abi.encodePacked(upper))) {
@@ -54,39 +54,40 @@ contract AddressU256CumMap is Base {
      * @param key The uint256 key to retrieve the associated value.
      * @return value The uint256 value associated with the key.
      */
-    function get(address key) public virtual view returns(uint256 value){  
+    function get(address key) public virtual returns(uint256 value){  
         (bool exist,bytes memory data)= Base._get(abi.encodePacked(key));
         if(exist)
             return uint256(abi.decode(data, (bytes32)));
         else
             return uint256(0);
-    }    
-     /**
+    }   
+
+    /**
      * @notice Get the key based on it index.
      * @param idx The key to retrieve the associated index.
      * @return The index key associated with the index.
      */
-    function keyAt(uint256 idx) public virtual  returns(address) {  
+    function keyAt(uint256 idx) public virtual returns(address) {  
         bytes memory rawdata=Base.indToKey(idx);
         bytes20 resultAdr;
         for (uint i = 0; i < 20; i++) {
             resultAdr |= bytes20(rawdata[i]) >> (i * 8); 
         }
         return address(uint160(resultAdr));      
-    }   
+    }    
 
     /**
      * @notice Retrieves the value stored at the specified index.
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
      */
-    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
+    function valueAt(uint256 idx) public virtual returns(uint256 value){ 
         (bool exist,bytes memory data)=Base._get(idx);
         if(exist)
             return  uint256(abi.decode(data, (bytes32)));
         else
             return uint256(0); 
-    }  
+    } 
 
     /**
      * @notice Delete a key-value pair from the map.
@@ -100,17 +101,18 @@ contract AddressU256CumMap is Base {
      * @notice Retrieve the min value in the concurrent map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v) = abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public  returns(address, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base._min(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
+    
 
     /**
      * @notice Retrieve the max value in the concurrent map.
      * @return The maximum value by numerical comparison.
      */
     function max() public returns(address, uint256, uint256) { 
-        (uint256 idx, uint256 v) = abi.decode(Base.maxNumerical(), (uint256, uint256));
+        (uint256 idx, uint256 v) = abi.decode(Base._max(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 }

@@ -40,7 +40,12 @@ contract BoolTest {
 
         require(boolContainer.fullLength() == 6);  
 
-        require(boolContainer.pop()==true);
+        require(!boolContainer.exists(0));
+        require(!boolContainer.exists(1));
+        require(!boolContainer.exists(2));
+        require(!boolContainer.exists(3));
+        require(boolContainer.exists(4));
+        require(boolContainer.exists(5));       
     }
 
     function check() public{

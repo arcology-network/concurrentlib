@@ -19,8 +19,8 @@ contract HashU256Map is Base {
      * @param k The uint256 key to check for existence.
      * @return true if the key exists, false otherwise.
      */    
-    function exist(bytes32 k) public view returns(bool) { 
-        return Base._exists(abi.encodePacked(k)); 
+    function exist(bytes32 k) public returns(bool) { 
+        return Base.exists(abi.encodePacked(k)); 
     }
     
     /**
@@ -30,7 +30,7 @@ contract HashU256Map is Base {
      *  @param lower The uint256 value associated with the key.
      *  @param upper The uint256 value associated with the key.
      */
-    function set(bytes32 key, uint256 value, uint256 lower, uint256 upper) public virtual{ 
+    function set(bytes32 key, uint256 value, uint256 lower, uint256 upper) public { 
         require((value < 0  && uint256(value) <= lower) || value >= 0 && uint256(value) >= lower && uint256(value) <= upper, "Out of bounds");
  
         if (!_init(abi.encodePacked(key), abi.encodePacked(lower), abi.encodePacked(upper))) {
@@ -53,7 +53,7 @@ contract HashU256Map is Base {
      * @param key The uint256 key to retrieve the associated value.
      * @return value The uint256 value associated with the key.
      */
-    function get(bytes32 key) public virtual view returns(uint256 value){ 
+    function get(bytes32 key) public returns(uint256 value){   
         (bool exist,bytes memory data)=Base._get(abi.encodePacked(key));
         if(exist)
             return uint256(abi.decode(data,(bytes32)));
@@ -66,13 +66,13 @@ contract HashU256Map is Base {
      * @param idx The key to retrieve the associated index.
      * @return The index key associated with the index.
      */
-    function keyAt(uint256 idx) public virtual view returns(bytes32) {    
+    function keyAt(uint256 idx) public returns(bytes32) {   
         bytes memory rawdata=Base.indToKey(idx);
         bytes32 resultAdr;
         for (uint i = 0; i < 20; i++) {
             resultAdr |= bytes32(rawdata[i]) >> (i * 8); 
         }
-        return resultAdr;      
+        return resultAdr;         
     }   
 
     /**
@@ -80,7 +80,7 @@ contract HashU256Map is Base {
      * @param idx The index of the element to retrieve.
      * @return value The value retrieved from the storage array at the given index.    
      */
-    function valueAt(uint256 idx) public virtual view returns(uint256 value){ 
+    function valueAt(uint256 idx) public returns(uint256 value){ 
         (bool exist,bytes memory data)=Base._get(idx);
         if(exist)
             return uint256(abi.decode(data, (bytes32)));
@@ -100,17 +100,17 @@ contract HashU256Map is Base {
      * @notice Retrieve the min value in the concurrent map.
      * @return The minimum element by numerical comparison.
      */
-    function min() public view returns(bytes32, uint256, uint256) { 
-        (uint256 idx, uint256 v) = abi.decode(Base.minNumerical(), (uint256, uint256));
+    function min() public  returns(bytes32, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base._min(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
-
+    
     /**
      * @notice Retrieve the max value in the concurrent map.
      * @return The maximum value by numerical comparison.
      */
-    function max() public view returns(bytes32, uint256, uint256) { 
-        (uint256 idx, uint256 v) = abi.decode(Base.maxNumerical(), (uint256, uint256));
+    function max() public returns(bytes32, uint256, uint256) { 
+        (uint256 idx, uint256 v) = abi.decode(Base._max(), (uint256, uint256));
         return (keyAt(idx), idx, v);
     }
 }
