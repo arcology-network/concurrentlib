@@ -38,7 +38,7 @@ library Runtime {
 
     /**
      * @notice Set the max parallelism level for a specific function with respect to other functions.
-     *  @param others The list of function signatures and their contract address that can be executed in parallel.
+     * @param others The list of function signatures and their contract address that can be executed in parallel.
     */
    function setParallelism(bytes4 func, address addr, bytes4[] memory others, uint64 parallelism) internal returns(bool) {
         (bool success,) = address(0xa0).call(abi.encodeWithSignature("setParallelism(bytes4,address,bytes4[],uint64)", func, addr, others, parallelism));

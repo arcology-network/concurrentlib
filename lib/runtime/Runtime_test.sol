@@ -30,11 +30,11 @@ contract DeferredTest  {
     U256Cumulative value = new U256Cumulative(1, 100);
 
     constructor () payable {
-        Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))), 222);  
+        Runtime.defer(bytes4(keccak256(bytes("init()"))), 222);  
     }
 
-    function init(uint256 v) public {
-        require(Runtime.isInDeferred());
+    function init() public {
+        require(!Runtime.isInDeferred());
     }
 }
 
