@@ -53,7 +53,7 @@ contract SequentializerTest  {
         // The init() function of the current contract cannot be called in parallel with 
         // the otherFuncs functions of the addr1 contract.
         require(Runtime.setParallelism(bytes4(keccak256("init()")), addr1, otherFuncs, 1));
-        require(Runtime.defer(bytes4(keccak256("init()")), 111));
+        require(Runtime.defer(bytes4(keccak256("init()")), 60000));
     }
 
     function init() public {}
