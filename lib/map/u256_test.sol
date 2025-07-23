@@ -6,7 +6,7 @@ import "../commutative/U256Cum.sol";
 import "../multiprocess/Multiprocess.sol";
 
 contract U256MapTest {
-    U256Map map = new U256Map();
+    U256Map map = new U256Map(false);
     constructor() {     
         require(map.nonNilCount() == 0); 
         map.set(10, 100);
@@ -39,7 +39,7 @@ contract U256MapTest {
 }
 
 contract ConcurrenctU256MapTest {
-    U256Map map = new U256Map();
+    U256Map map = new U256Map(false);
     function call() public { 
        Multiprocess mp = new Multiprocess(2); 
        mp.addJob(500000, 0, address(this), abi.encodeWithSignature("assigner(uint256)", 11));

@@ -13,7 +13,7 @@ import "../shared/Base.sol";
  *      It can only store positive integers within the lower and upper bounds. The lower bound must be less than the upper bound and they must be both positive.
  */
 contract U256Cum is Base {
-    constructor() Base(Const.U256_CUM) {}
+    constructor(bool isTransient) Base(Const.U256_CUM, isTransient) {}
 
     /**
      * @notice push an uint256 data element to the concurrent array.

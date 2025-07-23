@@ -18,7 +18,7 @@ struct JobResult {
     bytes returnData;
 }
 
-contract Multiprocess is ConcurrentGateway(Const.BYTES, Const.MULTIPROCESSOR_ADDR) {
+contract Multiprocess is ConcurrentGateway(Const.BYTES, Const.MULTIPROCESSOR_ADDR, false) {
     uint256 numProcesses = 1;
 
     /**

@@ -12,7 +12,7 @@ import "../shared/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract AddressUint256Map is Base { 
-    constructor() Base(Const.BYTES) {}
+    constructor(bool isTransient) Base(Const.BYTES, isTransient){}
 
     /**
      * @notice Check if a given key exists in the map.

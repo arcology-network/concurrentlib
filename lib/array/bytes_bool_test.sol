@@ -5,8 +5,8 @@ import "./Bytes.sol";
 import "./Bool.sol";
 
 contract PairTest {
-    Bytes bytesContainer = new Bytes();
-    Bool boolContainer = new Bool();
+    Bytes bytesContainer = new Bytes(false);
+    Bool boolContainer = new Bool(false);
     constructor() {     
         require(bytesContainer.nonNilCount() == 0); 
  

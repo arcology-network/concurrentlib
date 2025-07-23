@@ -23,7 +23,7 @@ contract Base is ConcurrentGateway{
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor (uint8 typeID) ConcurrentGateway(typeID, Const.CONTAINER_ADDR) {}
+    constructor (uint8 typeID, bool isTransient) ConcurrentGateway(typeID, Const.CONTAINER_ADDR, isTransient) {}
          
     /**
      * @notice Retrieve the length of the container, including newly appended and deleted values if any.

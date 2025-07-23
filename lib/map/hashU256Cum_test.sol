@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./HashU256Cum.sol";
 
 contract HashU256MapTest {
-    HashU256Map container = new HashU256Map();
+    HashU256Map container = new HashU256Map(false);
 
     constructor() {     
         bytes32 hash1 = keccak256(abi.encodePacked("0"));

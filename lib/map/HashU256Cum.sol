@@ -12,7 +12,7 @@ import "../shared/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract HashU256Map is Base { 
-    constructor() Base(Const.U256_CUM) {}
+    constructor(bool isTransient) Base(Const.U256_CUM, isTransient) {}
 
     /**
      * @notice Check if a given key exists in the map.

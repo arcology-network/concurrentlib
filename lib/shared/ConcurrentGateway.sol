@@ -22,10 +22,10 @@ contract ConcurrentGateway {
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor (uint8 typeID, address APIAddr) {
-        API = APIAddr;
+    constructor (uint8 typeID , address APIAddr, bool isTransient) {
+        API = APIAddr; // Need to set the address for the other functions to work properly.
         (bool success,) = address(API).call(abi.encodeWithSignature(
-            "new(uint8,bytes,bytes)", uint8(typeID), new bytes(0), new bytes(0)));
+            "new(uint8,bool)", uint8(typeID), isTransient)); // A false value indicates it is NOT a transient container.
         require(success);
     }
 

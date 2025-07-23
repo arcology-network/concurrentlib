@@ -8,7 +8,7 @@ import "../runtime/Runtime.sol";
 import "../runtime/Debug.sol";
 
 contract ConcurrentGatewayTest {
-    ConcurrentGateway container = new ConcurrentGateway(Const.BYTES, Const.CONTAINER_ADDR);    
+    ConcurrentGateway container = new ConcurrentGateway(Const.BYTES, Const.CONTAINER_ADDR, false);    
 
     constructor() {       
         bytes memory elem1 = '0x1111111';

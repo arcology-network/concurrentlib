@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./String.sol";
 
 contract StringTest {
-    String container = new String();
+    String container = new String(false);
     
     constructor() {     
         require(container.nonNilCount() == 0); 

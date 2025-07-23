@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./OrderedSet.sol";
 
 contract OrderedSetTest {
-    BytesOrderedSet container = new BytesOrderedSet();    
+    BytesOrderedSet container = new BytesOrderedSet(false);    
 
     constructor() {       
         bytes memory arr1 = '0x10';

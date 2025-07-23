@@ -11,7 +11,7 @@ import "../shared/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for uint256 storage.
  */
 contract U256 is Base {
-    constructor() Base(Const.BYTES) {}
+    constructor(bool isTransient) Base(Const.BYTES, isTransient){}
 
     /**
      * @notice Add a uint256 data element to the concurrent array.
