@@ -29,6 +29,16 @@ contract ConcurrentGateway {
         require(success);
     }
 
+    /**
+     * @notice Set the transient state of the container. If the container is transient, it is only
+     *         accessible within the current BLOCK. After the block is finalized, the container will
+     *         be reset automatically.
+     */
+    function markBlockScoped() public returns(uint256) {
+        (,bytes memory data) = eval(abi.encodeWithSignature("markBlockScoped()"));
+        return abi.decode(data, (uint256));
+    } 
+
     function eval(bytes memory command) public returns(bool, bytes memory) {
         return address(API).call(abi.encodeWithSignature("eval(bytes)", command));  
     }  

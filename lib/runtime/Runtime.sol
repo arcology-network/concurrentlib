@@ -40,8 +40,9 @@ library Runtime {
      * @notice Set the max parallelism level for a specific function with respect to other functions.
      * @param others The list of function signatures and their contract address that can be executed in parallel.
     */
-   function setParallelism(bytes4 func, address addr, bytes4[] memory others, uint64 parallelism) internal returns(bool) {
-        (bool success,) = address(0xa0).call(abi.encodeWithSignature("setParallelism(bytes4,address,bytes4[],uint64)", func, addr, others, parallelism));
+   function setParallelism(string memory funcName, address addr, bytes4[] memory others, uint64 parallelism) internal returns(bool) {
+        bytes4 funSign = bytes4(keccak256(bytes(funcName)));
+        (bool success,) = address(0xa0).call(abi.encodeWithSignature("setParallelism(bytes4,address,bytes4[],uint64)", funSign, addr, others, parallelism));
         return success;
     }
  
@@ -58,7 +59,8 @@ library Runtime {
      * @notice Inform the scheduler that a function needs to schedule a defer call. This function can only be called once in the constructor.
      * @return The number of concurrent instances.
      */
-    function defer(bytes4 funSign, uint64 prepaidGas) internal returns(bool) {
+    function defer(string memory funName, uint64 prepaidGas) internal returns(bool) {
+        bytes4 funSign = bytes4(keccak256(bytes(funName)));
         (bool successful,) = address(0xa0).call(abi.encodeWithSignature("defer(bytes4,uint64)", funSign, prepaidGas));
         return successful;  
     }
