@@ -21,7 +21,7 @@ contract BytesOrderedSet is ConcurrentGateway {
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor (bool isTransient) ConcurrentGateway(Const.U256_CUM, Const.CONTAINER_ADDR, isTransient) {       
+    constructor (bool isBlockBound) ConcurrentGateway(Const.U256_CUM, Const.CONTAINER_ADDR, isBlockBound) {       
         // (bool success,) = address(API).call(abi.encodeWithSignature(
         //     "new(uint8,bytes,bytes)", uint8(Const.U256_CUM), new bytes(0), new bytes(0)));
         // require(success);

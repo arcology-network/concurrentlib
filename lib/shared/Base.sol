@@ -22,8 +22,10 @@ import "./Const.sol";
 contract Base is ConcurrentGateway{    
     /**
      * @notice Constructor to initiate communication with the external contract.
+     * @param typeID The type ID of the concurrent container.
+     * @param isBlockBound If true, the content of the container will be cleared after each block.
      */
-    constructor (uint8 typeID, bool isTransient) ConcurrentGateway(typeID, Const.CONTAINER_ADDR, isTransient) {}
+    constructor (uint8 typeID, bool isBlockBound) ConcurrentGateway(typeID, Const.CONTAINER_ADDR, isBlockBound) {}
           
     /**
      * @notice Retrieve the length of the container, including newly appended and deleted values if any.

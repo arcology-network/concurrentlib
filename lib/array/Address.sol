@@ -11,7 +11,7 @@ import "../shared/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for address storage.
  */
 contract Address is Base {
-    constructor(bool isTransient) Base(Const.BYTES, isTransient){}
+    constructor(bool isBlockBound) Base(Const.BYTES, isBlockBound){}
 
    /**
      * @notice Add an address element to the concurrent array.

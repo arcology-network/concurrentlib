@@ -12,7 +12,7 @@ import "../shared/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract AddressU256CumMap is Base { 
-    constructor(bool isTransient) Base(Const.U256_CUM, isTransient) {}
+    constructor(bool isBlockBound) Base(Const.U256_CUM, isBlockBound) {}
 
     /**
      * @notice Check if a given key exists in the map.
@@ -82,8 +82,8 @@ contract AddressU256CumMap is Base {
      * @return value The value retrieved from the storage array at the given index.    
      */
     function valueAt(uint256 idx) public virtual returns(uint256 value){ 
-        (bool exist,bytes memory data)=Base._get(idx);
-        if(exist)
+        (bool ifExist,bytes memory data)=Base._get(idx);
+        if(ifExist)
             return  uint256(abi.decode(data, (bytes32)));
         else
             return uint256(0); 
