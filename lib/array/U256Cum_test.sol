@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./U256Cum.sol";
 
 contract U256CumArrayTest {
-    U256Cum container = new U256Cum(false);
+    U256Cum container = new U256Cum();
 
     constructor() {    
         require(container.push(17, 17, 111)); 
@@ -48,7 +48,7 @@ contract U256CumArrayTest {
 }
 
 contract U256CumArrayTestTransient {
-    U256Cum container = new U256Cum(true);
+    U256Cum container = new U256Cum();
 
     constructor() {    
         require(container.push(17, 17, 111)); 

@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./Bytes.sol";
 
 contract WildcardTest {
-    Bytes container = new Bytes(false);    
+    Bytes container = new Bytes();    
 
     constructor() {    
         bytes memory arr1 = '0x1000000000000000000000000000000000000000000000000000000000000001';

@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./Int256.sol";
 
 contract Int256Test {
-    Int256 container = new Int256(false);
+    Int256 container = new Int256();
     
     constructor() {     
        require(container.nonNilCount() == 0); 

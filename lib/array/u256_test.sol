@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./U256.sol";
 
 contract U256Test {
-    U256 container = new U256(false);
+    U256 container = new U256();
     U256[] array;
 
     constructor() {     
@@ -44,14 +44,14 @@ contract U256Test {
         require(container.nonNilCount() == 0); 
         
         // Nested array
-        // U256 container0 = new U256(false);
-        // U256 container1 = new U256(false);
-        // U256 container2 = new U256(false);
+        // U256 container0 = new U256();
+        // U256 container1 = new U256();
+        // U256 container2 = new U256();
 
         array = new U256[](3);
-        array[0] = new U256(false);
-        array[1] = new U256(false);
-        array[2] = new U256(false);
+        array[0] = new U256();
+        array[1] = new U256();
+        array[2] = new U256();
 
         // array.push(container0);
         // array.push(container1);

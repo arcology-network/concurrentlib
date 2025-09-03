@@ -12,6 +12,6 @@ contract SequentialTest {
    }
 
   //  function check2() public {
-  //   require(false);
+  //   require();
   // }
 }

@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./Bool.sol";
 
 contract StorageTest {
-    Bool bArray = new Bool(false);
+    Bool bArray = new Bool();
     
     constructor() {
         bArray.push(true);

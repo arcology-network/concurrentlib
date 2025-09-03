@@ -12,7 +12,7 @@ import "../shared/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract AddressBooleanMap is Base { 
-    constructor(bool isBlockBound) Base(Const.BYTES, isBlockBound){}
+    constructor() Base(Const.BYTES, false){}
 
     /**
      * @notice Check if a given key exists in the map.

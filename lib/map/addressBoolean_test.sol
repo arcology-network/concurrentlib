@@ -5,7 +5,7 @@ import "./AddressBoolean.sol";
 import "../multiprocess/Multiprocess.sol";
 
 contract AddressBooleanMapTest {
-    AddressBooleanMap map = new AddressBooleanMap(false);
+    AddressBooleanMap map = new AddressBooleanMap();
     constructor() {     
         address addr1 = 0x1111111110123456789012345678901234567890;
         address addr2 = 0x2222222220123456789012345678901234567890;
@@ -48,7 +48,7 @@ contract AddressBooleanMapTest {
 }
 
 contract AddressBooleanMapConcurrentTest {
-    AddressBooleanMap map = new AddressBooleanMap(false);
+    AddressBooleanMap map = new AddressBooleanMap();
     function call() public {     
         address addr1 = 0x1111111110123456789012345678901234567890;
         address addr2 = 0x2222222220123456789012345678901234567890;

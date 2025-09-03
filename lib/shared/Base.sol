@@ -98,6 +98,15 @@ contract Base is ConcurrentGateway{
         (bool success,)  = eval(abi.encodeWithSignature("clear()"));
         return success;       
     }
+
+    /**
+     * @notice Delete all the committed elements. This will not change the length of committedLength() immediately.
+     * @return success true if the all the data was successfully deleted, false otherwise.
+     */
+    function clearCommitted() public returns(bool)  {
+        (bool success,)  = eval(abi.encodeWithSignature("clearCommitted()"));
+        return success;       
+    }
     
     /**
      * @notice Reset the data associated with the key to its default value.

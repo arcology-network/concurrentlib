@@ -11,7 +11,7 @@ import "../shared/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for bytes storage.
  */
 contract Bytes is Base {
-    constructor(bool isBlockBound) Base(Const.BYTES, isBlockBound){}
+    constructor() Base(Const.BYTES, false){}
 
     /**
      * @notice Add a bytes data element to the concurrent array.

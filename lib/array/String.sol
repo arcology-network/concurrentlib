@@ -11,7 +11,7 @@ import "../shared/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for string storage.
  */
 contract String is Base {
-    constructor(bool isBlockBound) Base(Const.BYTES, isBlockBound){}
+    constructor() Base(Const.BYTES, false){}
 
     /**
      * @notice Add a string data element to the concurrent array.

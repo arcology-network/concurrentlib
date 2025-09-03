@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./Bool.sol";
 
 contract BoolTest {
-    Bool boolContainer = new Bool(false);
+    Bool boolContainer = new Bool();
     
     constructor() {     
         require(boolContainer.nonNilCount() == 0); 
@@ -50,6 +50,8 @@ contract BoolTest {
 
     function check() public{
         require(boolContainer.nonNilCount() == 2);  
+        boolContainer.clearCommitted();
+        require(boolContainer.nonNilCount() == 0);  
     }
 
     function call() public{

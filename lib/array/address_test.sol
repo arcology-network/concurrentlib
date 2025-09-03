@@ -5,7 +5,7 @@ pragma solidity >=0.7.0;
 import "./Address.sol";
 
 contract AddressTest {
-    Address container = new Address(false);
+    Address container = new Address();
     
     constructor() {     
         // require(container.nonNilCount() == 0);    
@@ -33,7 +33,7 @@ contract AddressTest {
 } 
 
 contract AddressTestTransient {
-    Address container = new Address(true);
+    Address container = new Address();
     
     constructor() {     
         require(container.nonNilCount() == 0);    

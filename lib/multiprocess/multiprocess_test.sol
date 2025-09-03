@@ -54,7 +54,7 @@ contract U256ParallelInitTest {
     }
 
     function init(uint256 idx) public  { 
-        containers[idx] = new U256(false);
+        containers[idx] = new U256();
         containers[idx].push(idx);        
     }
 }
@@ -76,13 +76,13 @@ contract U256ParallelInitTestExeceed {
     }
 
     function init(uint256 idx) public  { 
-        containers[idx] = new U256(false);
+        containers[idx] = new U256();
         containers[idx].push(idx);        
     }
 }
 
 contract U256ParallelPopTest {
-    U256 container = new U256(false);
+    U256 container = new U256();
 
     function call() public {
         container.push(1);
@@ -102,7 +102,7 @@ contract U256ParallelPopTest {
 }
 
 contract U256ParallelConflictTest {
-    U256 container = new U256(false);
+    U256 container = new U256();
 
     constructor() {
         container.push(uint256(10));
@@ -129,7 +129,7 @@ contract U256ParallelConflictTest {
 }
 
 contract U256ParallelTest {
-    U256 container = new U256(false);
+    U256 container = new U256();
 
     function call() public  { 
         require(container.nonNilCount() == 0); 
@@ -201,8 +201,8 @@ contract ArrayOfU256ParallelTest {
 
     constructor() {
         array = new U256[](2);
-        array[0] = new U256(false);
-        array[1] = new U256(false);
+        array[0] = new U256();
+        array[1] = new U256();
     }
 
     function call() public  {
@@ -255,7 +255,7 @@ contract Deployer {
     }
 
     function init() public {
-        array = new U256(false);
+        array = new U256();
     }
 }  
 
@@ -300,7 +300,7 @@ contract ParaNativeArrayAssignmentTest {
 }  
  
 contract ParaFixedLengthWithConflictTest {  
-    Bool container = new Bool(false);
+    Bool container = new Bool();
      uint256[2] results;
      function call() public  { 
        results[0] = 100;
@@ -323,8 +323,8 @@ contract ParaFixedLengthWithConflictTest {
 }
 
 contract ParaContainerConcurrentPushTest {
-    Bool container = new Bool(false);
-    Bool container2 = new Bool(false);
+    Bool container = new Bool();
+    Bool container2 = new Bool();
     function call() public  { 
        container.push(true);
 
@@ -346,7 +346,7 @@ contract ParaContainerConcurrentPushTest {
 }
 
 contract MultiTempParaTest {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     bytes32[2] results;
     function call() public  { 
        Multiprocess mp = new Multiprocess(2);
@@ -368,7 +368,7 @@ contract MultiTempParaTest {
 }
 
 contract MultiGlobalParaSingleInUse {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
 
     Multiprocess mp2;
     Multiprocess mp = new Multiprocess(2);
@@ -386,7 +386,7 @@ contract MultiGlobalParaSingleInUse {
 }
 
 contract MultiprocessConcurrentBool {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     
     Multiprocess mp ; 
     Multiprocess mp2;
@@ -414,7 +414,7 @@ contract MultiprocessConcurrentBool {
 }
 
 contract MultiLocalParaTestWithClear {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     bytes32[2] results;
     function call() public  { 
        Multiprocess mp = new Multiprocess(2);
@@ -439,7 +439,7 @@ contract MultiLocalParaTestWithClear {
 }
 
 contract ParallelizerArrayTest {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     Multiprocess[2] parallelizers;
 
     function call() public  { 
@@ -603,7 +603,7 @@ contract RecursiveAssignerTest {
 
 contract RecursiveParallelizerOnContainerTest {
     uint256[2] results;
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     U256Cumulative cumulative = new U256Cumulative(0, 100);  
 
     function call() public {
@@ -634,7 +634,7 @@ contract RecursiveParallelizerOnContainerTest {
 }
 
 contract MaxRecursiveDepth4Test {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
 
     function call() public {
         // container.push(true);       
@@ -670,7 +670,7 @@ contract MaxRecursiveDepth4Test {
 }
 
 contract MaxSelfRecursiveDepth4Test {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
 
     Multiprocess mp;
     function call() public {
@@ -692,7 +692,7 @@ contract MaxSelfRecursiveDepth4Test {
 }
 
 contract MaxRecursiveDepthOffLimitTest {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     U256Cumulative cumulative = new U256Cumulative(0, 200);  
 
     Multiprocess mp;
@@ -721,7 +721,7 @@ contract MaxRecursiveDepthOffLimitTest {
 }
 
 contract ParaFixedLengthWithConflictRollbackTest {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     uint256[2] results;
     function call() public {
         Multiprocess mp = new Multiprocess(2);
@@ -748,7 +748,7 @@ contract ParaFixedLengthWithConflictRollbackTest {
 }
 
 contract ParaSubbranchConflictTest {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     uint256[2] results0;
     uint256[2] results1;
     function call() public {
@@ -814,7 +814,7 @@ contract SimpleConflictTest {
 }
 
 contract ParentChildBranchConflictTest {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     uint256[2] results0;
     uint256[2] results1;
     function call() public {
@@ -849,7 +849,7 @@ contract ParentChildBranchConflictTest {
 }
 
 contract MixedRecursiveMultiprocessTest {
-    Bool container = new Bool(false);
+    Bool container = new Bool();
     uint256[2] results;
     U256Cumulative cumulative = new U256Cumulative(0, 100);  
     U256Cumulative cumulative2 = new U256Cumulative(50, 80);  
@@ -1185,7 +1185,7 @@ contract ParaCumU256SubTest{
 } 
 
 contract ParaDeletions{
-    StringUint256Map addBoolLookup = new StringUint256Map(false);
+    StringUint256Map addBoolLookup = new StringUint256Map();
 
     constructor()  {
         addBoolLookup.set("key 0", 100);
@@ -1242,7 +1242,7 @@ contract ParaDeletions{
 } 
 
 contract ParaAddressUint256ConflictTest {  
-    AddressU256CumMap container = new AddressU256CumMap(false);
+    AddressU256CumMap container = new AddressU256CumMap();
 
     address addr1 = 0x1111111110123456789012345678901234567890;
     address addr2 = 0x2222222220123456789012345678901234567890;

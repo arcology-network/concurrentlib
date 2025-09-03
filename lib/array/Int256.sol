@@ -12,7 +12,7 @@ import "../shared/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for int256 storage.
  */
 contract Int256 is Base {
-    constructor(bool isBlockBound) Base(Const.BYTES, isBlockBound){}
+    constructor() Base(Const.BYTES, false){}
 
     /**
      * @notice Add an int256 data element to the concurrent array.

@@ -1,6 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.7;
-
-import "@arcologynetwork/concurrentlib/lib/commutative/U256Cum.sol";
 
 import "../../lib/map/AddressU256Cum.sol";
 
@@ -12,7 +11,7 @@ contract VendingMachine {
     // We use an AddressU256CumMap to store cupcake balances instead of a mapping
     // The data structure has the advantage of being able to efficiently handle
     // concurrent updates to the same entry.
-    AddressU256CumMap cupcakeBalances = new AddressU256CumMap(false);
+    AddressU256CumMap cupcakeBalances = new AddressU256CumMap();
 
     // When 'VendingMachine' contract is deployed:
     // 1. set the deploying address as the owner of the contract

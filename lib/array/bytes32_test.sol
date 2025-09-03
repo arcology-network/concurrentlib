@@ -4,7 +4,7 @@ pragma solidity >=0.7.0;
 import "./Bytes32.sol";
 
 contract Bytes32Test {
-    Bytes32 container = new Bytes32(false);
+    Bytes32 container = new Bytes32();
     
     constructor() {     
         require(container.nonNilCount() == 0); 

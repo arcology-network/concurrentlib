@@ -80,7 +80,7 @@ contract SimpleAuction {
         beneficiary = beneficiaryAddress;
         // auctionEndTime = block.timestamp + biddingTime;
 
-        bidders = new AddressUint256Map(false);
+        bidders = new AddressUint256Map();
         // bidders = new Address();
         // bids = new U256();
     }
