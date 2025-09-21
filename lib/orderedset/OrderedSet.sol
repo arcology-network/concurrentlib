@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "./Const.sol";
-import "./ConcurrentGateway.sol";
+import "../core/Const.sol";
+import "../core/Gateway.sol";
 // import "../runtime/Runtime.sol";
-
 
 /**
  * @author Arcology Network
@@ -14,14 +13,14 @@ import "./ConcurrentGateway.sol";
  *      causing state conflicts. It provides functionalities for both key-value lookup and
  *      linear access.
  */
-contract BytesOrderedSet is ConcurrentGateway {
+contract BytesOrderedSet is Gateway {
     bytes internal constant MIN = abi.encodePacked(uint256(0));
     bytes internal constant MAX = abi.encodePacked(type(uint256).max);
     
     /**
      * @notice Constructor to initiate communication with the external contract.
      */
-    constructor (bool isBlockBound) ConcurrentGateway(Const.U256_CUM, Const.CONTAINER_ADDR, isBlockBound) {       
+    constructor (bool isBlockBound) Gateway(Const.U256_CUM, Const.CONTAINER_ADDR, isBlockBound) {       
         // (bool success,) = address(API).call(abi.encodeWithSignature(
         //     "new(uint8,bytes,bytes)", uint8(Const.U256_CUM), new bytes(0), new bytes(0)));
         // require(success);

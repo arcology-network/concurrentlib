@@ -2,8 +2,8 @@ pragma solidity >=0.7.0;
 
 /**
  * @author Arcology Network
- * @title ConcurrentGateway Concurrent Container
- * @dev The ConcurrentGateway contract is a concurrent container designed for concurrent operations,
+ * @title Gateway Concurrent Container
+ * @dev The Gateway contract is a concurrent container designed for concurrent operations,
  *      allowing elements to be added in different processes running in parallel without
  *      causing state conflicts. It provides functionalities for both key-value lookup and
  *      linear access.
@@ -16,7 +16,7 @@ pragma solidity >=0.7.0;
  *
  *      Delopers should exercise caution when accessing the container concurrently to avoid conflicts.
  */
-contract ConcurrentGateway {
+contract Gateway {
     address public API;
 
     /**
