@@ -50,6 +50,8 @@ contract BoolTest {
 
     function check() public{
         require(boolContainer.nonNilCount() == 2);  
+        boolContainer.clearCommitted();
+        require(boolContainer.nonNilCount() == 0);  
     }
 
     function call() public{

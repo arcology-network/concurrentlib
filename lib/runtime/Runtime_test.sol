@@ -26,21 +26,17 @@ import "../commutative/U256Cum.sol";
 //     }
 // }
 
-// contract DeferredTest  {
-//     U256Cumulative value = new U256Cumulative(1, 100);
+contract DeferredTest  {
+    U256Cumulative value = new U256Cumulative(1, 100);
 
-//     constructor () payable {
-//         Runtime.defer(bytes4(keccak256(bytes("init(uint256)"))));  
-//     }
+    constructor () payable {
+        Runtime.defer("init()", 500222);  
+    }
 
-//     function init(uint256 v) public {
-//         bytes4 funSign = bytes4(keccak256(bytes("init(uint256)")));
-//         if (Runtime.instances(address(this),funSign) == 0) {
-//             Runtime.topupGas(100, 100); // Top up gas by 1,000,000 units
-//             value.add(v);    
-//         }
-//     }
-// }
+    function init() public {
+        require(!Runtime.isInDeferred());
+    }
+}
 
 contract SequentializerTest  {
     address addr1 = 0x1111111110123456789012345678901234567890;
@@ -56,8 +52,8 @@ contract SequentializerTest  {
 
         // The init() function of the current contract cannot be called in parallel with 
         // the otherFuncs functions of the addr1 contract.
-        require(Runtime.sequentialize(bytes4(keccak256("init()")), addr1, otherFuncs));
-        require(Runtime.defer(bytes4(keccak256("init()"))));
+        require(Runtime.setParallelism("init()", addr1, otherFuncs, 1));
+        require(Runtime.defer("init()", 600000));
     }
 
     function init() public {}
@@ -78,23 +74,14 @@ contract ParallizerTest  {
         otherFuncs[2] = 0x03030303;       
 
         // Only the init() function of the current contract can be called in parallel with the others.
-        require(Runtime.parallelize(bytes4(keccak256("init()")), addr1, otherFuncs));
-        require(Runtime.defer(bytes4(keccak256("def()"))));
+        require(Runtime.setParallelism("init()", addr1, otherFuncs, 2));
+        require(Runtime.defer("def()", 111));
     }
 
     function init() public {}
     function seq() public {}
     function def() public {}
 }
-
-contract TopupGasTest  {
-    constructor () {}
-
-    function init() public {
-        Runtime.topupGas(222, 111); // Top up gas by 1,000,000 units
-    }
-}
-
 
 contract PrintTest  {
     constructor () {

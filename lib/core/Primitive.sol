@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 import "../runtime/Runtime.sol";
-import "./ConcurrentGateway.sol";
+import "./Gateway.sol";
 import "./Const.sol";
 /**
  * @author Arcology Network
@@ -19,12 +19,14 @@ import "./Const.sol";
  *
  *      Delopers should exercise caution when accessing the container concurrently to avoid conflicts.
  */
-contract Base is ConcurrentGateway{    
+contract Base is Gateway{    
     /**
      * @notice Constructor to initiate communication with the external contract.
+     * @param typeID The type ID of the concurrent container.
+     * @param isBlockBound If true, the content of the container will be cleared after each block.
      */
-    constructor (uint8 typeID) ConcurrentGateway(typeID, Const.CONTAINER_ADDR) {}
-         
+    constructor (uint8 typeID, bool isBlockBound) Gateway(typeID, Const.CONTAINER_ADDR, isBlockBound) {}
+          
     /**
      * @notice Retrieve the length of the container, including newly appended and deleted values if any.
      * @return The length of the container.
@@ -94,6 +96,15 @@ contract Base is ConcurrentGateway{
      */
     function clear() public returns(bool)  {
         (bool success,)  = eval(abi.encodeWithSignature("clear()"));
+        return success;       
+    }
+
+    /**
+     * @notice Delete all the committed elements. This will not change the length of committedLength() immediately.
+     * @return success true if the all the data was successfully deleted, false otherwise.
+     */
+    function clearCommitted() public returns(bool)  {
+        (bool success,)  = eval(abi.encodeWithSignature("clearCommitted()"));
         return success;       
     }
     

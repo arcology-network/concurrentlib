@@ -46,3 +46,12 @@ contract U256CumArrayTest {
         // require(container.get(2) == 21);
     }
 }
+
+contract U256CumArrayTestTransient {
+    U256Cum container = new U256Cum();
+
+    constructor() {    
+        require(container.push(17, 17, 111)); 
+        require(container.push(111, 17, 111)); 
+    }
+}

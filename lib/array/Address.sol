@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "../shared/Const.sol"; 
-import "../shared/Base.sol";
+import "../core/Const.sol"; 
+import "../core/Primitive.sol";
 
 /**
  * @author Arcology Network
@@ -11,7 +11,7 @@ import "../shared/Base.sol";
  *      It inherits from the Base contract to utilize container functionalities for address storage.
  */
 contract Address is Base {
-    constructor() Base(Const.BYTES) {}
+    constructor() Base(Const.BYTES, false){}
 
    /**
      * @notice Add an address element to the concurrent array.

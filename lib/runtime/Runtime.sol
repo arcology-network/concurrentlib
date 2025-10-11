@@ -37,49 +37,31 @@ library Runtime {
     }
 
     /**
-     * @notice The funtion instructs the scheduler to avoid executing the specified functions with itself in parallel.
-     * @param others The list of function signatures and their contract address to avoid executing in parallel.
-     */
-    function sequentialize(bytes4 func, address addr, bytes4[] memory others) internal returns(bool) {
-        (bool success,) =  address(0xa0).call(abi.encodeWithSignature("sequentialize(bytes4,address,bytes4[])", func, addr, others));
-        return success;
-    }
-
-    /**
-     * @notice All the functions in the contract will be executed sequentially except the functions in the list.
-     *  @param others The list of function signatures and their contract address that can be executed in parallel.
+     * @notice Set the max parallelism level for a specific function with respect to other functions.
+     * @param others The list of function signatures and their contract address that can be executed in parallel.
     */
-    function parallelize(bytes4 func, address addr, bytes4[] memory others) internal returns(bool) {
-        (bool success,) = address(0xa0).call(abi.encodeWithSignature("parallelize(bytes4,address,bytes4[])", func, addr, others));
+   function setParallelism(string memory funcName, address addr, bytes4[] memory others, uint64 parallelism) internal returns(bool) {
+        bytes4 funSign = bytes4(keccak256(bytes(funcName)));
+        (bool success,) = address(0xa0).call(abi.encodeWithSignature("setParallelism(bytes4,address,bytes4[],uint64)", funSign, addr, others, parallelism));
         return success;
     }
-
+ 
     /**
      * @notice Get the number of concurrent instances of the specified function.
      * @return The number of concurrent instances.
      */
-    // function instances(address addr, bytes4 funSign) internal view returns(uint256) {
-    //     (,bytes memory data) = address(0xa0).staticcall(abi.encodeWithSignature("instances(address,bytes4)", addr, funSign));
-    //     return abi.decode(data, (uint256));  
-    // }
+    function isInDeferred() internal view returns(bool) {
+        (,bytes memory data) = address(0xa0).staticcall(abi.encodeWithSignature("isInDeferred()"));
+        return abi.decode(data, (bool));  
+    }
 
     /**
      * @notice Inform the scheduler that a function needs to schedule a defer call. This function can only be called once in the constructor.
      * @return The number of concurrent instances.
      */
-    function defer(bytes4 funSign) internal returns(bool) {
-        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("defer(bytes4)", funSign));
-        return successful;  
-    }
- 
-    /**
-     * @notice Top up the gas for the deferred TX once called.
-     * @param prepaidVal The value has been prepaid during the parallel execution by the non-deferred TXs
-     * @param prepaidGas The gas has been prepaid during the parallel execution by the non-deferred TXs
-     * @return A boolean indicating whether the top-up was successful.
-     */
-    function topupGas(uint256 prepaidVal, uint256 prepaidGas) internal returns(bool) {
-        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("topupGas(uint256,uint256)", prepaidVal, prepaidGas));
+    function defer(string memory funName, uint64 prepaidGas) internal returns(bool) {
+        bytes4 funSign = bytes4(keccak256(bytes(funName)));
+        (bool successful,) = address(0xa0).call(abi.encodeWithSignature("defer(bytes4,uint64)", funSign, prepaidGas));
         return successful;  
     }
 }

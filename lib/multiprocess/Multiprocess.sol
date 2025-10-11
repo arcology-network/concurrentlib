@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "../shared/Const.sol"; 
-import "../shared/Base.sol";
-import "../shared/ConcurrentGateway.sol";
+import "../core/Const.sol"; 
+import "../core/Primitive.sol";
+import "../core/Gateway.sol";
 import "../runtime/Runtime.sol";
 /**
  * @author Arcology Network
@@ -18,7 +18,7 @@ struct JobResult {
     bytes returnData;
 }
 
-contract Multiprocess is ConcurrentGateway(Const.BYTES, Const.MULTIPROCESSOR_ADDR) {
+contract Multiprocess is Gateway(Const.BYTES, Const.MULTIPROCESSOR_ADDR, false) {
     uint256 numProcesses = 1;
 
     /**

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "../shared/Const.sol"; 
-import "../shared/Base.sol";
+import "../core/Const.sol"; 
+import "../core/Primitive.sol";
 
 /**
  * @author Arcology Network
@@ -12,7 +12,7 @@ import "../shared/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract AddressU256CumMap is Base { 
-    constructor() Base(Const.U256_CUM) {}
+    constructor() Base(Const.U256_CUM, false) {}
 
     /**
      * @notice Check if a given key exists in the map.
@@ -55,8 +55,8 @@ contract AddressU256CumMap is Base {
      * @return value The uint256 value associated with the key.
      */
     function get(address key) public virtual returns(uint256 value){  
-        (bool exist,bytes memory data)= Base._get(abi.encodePacked(key));
-        if(exist)
+        (bool ifExist,bytes memory data)= Base._get(abi.encodePacked(key));
+        if(ifExist)
             return uint256(abi.decode(data, (bytes32)));
         else
             return uint256(0);
@@ -82,8 +82,8 @@ contract AddressU256CumMap is Base {
      * @return value The value retrieved from the storage array at the given index.    
      */
     function valueAt(uint256 idx) public virtual returns(uint256 value){ 
-        (bool exist,bytes memory data)=Base._get(idx);
-        if(exist)
+        (bool ifExist,bytes memory data)=Base._get(idx);
+        if(ifExist)
             return  uint256(abi.decode(data, (bytes32)));
         else
             return uint256(0); 

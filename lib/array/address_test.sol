@@ -19,14 +19,42 @@ contract AddressTest {
         require(container.nonNilCount() == 2); 
 
         require(container.get(0) == addr1);
-        // require(container.get(1) == addr2);
+        require(container.get(1) == addr2);
  
-        // container.set(0, addr3);
-        // container.set(1, addr4);
+        container.set(0, addr3);
+        container.set(1, addr4);
 
-        // require(container.get(0) == addr3);
-        // require(container.get(1) == addr4);
+        require(container.get(0) == addr3);
+        require(container.get(1) == addr4);
 
-        // require(container.fullLength() == 2);
+        require(container.fullLength() == 2);
+    } 
+} 
+
+contract AddressTestTransient {
+    Address container = new Address();
+    
+    constructor() {     
+        require(container.nonNilCount() == 0);    
+        address addr1 = 0x1111111110123456789012345678901234567890;
+        address addr2 = 0x2222222220123456789012345678901234567890;
+        address addr3 = 0x3333337890123456789012345678901234567890;
+        address addr4 = 0x4444444890123456789012345678901234567890;
+
+        container.push(addr1);
+        container.push(addr2);
+
+        require(container.nonNilCount() == 2); 
+
+        require(container.get(0) == addr1);
+        require(container.get(1) == addr2);
+ 
+        container.set(0, addr3);
+        container.set(1, addr4);
+
+        require(container.get(0) == addr3);
+        require(container.get(1) == addr4);
+
+        require(container.fullLength() == 2);
     } 
 } 

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-import "../shared/Const.sol"; 
-import "../shared/Base.sol";
+import "../core/Const.sol"; 
+import "../core/Primitive.sol";
 
 /**
  * @author Arcology Network
@@ -12,7 +12,7 @@ import "../shared/Base.sol";
  *      to utilize container functionalities for key-value storage.
  */
 contract StringUint256Map is Base { 
-    constructor() Base(Const.BYTES) {}
+    constructor() Base(Const.BYTES, false){}
 
     /**
      * @notice Check if a given key exists in the map.

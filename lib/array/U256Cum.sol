@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0;
 
-
-import "../shared/Const.sol"; 
-import "../shared/Base.sol";
+import "../core/Const.sol"; 
+import "../core/Primitive.sol";
 
 /**
  * @author Arcology Network
@@ -13,7 +12,7 @@ import "../shared/Base.sol";
  *      It can only store positive integers within the lower and upper bounds. The lower bound must be less than the upper bound and they must be both positive.
  */
 contract U256Cum is Base {
-    constructor() Base(Const.U256_CUM) {}
+    constructor() Base(Const.U256_CUM, false) {}
 
     /**
      * @notice push an uint256 data element to the concurrent array.

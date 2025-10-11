@@ -3,12 +3,12 @@
 pragma solidity >=0.7.0;
 
 import "./Const.sol";
-import "./ConcurrentGateway.sol";
+import "./Gateway.sol";
 import "../runtime/Runtime.sol";
 import "../runtime/Debug.sol";
 
 contract ConcurrentGatewayTest {
-    ConcurrentGateway container = new ConcurrentGateway(Const.BYTES, Const.CONTAINER_ADDR);    
+    Gateway container = new Gateway(Const.BYTES, Const.CONTAINER_ADDR, false);    
 
     constructor() {       
         bytes memory elem1 = '0x1111111';

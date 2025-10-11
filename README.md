@@ -26,9 +26,9 @@ The following example demonstrates how to use the concurrentlib to parallelize a
 
 #### Simple Contract
 
-The following example of a simple smart contract that allows users to like a post. A simplest version of the contract is shown below. When a calls the `like()` function, the `likes` of the receiver is incremented by 1.
+The following is an example of a simple smart contract that allows users to like a post. The simplest version of the contract is shown below. When the `like()` function is called, the `likes` counter is incremented by 1.
 
-This implementation doesn't support concurrent execution. If multiple users call the `like()` function concurrently, the `likes` of the receiver will be incremented concurrently. This is not allowed in Solidity.
+This sequential-only implementation does not support concurrent execution. If multiple users call the `like()` function at the same time, the `likes` counter may be incremented incorrectly, resulting in an inconsistent final state.
 
 ```solidity
 // SPDX-License-Identifier: GPL-3.0
