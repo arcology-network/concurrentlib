@@ -107,7 +107,7 @@ contract MultiCummutative {
         visitCount2.add(88);
     }
 
-    function check() public{
+    function check() public view {
         require(visitCount1.get() == 10);
         require(visitCount2.get() == 108);
         require(visitCount3.get() == 66);
