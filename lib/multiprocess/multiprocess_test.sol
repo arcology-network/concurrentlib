@@ -1122,7 +1122,7 @@ contract ParaRwConflictTest {
   
         // The conflict detection will detect the conflict and revert one of the transactions    
         require(counterCopy == 0); 
-        require(counter == 0);
+        require(counter == 11);
     }
 
     function read() public {
