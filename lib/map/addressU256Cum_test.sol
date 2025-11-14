@@ -5,7 +5,7 @@ import "./AddressU256Cum.sol";
 // import "../multiprocess/Multiprocess.sol";
 
 contract AddressU256CumTest {
-    AddressU256CumMap container = new AddressU256CumMap();
+    AddressU256CumMap map = new AddressU256CumMap();
     event LogMax(address k,uint256 idx,uint256 v);
     event Step(address val);
     constructor() {     
@@ -14,12 +14,12 @@ contract AddressU256CumTest {
         address addr3 = 0x3333337890123456789012345678901234567890;
         address addr4 = 0x4444444890123456789012345678901234567890;
 
-        require(container.nonNilCount() == 0); 
+        require(map.nonNilCount() == 0); 
 
-        container.set(addr1, 0, 0, 1000);  
-        container.set(addr2, 0, 0, 1000);
-        container.set(addr3, 0, 0, 1000);
-        require(container.nonNilCount() == 3); 
+        map.set(addr1, 0, 0, 1000);  
+        map.set(addr2, 0, 0, 1000);
+        map.set(addr3, 0, 0, 1000);
+        require(map.nonNilCount() == 3); 
 
         (address k, uint256 idx, uint256 v) = map.min();
         require(idx == 0 && v == 0 && map.get(k) == v);
