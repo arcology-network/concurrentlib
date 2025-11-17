@@ -59,3 +59,12 @@ func TestGasDebitInFailedTx(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestSequentialTest(t *testing.T) {
+	currentPath, _ := os.Getwd()
+	targetPath := path.Join(path.Dir(filepath.Dir(currentPath)), "native/")
+	_, err, _, _ := exectest.DeployThenInvoke(targetPath, "Sequential.sol", "0.8.19", "SequentialTest", "call()", []byte{}, false)
+	if err != nil {
+		t.Error(err)
+	}
+}

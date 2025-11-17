@@ -10,4 +10,9 @@ contract SequentialTest {
    function check() public {
      require(x == 2);
    }
+
+   function call()public{
+    add();
+    check();
+   }
 }
